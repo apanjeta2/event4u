@@ -3,7 +3,11 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
+import database from './lib/db/';
+
 dotenv.config();
+database.sequelize.sync();
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -13,7 +17,7 @@ app.use(cookieParser());
 const PORT = process.env.PORT || 4000;
 
 app.get('/', (req, res) => {
-  res.send('Auth service!');
+  res.send('User managment service!');
 });
 
-app.listen(PORT, () => console.log(`[auth-service] Listening on port ${PORT}!`));
+app.listen(PORT, () => console.log(`[user-managment-service] Listening on port ${PORT}!`));

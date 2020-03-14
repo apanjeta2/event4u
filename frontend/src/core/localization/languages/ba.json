@@ -1,0 +1,16 @@
+{
+  "AUTH.SIGN_IN": "Ulogujte se",
+  "AUTH.SIGN_UP": "Prijavite se",
+  "AUTH.ALREADY_HAVE_ACCOUNT": "Vec imate korisnicki racun? Ulogujte se",
+  "AUTH.DONT_HAVE_ACCOUNT": "Nemate korisnicki racun? Prijavite se",
+  "AUTH.INVALID_USERNAME_/_PASSWORD": "Netacno korisnicko ime/sifra.",
+  "AUTH.SERVICE_UNAVAILABLE": "Servis je trenutno nedostupan",
+  "AUTH.PASSWORD": "Sifra",
+  "AUTH.EMAIL_OR_USERNAME_IS_REQUIRED": "Korisnicko ime je obavezno.",
+  "AUTH.PASSWORD_IS_REQUIRED": "Sifra je obavezna.",
+  "AUTH.USERNAME": "Korisnicko ime",
+  "AUTH.FIRST_NAME": "Ime",
+  "AUTH.LAST_NAME": "Prezime",
+  "NOT_FOUND.404": "404",
+  "NOT_FOUND.MSG": "Trazena stranica ne postoji."
+}
