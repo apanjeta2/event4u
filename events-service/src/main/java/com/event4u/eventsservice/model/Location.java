@@ -6,6 +6,7 @@ import javafx.util.Pair;
 import javax.persistence.*;
 import java.awt.*;
 import java.lang.reflect.Array;
+import java.util.List;
 
 @Entity
 @Table(name = "Location")
@@ -16,6 +17,8 @@ public class Location {
     private Point coordinates;
     private String city;
     private String country;
+    @OneToMany(mappedBy = "location") //Jedna lokacija ima više događaja
+    private List<Event> events;
 
     protected Location(Point coordinates, String city, String country, Boolean isRead) {
         this.coordinates = new Point(0,0);

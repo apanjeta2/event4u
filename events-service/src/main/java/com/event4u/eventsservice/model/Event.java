@@ -15,19 +15,22 @@ public class Event {
     private Date date;
     private String description;
     private Boolean isActive;
-//    private User creator;
-//    @OneToMany
-//    private List<EventsUsers> eventsUsers;
+    @ManyToOne //vise dogadjaja pripada istoj kategoriji
+    private Category category;
+    @ManyToOne
+    private User creator;
+    @ManyToOne
+    private Location location;
+    @OneToMany(mappedBy = "event") //Jedan dogadjas moze oznaciti vise korisnika
+    private List<EventUser> eu;
 
-
-    protected Event(String title, String address, Date date, String description, Boolean isActive, User creator, List<EventsUsers> eventsUsers) {
+    protected Event(String title, String address, Date date, String description, Boolean isActive, User creator) {
         this.title = title;
         this.address = address;
         this.date = date;
         this.description = description;
         this.isActive = isActive;
-        //this.creator = creator;
-        //this.eventsUsers = eventsUsers;
+        this.creator = creator;
     }
 
     @Override
@@ -62,11 +65,11 @@ public class Event {
         return isActive;
     }
 
-//    public User getCreator() {
-//        return creator;
-//    }
+    public User getCreator() {
+        return creator;
+    }
 
-//    public List<EventsUsers> getEventsUsers() {
-//        return eventsUsers;
-//    }
+    public Category getCategory() {
+        return category;
+    }
 }

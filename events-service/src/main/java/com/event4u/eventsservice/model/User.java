@@ -9,8 +9,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-//    @OneToMany
-//    private List<Event> events;
+    //Jedan korisnik moze kreirati vise dogadjaja
+    @OneToMany(mappedBy = "creator")
+    private List<Event> events;
+    @OneToMany(mappedBy = "user") //Jedan korisnik moze oznaciti vise dogadjaja
+    private List<EventUser> eu;
 
     public User() {}
 

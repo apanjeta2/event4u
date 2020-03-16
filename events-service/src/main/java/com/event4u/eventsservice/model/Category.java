@@ -10,14 +10,14 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-//    @OneToMany
-//    private List<Event> events;
+     @OneToMany(mappedBy = "category") //Jedna kategorija ima više događaja
+     private List<Event> events;
 
     protected Category() {}
 
     public Category(String name, List<Event> events) {
         this.name = name;
-        //this.events = events;
+        this.events = events;
     }
 
     @Override
@@ -34,5 +34,9 @@ public class Category {
 
     public String getName() {
         return name;
+    }
+
+    public List<Event> getEvents() {
+        return events;
     }
 }
