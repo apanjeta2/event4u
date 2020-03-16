@@ -15,9 +15,9 @@ public class Event {
     private Date date;
     private String description;
     private Boolean isActive;
-    private User creator;
-    @OneToMany
-    private List<EventsUsers> eventsUsers;
+//    private User creator;
+//    @OneToMany
+//    private List<EventsUsers> eventsUsers;
 
 
     protected Event(String title, String address, Date date, String description, Boolean isActive, User creator, List<EventsUsers> eventsUsers) {
@@ -26,8 +26,8 @@ public class Event {
         this.date = date;
         this.description = description;
         this.isActive = isActive;
-        this.creator = creator;
-        this.eventsUsers = eventsUsers;
+        //this.creator = creator;
+        //this.eventsUsers = eventsUsers;
     }
 
     @Override
@@ -62,11 +62,11 @@ public class Event {
         return isActive;
     }
 
-    public User getCreator() {
-        return creator;
-    }
+//    public User getCreator() {
+//        return creator;
+//    }
 
-    public List<EventsUsers> getEventsUsers() {
-        return eventsUsers;
-    }
+//    public List<EventsUsers> getEventsUsers() {
+//        return eventsUsers;
+//    }
 }

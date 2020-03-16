@@ -45,9 +45,10 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.javatuples</groupId>
-			<artifactId>javatuples</artifactId>
-			<version>1.2</version>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+			<version>1.4.199</version>
 		</dependency>
 	</dependencies>
 

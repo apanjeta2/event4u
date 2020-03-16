@@ -10,15 +10,15 @@ public class EventsUsers {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Boolean isGoing;
-    @OneToMany
-    private List<Event> events;
-    @OneToMany
-    private List<User> users;
+//    @OneToMany
+//    private List<Event> events;
+//    @OneToMany
+//    private List<User> users;
 
     public EventsUsers(Boolean isGoing, List<Event> events, List<User> users) {
         this.isGoing = isGoing;
-        this.events = events;
-        this.users = users;
+//        this.events = events;
+//        this.users = users;
     }
 
     @Override
@@ -33,13 +33,13 @@ public class EventsUsers {
         return id;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public List<Event> getEvents() {
-        return events;
-    }
+//    public List<User> getUsers() {
+//        return users;
+//    }
+//
+//    public List<Event> getEvents() {
+//        return events;
+//    }`
 
     public Boolean getGoing() {
         return isGoing;

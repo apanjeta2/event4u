@@ -9,8 +9,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToMany
-    private List<Event> events;
+//    @OneToMany
+//    private List<Event> events;
 
     public User() {}
 

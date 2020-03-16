@@ -17,23 +17,23 @@ public class EventsServiceApplication {
 		SpringApplication.run(EventsServiceApplication.class, args);
 	}
 
-	@Bean
-	ApplicationRunner init(CategoryInterface repoCat) {
-		List<String> categories = Arrays.asList(new String[]{
-				"movies", "books", "programming"
-		});
-		return args -> {
-			try {
-				for (String s: categories
-					 ) {
-					repoCat.save(new Category(s, events));
-				}
-			}
-			catch (Exception e) {
-				e.printStackTrace();;
-			}
-			repoCat.findAll().forEach(System.out::println);
-		};
-	}
+//	@Bean
+//	ApplicationRunner init(CategoryInterface repoCat) {
+//		List<String> categories = Arrays.asList(new String[]{
+//				"movies", "books", "programming"
+//		});
+//		return args -> {
+//			try {
+//				for (String s: categories
+//					 ) {
+//					repoCat.save(new Category());
+//				}
+//			}
+//			catch (Exception e) {
+//				e.printStackTrace();;
+//			}
+//			repoCat.findAll().forEach(System.out::println);
+//		};
+//	}
 
 }
