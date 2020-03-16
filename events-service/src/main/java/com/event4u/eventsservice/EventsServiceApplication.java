@@ -26,7 +26,7 @@ public class EventsServiceApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(CategoryInterface cRepository, UserInterface uRepository, LocationInterface lRepository, EventInterface eRepository) {
+	public CommandLineRunner demo(CategoryInterface cRepository, UserInterface uRepository, LocationInterface lRepository, EventInterface eRepository, EventUserInterface euRepository) {
 		return (args) -> {
 			// save a few categories
 			cRepository.save(new Category("movies", null));
@@ -42,7 +42,7 @@ public class EventsServiceApplication {
 			log.info("");
 
 			// save a few users
-			uRepository.save(new User());
+			User u1 = uRepository.save(new User());
 			uRepository.save(new User());
 			uRepository.save(new User());
 
@@ -68,13 +68,24 @@ public class EventsServiceApplication {
 			log.info("");
 
 			// save a few events
-			eRepository.save(new Event("LV3 NWT", "Zmaja od Bosne bb", new Date(2020,3,16), "Laboratorijske vježbe iz predmeta NWT", Boolean.TRUE));
+			Event e1 = eRepository.save(new Event("LV3 NWT", "Zmaja od Bosne bb", new Date(2020,3,16), "Laboratorijske vježbe iz predmeta NWT", Boolean.TRUE));
 
 			log.info("Events found with findAll():");
 			log.info("-------------------------------");
 
 			for (Event e: eRepository.findAll()) {
 				log.info(e.toString());
+			}
+			log.info("");
+
+			// mark a few events
+			euRepository.save(new EventUser(u1, e1, Boolean.TRUE));
+
+			log.info("Event-User found with findAll():");
+			log.info("-------------------------------");
+
+			for (EventUser eu: euRepository.findAll()) {
+				log.info(eu.toString());
 			}
 			log.info("");
 		};

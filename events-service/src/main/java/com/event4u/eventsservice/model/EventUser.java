@@ -14,6 +14,8 @@ public class EventUser {
     private Event event;
     private Boolean isGoing;
 
+    protected EventUser() {};
+
     public EventUser(User user, Event event, Boolean isGoing) {
         this.user = user;
         this.event = event;
@@ -34,5 +36,13 @@ public class EventUser {
 
     public Boolean getGoing() {
         return isGoing;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "User with id=%d is going to event with id=%d",
+                id, user.getId(), event.getId()
+        );
     }
 }
