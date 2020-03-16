@@ -23,9 +23,9 @@ public class NotificationServiceApplication {
     public CommandLineRunner demo(NotificationRepository repository, EventsRepository repository2, UserRepository repository3) {
         return (args) -> {
             // save a few customers
-            repository.save(new Notification(Long.valueOf(123), "Podsjetnik za događaj 1", new Date(), true));
-            repository.save(new Notification(Long.valueOf(124), "Podsjetnik za događaj 2", new Date(), true));
-            repository.save(new Notification(Long.valueOf(125), "Podsjetnik za događaj 3", new Date(), true));
+            repository.save(new Notification(repository3.save(new User(Long.valueOf(12))), "Podsjetnik za događaj 1", new Date(), true));
+            repository.save(new Notification(repository3.save(new User(Long.valueOf(122))),"Podsjetnik za događaj 2", new Date(), true));
+            repository.save(new Notification(repository3.save(new User(Long.valueOf(123))),"Podsjetnik za događaj 3", new Date(), true));
 
             log.info("Notifications found with findAll():");
             log.info("-------------------------------");

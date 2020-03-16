@@ -24,6 +24,13 @@ public class User {
     @Id
     private Long userId;
 
+    @ManyToMany
+    private List<User> userList;
+    @ManyToMany(mappedBy = "userList")
+    private List<User> subsribedTo;
+    @OneToMany (mappedBy = "userId")
+    private List<Notification> notificationList;
+
     protected User() {
     }
 

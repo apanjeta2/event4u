@@ -19,16 +19,18 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long notificationId;
-    private Long userId;
+    @ManyToOne
+    private User userId;
     private String message;
     private Date date;
     private boolean isRead;
 
+
     protected Notification() {
     }
 
-    public Notification(Long userId, String message, Date date, boolean isRead) {
-        this.userId=userId;
+    public Notification(User u,String message, Date date, boolean isRead) {
+        this.userId=u;
         this.message=message;
         this.date=date;
         this.isRead=isRead;
@@ -38,15 +40,15 @@ public class Notification {
     public String toString() {
         return String.format(
                 "Notification[NotificationId='%s', UserId='%s', Message='%s', Date='%s', IsRead='%s']",
-                notificationId, userId, message, date, isRead);
+                notificationId, userId.getUserId(), message, date, isRead);
     }
 
     public Long getUserId() {
-        return notificationId;
+        return userId.getUserId();
     }
 
     public Long getNotificationId() {
-        return userId;
+        return notificationId;
     }
 
     public String getMessage() {
