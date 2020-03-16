@@ -20,7 +20,11 @@ public class Location {
     @OneToMany(mappedBy = "location") //Jedna lokacija ima više događaja
     private List<Event> events;
 
-    protected Location(Point coordinates, String city, String country, Boolean isRead) {
+    protected Location() {
+
+    }
+
+    public Location(Point coordinates, String city, String country) {
         this.coordinates = new Point(0,0);
         this.city = city;
         this.country = country;

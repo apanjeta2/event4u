@@ -24,13 +24,16 @@ public class Event {
     @OneToMany(mappedBy = "event") //Jedan dogadjas moze oznaciti vise korisnika
     private List<EventUser> eu;
 
-    protected Event(String title, String address, Date date, String description, Boolean isActive, User creator) {
+    protected Event() {
+
+    };
+
+    public Event(String title, String address, Date date, String description, Boolean isActive) {
         this.title = title;
         this.address = address;
         this.date = date;
         this.description = description;
         this.isActive = isActive;
-        this.creator = creator;
     }
 
     @Override

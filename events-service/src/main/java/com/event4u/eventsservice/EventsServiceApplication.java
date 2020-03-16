@@ -1,39 +1,83 @@
 package com.event4u.eventsservice;
 
-import com.event4u.eventsservice.model.Category;
-import com.event4u.eventsservice.repository.CategoryInterface;
-import org.springframework.boot.ApplicationRunner;
+import com.event4u.eventsservice.model.*;
+import com.event4u.eventsservice.model.Event;
+import com.event4u.eventsservice.repository.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Arrays;
-import java.util.List;
+import java.awt.*;
+import java.util.Date;
+
 
 @SpringBootApplication
 public class EventsServiceApplication {
+	private static final Logger log =
+			LoggerFactory.getLogger(EventsServiceApplication.class);
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(EventsServiceApplication.class, args);
 	}
 
-//	@Bean
-//	ApplicationRunner init(CategoryInterface repoCat) {
-//		List<String> categories = Arrays.asList(new String[]{
-//				"movies", "books", "programming"
-//		});
-//		return args -> {
-//			try {
-//				for (String s: categories
-//					 ) {
-//					repoCat.save(new Category());
-//				}
-//			}
-//			catch (Exception e) {
-//				e.printStackTrace();;
-//			}
-//			repoCat.findAll().forEach(System.out::println);
-//		};
-//	}
+	@Bean
+	public CommandLineRunner demo(CategoryInterface cRepository, UserInterface uRepository, LocationInterface lRepository, EventInterface eRepository) {
+		return (args) -> {
+			// save a few categories
+			cRepository.save(new Category("movies", null));
+			cRepository.save(new Category("books", null));
+			cRepository.save(new Category("IT", null));
+
+			log.info("Categories found with findAll():");
+			log.info("-------------------------------");
+
+			for (Category c : cRepository.findAll()) {
+				log.info(c.toString());
+			}
+			log.info("");
+
+			// save a few users
+			uRepository.save(new User());
+			uRepository.save(new User());
+			uRepository.save(new User());
+
+			log.info("Users found with findAll():");
+			log.info("-------------------------------");
+
+			for (User u: uRepository.findAll()) {
+				log.info(u.toString());
+			}
+			log.info("");
+
+			// save a few locations
+			lRepository.save(new Location(new Point(0,0), "Sarajevo", "Bosna i Hercegovina"));
+			lRepository.save(new Location(new Point(0,0), "Mostar", "Bosna i Hercegovina"));
+			lRepository.save(new Location(new Point(0,0), "Banja Luka", "Bosna i Hercegovina"));
+
+			log.info("Locations found with findAll():");
+			log.info("-------------------------------");
+
+			for (Location l: lRepository.findAll()) {
+				log.info(l.toString());
+			}
+			log.info("");
+
+			// save a few events
+			eRepository.save(new Event("LV3 NWT", "Zmaja od Bosne bb", new Date(2020,3,16), "Laboratorijske vježbe iz predmeta NWT", Boolean.TRUE));
+
+			log.info("Events found with findAll():");
+			log.info("-------------------------------");
+
+			for (Event e: eRepository.findAll()) {
+				log.info(e.toString());
+			}
+			log.info("");
+		};
+	}
 
 }
