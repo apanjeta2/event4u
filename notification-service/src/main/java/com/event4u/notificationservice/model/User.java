@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.event4u.notificationservice;
+package com.event4u.notificationservice.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.util.List;
 
 /**
@@ -22,14 +19,21 @@ import java.util.List;
 public class User {
 
     @Id
+    @Column(name = "user_id")
+    @NotNull(message = "Id cannot be null")
     private Long userId;
 
-    @ManyToMany
-    private List<User> userList;
-    @ManyToMany(mappedBy = "userList")
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<User> subscriber;
+
+    @ManyToMany(mappedBy = "subscriber")
     private List<User> subsribedTo;
-    @OneToMany (mappedBy = "userId")
-    private List<Notification> notificationList;
+
+    @OneToMany (mappedBy = "user")
+    private List<Notification> notifications;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Events> events;
 
     protected User() {
     }
@@ -52,7 +56,5 @@ public class User {
         this.userId=userId;
     }
 
-    @ManyToMany
-    private List<Events> eventsList;
 
 }

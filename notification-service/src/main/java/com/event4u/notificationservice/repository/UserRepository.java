@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.event4u.notificationservice;
-import java.util.List;
+package com.event4u.notificationservice.repository;
 
+import com.event4u.notificationservice.model.User;
 import org.springframework.data.repository.CrudRepository;
 /**
  *
  * @author DT User
  */
-public interface EventsRepository extends
-        CrudRepository<Events, Long> {
+public interface UserRepository extends
+        CrudRepository<User, Long> {
 
-    Events findByEventId(Long id);
+    User findByUserId(Long id);
 }

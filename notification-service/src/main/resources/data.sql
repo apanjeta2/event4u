@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS user_notification_list;
+DROP TABLE IF EXISTS user_user_list;
