@@ -10,11 +10,21 @@ export default (sequelize, DataTypes) =>
     username: {
       type: Sequelize.STRING,
       unique: true,
+      required: true,
     },
-    name: Sequelize.STRING,
-    surname: Sequelize.STRING,
-    password: Sequelize.STRING,
-    Picture: Sequelize.STRING,
-    Description: Sequelize.STRING,
-    DateOfRegistration: Sequelize.DATE,
+    name: {
+      type: Sequelize.STRING,
+      required: true,
+    },
+    surname: {
+      type: Sequelize.STRING,
+      required: true,
+    },
+    password: {
+      type: Sequelize.STRING,
+      required: true,
+    },
+    picture: Sequelize.STRING,
+    description: Sequelize.STRING,
+    dateOfRegistration: Sequelize.DATE,
   });

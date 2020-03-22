@@ -15,11 +15,4 @@ db.sequelize = sequelize;
 
 db.User = sequelize.import(__dirname + '/models/User.js');
 
-// primjer unosa, pri pokretanju dodaje se uvijek
-// u tabelu
-
-db.User.create({ username: `masha${new Date().valueOf()}`, name: 'Haris', surname: 'Masovic' }).then(podaci => {
-  db.User.findAll().then(data => console.log('podaci nakon unosa: ', data));
-});
-
 export default db;
