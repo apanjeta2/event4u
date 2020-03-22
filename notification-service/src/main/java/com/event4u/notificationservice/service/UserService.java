@@ -1,5 +1,6 @@
 package com.event4u.notificationservice.service;
 
+import com.event4u.notificationservice.exceptionHandler.UserNotFoundException;
 import com.event4u.notificationservice.model.Events;
 import com.event4u.notificationservice.model.Notification;
 import com.event4u.notificationservice.model.User;
@@ -30,7 +31,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public User createUser(Long userId){

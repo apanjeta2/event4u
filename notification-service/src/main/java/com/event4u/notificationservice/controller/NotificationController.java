@@ -55,6 +55,7 @@ public class NotificationController {
     public void deleteNotification(@PathVariable Long id) {
         notificationService.deleteById(id);
     }
+
     //Kreiranje nove notifikacije
     @PostMapping("")
     public Notification newNotification(@RequestParam Long userId, @RequestParam Long eventId, @RequestParam String message,@RequestParam String date, @RequestParam boolean isRead) throws ParseException {

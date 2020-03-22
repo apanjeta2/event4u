@@ -1,5 +1,6 @@
 package com.event4u.notificationservice.service;
 
+import com.event4u.notificationservice.exceptionHandler.NotificationNotFoundException;
 import com.event4u.notificationservice.model.Events;
 import com.event4u.notificationservice.model.Notification;
 import com.event4u.notificationservice.model.User;
@@ -34,7 +35,7 @@ public class NotificationService {
     }
 
     public Notification findById(Long id) {
-        return notificationRepository.findById(id).orElseThrow();
+        return notificationRepository.findById(id).orElseThrow(() -> new NotificationNotFoundException(id));
     }
 
     public List<Notification> findByUserIdRead(Long id) {

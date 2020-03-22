@@ -1,5 +1,6 @@
 package com.event4u.notificationservice.service;
 
+import com.event4u.notificationservice.exceptionHandler.EventNotFoundException;
 import com.event4u.notificationservice.model.Events;
 import com.event4u.notificationservice.model.Notification;
 import com.event4u.notificationservice.model.User;
@@ -29,7 +30,7 @@ public class EventsService {
     }
 
     public Events getEventById(Long id) {
-        return eventsRepository.findById(id).orElseThrow();
+        return eventsRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
     }
 
     public Events createEvent(Long eventId){

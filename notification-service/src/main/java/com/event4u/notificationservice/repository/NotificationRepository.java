@@ -21,4 +21,5 @@ public interface NotificationRepository extends
     List<Notification> findByEvent(Events event);
     Notification findByNotificationId(Long id);
     List<Notification> deleteByUser(User user);
+    void deleteById(Long id);
 }

@@ -25,6 +25,12 @@ public class UserController {
         return userService.findAll();
     }
 
+    //Vraca user po id-u
+    @GetMapping("/getById/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
     //Dodavanje user-a
     @PostMapping("")
     public User newUser(@RequestParam Long userId) {

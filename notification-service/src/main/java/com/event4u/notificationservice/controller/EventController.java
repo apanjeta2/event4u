@@ -1,5 +1,6 @@
 package com.event4u.notificationservice.controller;
 
+import com.event4u.notificationservice.exceptionHandler.EventNotFoundException;
 import com.event4u.notificationservice.model.Events;
 import com.event4u.notificationservice.model.Notification;
 import com.event4u.notificationservice.service.EventsService;
@@ -17,6 +18,11 @@ public class EventController {
     @Autowired
     private EventsService eventService;
 
+    //Vraca event po id-u
+    @GetMapping("/getById/{id}")
+    public Events getEventById(@PathVariable Long id){
+        return eventService.getEventById(id);
+    }
     @GetMapping("")
     public List<Events> allEvents() {
         return eventService.findAll();
