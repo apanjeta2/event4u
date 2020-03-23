@@ -93,14 +93,14 @@ Vraća notifikaciju na osnovu njegovog id-a
   - **Code:** 200 OK <br />
     **Content:**
     ```
-{
+    {
     "notificationId": 2,
     "message": "Podsjetnik za događaj 2",
     "date": "2020-03-22T22:29:34.309+0000",
     "isRead": false,
     "eventId": 1,
     "userId": 122
-}
+    }
     ```
 
 - **Error Response:**
@@ -148,7 +148,7 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera
   - **Code:** 200 OK <br />
     **Content:**
     ```
-[
+    [
     {
         "notificationId": 2,
         "message": "Podsjetnik za događaj 2",
@@ -157,7 +157,7 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera
         "eventId": 1,
         "userId": 122
     }
-]
+    ]
     ```
 
 - **Error Response:**
@@ -173,7 +173,8 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera
 
 - **Sample Call:**
 
-  ```curl http://localhost:8080/notifications/getByUserId/122
+  ```
+  curl http://localhost:8080/notifications/getByUserId/122
 
   ```
 ### 4. **Get read notification by user id**
@@ -203,7 +204,7 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera koje su pročitane
   - **Code:** 200 OK <br />
     **Content:**
     ```
-[
+    [
     {
         "notificationId": 2,
         "message": "Podsjetnik za događaj 2",
@@ -212,7 +213,7 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera koje su pročitane
         "eventId": 1,
         "userId": 122
     }
-]
+    ]
     ```
 
 - **Error Response:**
@@ -224,11 +225,12 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera koje su pročitane
     "error": "Not Found",
     "message": "User id not found : 667",
     "path": "/notifications/getByUserId/667"
-}`
+    }`
 
 - **Sample Call:**
 
-  ```curl http://localhost:8080/notifications/getByUserIdRead/122
+  ```
+  curl http://localhost:8080/notifications/getByUserIdRead/122
 
   ```
 
@@ -259,7 +261,7 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera koje nisu pročitan
   - **Code:** 200 OK <br />
     **Content:**
     ```
-[
+    [
     {
         "notificationId": 2,
         "message": "Podsjetnik za događaj 2",
@@ -268,7 +270,7 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera koje nisu pročitan
         "eventId": 1,
         "userId": 122
     }
-]
+    ]
     ```
 
 - **Error Response:**
@@ -284,7 +286,8 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera koje nisu pročitan
 
 - **Sample Call:**
 
-  ```curl http://localhost:8080/notifications/getByUserIdNotRead/122
+  ```
+  curl http://localhost:8080/notifications/getByUserIdNotRead/122
 
   ```
 
@@ -315,7 +318,7 @@ Vraća sve notifikacije na osnovu id-a eventa
   - **Code:** 200 OK <br />
     **Content:**
     ```
-[
+    [
     {
         "notificationId": 2,
         "message": "Podsjetnik za događaj 2",
@@ -324,7 +327,7 @@ Vraća sve notifikacije na osnovu id-a eventa
         "eventId": 1,
         "userId": 122
     }
-]
+    ]
     ```
 
 - **Error Response:**
@@ -340,7 +343,8 @@ Vraća sve notifikacije na osnovu id-a eventa
 
 - **Sample Call:**
 
-  ```curl http://localhost:8080/notifications/getByEventId/1
+  ```
+  curl http://localhost:8080/notifications/getByEventId/1
 
   ```
 
@@ -370,7 +374,8 @@ Briše notifikaciju na osnovu id-a
 
   - **Code:** 200 OK <br />
     **Content:**
-    ```message : Successful deletion of the notification with id: 1
+    ```
+    message : Successful deletion of the notification with id: 1
     ```
 
 - **Error Response:**
@@ -381,7 +386,8 @@ Error deleting notifications.`
 
 - **Sample Call:**
 
-  ```curl -X DELETE http://localhost:8080/notifications/2
+  ```
+  curl -X DELETE http://localhost:8080/notifications/2
 
   ```
 ### 8. **Delete all notifications of one user**
@@ -410,7 +416,8 @@ Briše sve notifikacije za jednog user-a na osnovu njegovog id-a
 
   - **Code:** 200 OK <br />
     **Content:**
-    ```message : Successful deletion of  notifications with userid: 1
+    ```
+    message : Successful deletion of  notifications with userid: 1
     ```
 
 - **Error Response:**
@@ -421,7 +428,8 @@ Error deleting notifications.`
 
 - **Sample Call:**
 
-  ```curl -X DELETE http://localhost:8080/notifications/deleteByUserId/2
+  ```
+  curl -X DELETE http://localhost:8080/notifications/deleteByUserId/2
 
   ```
 
@@ -462,7 +470,7 @@ Briše sve notifikacije za jednog user-a na osnovu njegovog id-a
     "isRead": false,
     "eventId": 1,
     "userId": 122
-}
+    }
     ```
 
 - **Error Response:**
@@ -472,9 +480,8 @@ Briše sve notifikacije za jednog user-a na osnovu njegovog id-a
 	Wrong parameters.
 - **Sample Call:**
 
-  ```curl --data "userId=122&eventId=2&message="eee"&date=20/06/2020&isRead=false" http://localhost:8080/notifications
-
-
+  ```
+  curl --data "userId=122&eventId=2&message="eee"&date=20/06/2020&isRead=false" http://localhost:8080/notifications
   ```
 
 
@@ -515,7 +522,7 @@ Vraća sve evente.
     {
         "eventId": 3
     }
-]
+    ]
     ```
 
 - **Error Response:**
@@ -557,9 +564,9 @@ Vraća event na osnovu njegovog id-a
   - **Code:** 200 OK <br />
     **Content:**
     ```
-   {
+    {
     "eventId": 1
-}
+    }
     ```
 
 - **Error Response:**
@@ -576,7 +583,7 @@ Vraća event na osnovu njegovog id-a
 - **Sample Call:**
 
   ```
-  http://localhost:8080/events/getById/22
+  curl http://localhost:8080/events/getById/22
 
   ```
 
@@ -669,7 +676,7 @@ Vraća sve usere.
     {
         "userId": 123
     }
-]
+    ]
     ```
 
 - **Error Response:**
@@ -760,9 +767,9 @@ Omogucava dodavanje user-a u bazu
   - **Code:** 200 OK <br />
     **Content:**
     ```
-   {
+    {
     "userId": 2
-   }
+    }
     ```
 
 - **Error Response:**
@@ -774,11 +781,12 @@ Omogucava dodavanje user-a u bazu
     "error": "Internal Server Error",
     "message": "For input string: \"id=1\"",
     "path": "/users"
-}`
+  }`
 
 - **Sample Call:**
 
-  ```curl -H "Content-Type: application/json" -X POST -d 5 http://localhost:8080/users
+  ```
+  curl -H "Content-Type: application/json" -X POST -d 5 http://localhost:8080/users
 
   ```
 
