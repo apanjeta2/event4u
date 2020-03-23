@@ -6,6 +6,8 @@ import com.event4u.notificationservice.model.User;
 import com.event4u.notificationservice.service.EventsService;
 import com.event4u.notificationservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -22,7 +24,14 @@ public class UserController {
 
     @GetMapping("")
     public List<User> allEvents() {
-        return userService.findAll();
+        try {
+            return userService.findAll();
+        }
+        catch(Exception e) {
+            return (List<User>) new ResponseEntity<String> (
+                    "Error getting users.",
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 
     //Vraca user po id-u
@@ -33,8 +42,8 @@ public class UserController {
 
     //Dodavanje user-a
     @PostMapping("")
-    public User newUser(@RequestParam Long userId) {
-        return userService.createUser(userId);
+    public User newUser(@RequestBody String id) {
+        return userService.createUser(Long.parseLong(id));
     }
 
 }

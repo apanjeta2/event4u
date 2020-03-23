@@ -78,6 +78,7 @@ public class NotificationService {
 
     public void deleteByUser(Long userId) {
         User user = userService.getUserById(userId);
-        notificationRepository.deleteByUser(user);
+        List<Notification> lista = notificationRepository.findByUser(user);
+        notificationRepository.deleteAll(lista);
     }
 }
