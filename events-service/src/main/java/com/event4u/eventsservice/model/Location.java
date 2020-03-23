@@ -1,11 +1,9 @@
 package com.event4u.eventsservice.model;
 
-
-import javafx.util.Pair;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.List;
 
 @Entity
@@ -14,8 +12,16 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotNull(message = "Coordinates cannot be null or empty")
+    @Column(nullable=false)
     private Point coordinates;
+    @NotNull(message = "City cannot be null or empty")
+    @NotBlank(message = "City cannot be null or empty")
+    @Column(nullable=false)
     private String city;
+    @NotNull(message = "Country cannot be null or empty")
+    @NotBlank(message = "Country cannot be null or empty")
+    @Column(nullable=false)
     private String country;
     @OneToMany(mappedBy = "location") //Jedna lokacija ima više događaja
     private List<Event> events;
@@ -25,7 +31,7 @@ public class Location {
     }
 
     public Location(Point coordinates, String city, String country) {
-        this.coordinates = new Point(0,0);
+        this.coordinates = new Point(coordinates.x,coordinates.y);
         this.city = city;
         this.country = country;
     }
@@ -52,5 +58,17 @@ public class Location {
 
     public Point getCoordinates() {
         return coordinates;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setCoordinates(Point coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

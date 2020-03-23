@@ -1,13 +1,29 @@
 package com.event4u.eventsservice.controller;
 
-import com.event4u.eventsservice.repository.UserInterface;
+import com.event4u.eventsservice.model.User;
+import com.event4u.eventsservice.repository.UserRepository;
+import com.event4u.eventsservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("user")
+import java.util.ArrayList;
+
+@RequestMapping("events-micro/users")
 @RestController
 public class UserController {
     @Autowired
-    private UserInterface userRepository;
+    private UserService userService;
+
+    @GetMapping("")
+    public ArrayList<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id){
+        return userService.getUserById(id);
+    }
 }

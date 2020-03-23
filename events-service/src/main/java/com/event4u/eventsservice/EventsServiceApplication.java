@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.awt.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 @SpringBootApplication
@@ -26,12 +26,12 @@ public class EventsServiceApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(CategoryInterface cRepository, UserInterface uRepository, LocationInterface lRepository, EventInterface eRepository, EventUserInterface euRepository) {
+	public CommandLineRunner demo(CategoryRepository cRepository, UserRepository uRepository, LocationRepository lRepository, EventRepository eRepository, EventUserRepository euRepository) {
 		return (args) -> {
 			// save a few categories
-			cRepository.save(new Category("movies", null));
-			cRepository.save(new Category("books", null));
-			cRepository.save(new Category("IT", null));
+			Category c1 = cRepository.save(new Category("movies"));
+			cRepository.save(new Category("books"));
+			cRepository.save(new Category("IT"));
 
 			log.info("Categories found with findAll():");
 			log.info("-------------------------------");
@@ -55,7 +55,7 @@ public class EventsServiceApplication {
 			log.info("");
 
 			// save a few locations
-			lRepository.save(new Location(new Point(0,0), "Sarajevo", "Bosna i Hercegovina"));
+			Location l1 = lRepository.save(new Location(new Point(0,0), "Sarajevo", "Bosna i Hercegovina"));
 			lRepository.save(new Location(new Point(0,0), "Mostar", "Bosna i Hercegovina"));
 			lRepository.save(new Location(new Point(0,0), "Banja Luka", "Bosna i Hercegovina"));
 
@@ -68,7 +68,27 @@ public class EventsServiceApplication {
 			log.info("");
 
 			// save a few events
-			Event e1 = eRepository.save(new Event("LV3 NWT", "Zmaja od Bosne bb", new Date(2020,3,16), "Laboratorijske vježbe iz predmeta NWT", Boolean.TRUE));
+			Event e1 = eRepository.save(new Event("LV4 NWT",
+					"Zmaja od Bosne bb",
+					LocalDate.of(2020, 3, 23),
+					"Laboratorijske vježbe iz predmeta NWT",
+					Boolean.TRUE,
+					c1,
+					u1,
+					l1
+					));
+
+			// save a few events
+			Event e2 = eRepository.save(
+					new Event("LV4 NWT",
+					"Zmaja od Bosne bb",
+					LocalDate.of(2020, 3, 30),
+					"Laboratorijske vježbe iz predmeta NWT",
+					Boolean.TRUE,
+					c1,
+					u1,
+					l1
+			));
 
 			log.info("Events found with findAll():");
 			log.info("-------------------------------");
@@ -88,6 +108,10 @@ public class EventsServiceApplication {
 				log.info(eu.toString());
 			}
 			log.info("");
+
+			/*String command =
+					"curl -i -H \"Content-Type: application/json\" -d '{\"title\": \"LV5 NWT\",\"address\": \"Zmaja od Bosne bb\",\"date\": \"2020-03-21\",\"description\": \"Laboratorijske vježbe iz predmeta NWT\",\"idCategory\": 1,\"idUser\": 5,\"idLocation\": 7}' http://localhost:8080/events-micro/events";
+			ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));*/
 		};
 	}
 

@@ -1,6 +1,10 @@
 package com.event4u.eventsservice.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -10,30 +14,51 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotNull(message = "Event title cannot be null or empty")
+    @NotBlank(message = "Event title cannot be null or empty")
+    @Column(nullable=false)
     private String title;
+    @NotNull(message = "Event address cannot be null or empty")
+    @NotBlank(message = "Event address cannot be null or empty")
+    @Column(nullable=false)
     private String address;
-    private Date date;
+   // @Past(message = "Event with date in the past cannot be created")
+    @NotNull(message = "Event date cannot be null or empty")
+    @Column(nullable=false)
+    private LocalDate date;
     private String description;
     private Boolean isActive;
+    //@NotNull(message = "Event must belong to a category")
     @ManyToOne //vise dogadjaja pripada istoj kategoriji
     private Category category;
+    @NotNull(message = "Event must have a creator")
     @ManyToOne
     private User creator;
+    @NotNull(message = "Event must have a location")
     @ManyToOne
     private Location location;
     @OneToMany(mappedBy = "event") //Jedan dogadjas moze oznaciti vise korisnika
     private List<EventUser> eu;
 
-    protected Event() {
+    protected Event() {}
 
-    };
+    public Event(String title, String address, LocalDate date, String description, Boolean aTrue) {
+        this.title = title;
+        this.address = address;
+        this.date = date;
+        this.description = description;
+        this.isActive = aTrue;
+    }
 
-    public Event(String title, String address, Date date, String description, Boolean isActive) {
+    public Event(String title, String address, LocalDate date, String description, Boolean isActive, Category category, User creator, Location location) {
         this.title = title;
         this.address = address;
         this.date = date;
         this.description = description;
         this.isActive = isActive;
+        this.category = category;
+        this.creator = creator;
+        this.location = location;
     }
 
     @Override
@@ -60,7 +85,7 @@ public class Event {
         return description;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -74,5 +99,37 @@ public class Event {
 
     public Category getCategory() {
         return category;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
