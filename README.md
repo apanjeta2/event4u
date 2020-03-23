@@ -16,7 +16,9 @@ DB_PORT=your_port
 DATABASE=your_database_name
 JWT_SECRET=your_secret
 JWT_EXPIRE_TIME_TOKEN=1h
-INITIAL_DB_SETUP=true // SET 'true' on inital database setup (initial migration)
+INITIAL_DB_SETUP=true // SET 'true' for first time running (initial migration), afterwards you can remove it.
+PORT=4000
+FULL_BASE_URL=http://localhost:4000
 ```
 
 - events
