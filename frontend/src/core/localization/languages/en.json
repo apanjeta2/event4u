@@ -6,11 +6,17 @@
   "AUTH.INVALID_USERNAME_/_PASSWORD": "Invalid username/password.",
   "AUTH.SERVICE_UNAVAILABLE": "Service unavailable.",
   "AUTH.PASSWORD": "Password",
-  "AUTH.EMAIL_OR_USERNAME_IS_REQUIRED": "Username is required.",
+  "AUTH.USERNAME_IS_REQUIRED": "Username is required.",
   "AUTH.PASSWORD_IS_REQUIRED": "Password is required.",
   "AUTH.USERNAME": "Username",
   "AUTH.FIRST_NAME": "First Name",
   "AUTH.LAST_NAME": "Last Name",
+  "AUTH.ERROR_LOGGING_IN": "Error while loggin in, please check your credientials.",
+  "AUTH.FIRST_NAME_IS_REQUIRED": "First name is required.",
+  "AUTH.LAST_NAME_IS_REQUIRED": "Last name is required.",
+  "AUTH.SUCCESSFULLY_CREATED_ACCOUNT": "Successfully created account.",
+  "AUTH.ERROR_CREATING_ACCOUNT": "Error while creating account",
+
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Page not found."
 }

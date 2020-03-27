@@ -1,14 +1,16 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { StylesProvider } from '@material-ui/core/styles';
 import MaterialThemeProvider from '@material-ui/styles/ThemeProvider';
 
+import SnackBar from '../features/snackbar/components/snackbar';
 import PrivateRoute from './routing/private-route';
+
 import routes from './routing/route-config';
 import GlobalStyle from './global-style';
-
 import './localization';
 
 const theme = {
@@ -28,7 +30,7 @@ const materialTheme = createMuiTheme({
 });
 
 function App() {
-  const userLoggedIn = false;
+  const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
 
   const renderRoutes = () => {
     return routes.map((route, index) => {
@@ -42,6 +44,7 @@ function App() {
       <MaterialThemeProvider theme={materialTheme}>
         <ThemeProvider theme={theme}>
           <Switch>{renderRoutes()}</Switch>
+          <SnackBar />
         </ThemeProvider>
       </MaterialThemeProvider>
     </StylesProvider>

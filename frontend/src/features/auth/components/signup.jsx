@@ -1,12 +1,18 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
+import { useFormik } from 'formik';
+import { useHistory } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import MaterialContainer from '@material-ui/core/Container';
 import styled from 'styled-components';
+import * as Yup from 'yup';
+
+import { handleSignup } from '../actions/auth-actions';
 
 import Button from '../../shared-components/button';
 
@@ -39,28 +45,62 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp() {
   const { t } = useTranslation();
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const signupInProgress = useSelector(state => state.auth.signupInProgress);
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required(t('AUTH.FIRST_NAME_IS_REQUIRED')),
+    surname: Yup.string().required(t('AUTH.LAST_NAME_IS_REQUIRED')),
+    username: Yup.string().required(t('AUTH.USERNAME_IS_REQUIRED')),
+    password: Yup.string().required(t('AUTH.PASSWORD_IS_REQUIRED')),
+  });
+
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
+    initialValues: {
+      name: '',
+      surname: '',
+      username: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: values => {
+      dispatch(handleSignup(values, history));
+    },
+  });
+
+  const fields = [
+    { value: values.name, label: 'AUTH.FIRST_NAME', error: touched.name && errors.name, name: 'name', grid: true },
+    { value: values.surname, label: 'AUTH.LAST_NAME', error: touched.surname && errors.surname, name: 'surname', grid: true },
+    { value: values.username, label: 'AUTH.USERNAME', error: touched.username && errors.username, name: 'username' },
+    { value: values.password, label: 'AUTH.PASSWORD', error: touched.password && errors.password, name: 'password' },
+  ];
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Image src={signUpLogo} alt="logo" />
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField autoComplete="fname" name="firstName" variant="outlined" fullWidth id="firstName" label={t('AUTH.FIRST_NAME')} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField variant="outlined" fullWidth id="lastName" label={t('AUTH.LAST_NAME')} name="lastName" autoComplete="lname" />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField variant="outlined" fullWidth id="username" label={t('AUTH.USERNAME')} name="username" autoComplete="username" />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField variant="outlined" fullWidth name="password" label={t('AUTH.PASSWORD')} type="password" id="password" autoComplete="current-password" />
-            </Grid>
+            {fields.map(field => (
+              <Grid key={field.name} item xs={12} sm={field.grid ? 6 : null}>
+                <TextField
+                  value={field.value}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  label={t(field.label)}
+                  error={Boolean(field.error)}
+                  helperText={field.error}
+                  variant="outlined"
+                  name={field.name}
+                  fullWidth
+                />
+              </Grid>
+            ))}
           </Grid>
-          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+          <Button type="submit" fullWidth variant="contained" color="primary" loadingInProgress={signupInProgress} className={classes.submit}>
             {t('AUTH.SIGN_UP')}
           </Button>
           <Grid container justify="flex-end">

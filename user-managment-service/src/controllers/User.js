@@ -96,7 +96,7 @@ export const deleteUser = async (req, res) => {
 
     await db.User.destroy({ where: { username: result.username } });
 
-    res.sendStatus(204);
+    res.status(200).json({ message: 'User successfully deleted. ' });
   } catch (e) {
     console.log('[user-management-service] deleteUser - ', e.message);
     res.status(400).json({ error: 'Error deleting user. ' });

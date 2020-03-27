@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 
 const Wrapper = styled.div`
-  padding-top: 40px;
   text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 `;
 

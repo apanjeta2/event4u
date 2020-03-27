@@ -41,7 +41,8 @@ Omogucava user-u da se uloguje sa svojim username-om i passwordom.
 
 - **Error Response:**
 
-  - **Code:** 401 NOT AUTHORIZED <br />
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error: 'Error with request params. '}`
 
   OR
 
@@ -98,7 +99,8 @@ Sluzi za pravljenje novog user-a tj. dodavanje u sistem.
 
 - **Success Response:**
 
-  - **Code:** 204 NO RESPONSE <br />
+  - **Code:** 200 OK <br />
+    **Content:** `{ "username": "Masha", "name": "Haris", "surname": "Masovic" }`
 
 - **Error Response:**
 
@@ -146,10 +148,11 @@ Sluzi za provjeri tokena, da li je validan.
 - **Success Response:**
 
   - **Code:** 200 OK <br />
+    **Content:** `{ "tokenValid": true }`
 
 - **Error Response:**
 
-  - **Code:** 401 NOT AUTHORIZED <br />
+  - **Code:** 405 NOT AUTHORIZED <br />
     **Content:** `{ "error": true, "message": "Unauthorized access." }`
 
   OR
@@ -386,7 +389,8 @@ Omogucava user-u da izbrise svoj profil.
 
 - **Success Response:**
 
-  - **Code:** 204 NO RESPONSE <br />
+  - **Code:** 200 OK <br />
+    **Content:** `{ message: 'User successfully deleted. ' }`
 
 - **Error Response:**
 
