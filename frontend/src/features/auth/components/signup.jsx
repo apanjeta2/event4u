@@ -23,7 +23,11 @@ const Container = styled(MaterialContainer)`
 `;
 
 const Image = styled.img`
-  width: 100%;
+  padding: 10px;
+`;
+
+const Header = styled.h1`
+  text-align: center;
 `;
 
 const useStyles = makeStyles(theme => ({
@@ -82,6 +86,7 @@ export default function SignUp() {
       <CssBaseline />
       <div className={classes.paper}>
         <Image src={signUpLogo} alt="logo" />
+        <Header>{t('AUTH.SIGNUP_TEXT')}</Header>
         <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
             {fields.map(field => (

@@ -16,6 +16,8 @@
   "AUTH.LAST_NAME_IS_REQUIRED": "Last name is required.",
   "AUTH.SUCCESSFULLY_CREATED_ACCOUNT": "Successfully created account.",
   "AUTH.ERROR_CREATING_ACCOUNT": "Error while creating account",
+  "AUTH.LOGIN_TEXT": "event4u - Login",
+  "AUTH.SIGNUP_TEXT": "event4u - Signup",
 
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Page not found."

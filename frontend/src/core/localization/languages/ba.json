@@ -16,6 +16,8 @@
   "AUTH.LAST_NAME_IS_REQUIRED": "Prezime je obavezno.",
   "AUTH.SUCCESSFULLY_CREATED_ACCOUNT": "Uspjesno kreiran korisnicki racun.",
   "AUTH.ERROR_CREATING_ACCOUNT": "Error prilikom kreiranja korisnickog racuna.",
+  "AUTH.LOGIN_TEXT": "event4u - Prijava",
+  "AUTH.SIGNUP_TEXT": "event4u - Prijava racuna",
 
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Trazena stranica ne postoji."
