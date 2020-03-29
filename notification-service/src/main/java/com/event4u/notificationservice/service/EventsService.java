@@ -1,11 +1,8 @@
 package com.event4u.notificationservice.service;
 
-import com.event4u.notificationservice.exceptionHandler.EventNotFoundException;
+import com.event4u.notificationservice.exception.EventNotFoundException;
 import com.event4u.notificationservice.model.Events;
-import com.event4u.notificationservice.model.Notification;
-import com.event4u.notificationservice.model.User;
 import com.event4u.notificationservice.repository.EventsRepository;
-import com.event4u.notificationservice.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

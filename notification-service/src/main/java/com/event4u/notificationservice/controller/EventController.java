@@ -1,45 +1,35 @@
 package com.event4u.notificationservice.controller;
 
-import com.event4u.notificationservice.exceptionHandler.EventNotFoundException;
 import com.event4u.notificationservice.model.Events;
-import com.event4u.notificationservice.model.Notification;
-import com.event4u.notificationservice.model.User;
 import com.event4u.notificationservice.service.EventsService;
-import com.event4u.notificationservice.service.NotificationService;
+import com.netflix.discovery.DiscoveryClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.events.Event;
 
-import java.util.List;
-
-@RequestMapping("events")
+@RequestMapping(path="events",produces = {MediaType.APPLICATION_JSON_VALUE})
 @RestController
 public class EventController {
 
     @Autowired
     private EventsService eventService;
+    //@Autowired
+    //private DiscoveryClient discoveryClient;
 
     //Vraca event po id-u
-    @GetMapping("/getById/{id}")
+    @GetMapping(path="/getById/{id}",produces = {MediaType.APPLICATION_JSON_VALUE})
     public Events getEventById(@PathVariable Long id){
         return eventService.getEventById(id);
     }
-    @GetMapping("")
-    public List<Events> allEvents() {
-        try {
+    @GetMapping(path="",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Object allEvents() {
         return eventService.findAll();
-        }
-        catch(Exception e) {
-            return (List<Events>) new ResponseEntity<String>(
-                    "Error getting events.",
-                    HttpStatus.BAD_REQUEST);
-        }
     }
 
     //Dodavanje event-a
-    @PostMapping("")
+    @PostMapping(path="",produces = {MediaType.APPLICATION_JSON_VALUE})
     public Events newEvent(@RequestBody String eventId) {
         return eventService.createEvent(Long.parseLong(eventId));
     }

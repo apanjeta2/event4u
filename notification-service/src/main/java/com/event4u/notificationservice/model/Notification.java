@@ -7,6 +7,7 @@ package com.event4u.notificationservice.model;
 
 import com.event4u.notificationservice.model.Events;
 import com.event4u.notificationservice.model.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.*;
 import java.util.Date;
@@ -42,6 +43,7 @@ public class Notification {
     @Size(min = 5, max = 100, message = "Message must be between 5 and 100 characters")
     private String message;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date date;
 
     @AssertFalse

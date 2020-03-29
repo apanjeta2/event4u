@@ -1,16 +1,12 @@
 package com.event4u.notificationservice.service;
 
-import com.event4u.notificationservice.exceptionHandler.UserNotFoundException;
-import com.event4u.notificationservice.model.Events;
-import com.event4u.notificationservice.model.Notification;
+import com.event4u.notificationservice.exception.UserNotFoundException;
 import com.event4u.notificationservice.model.User;
-import com.event4u.notificationservice.repository.NotificationRepository;
 import com.event4u.notificationservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

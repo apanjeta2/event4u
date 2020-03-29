@@ -1,4 +1,4 @@
-package com.event4u.notificationservice.exceptionHandler;
+package com.event4u.notificationservice.exception;
 
 public class EventNotFoundException extends RuntimeException {
 

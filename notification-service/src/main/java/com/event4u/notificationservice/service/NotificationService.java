@@ -1,6 +1,6 @@
 package com.event4u.notificationservice.service;
 
-import com.event4u.notificationservice.exceptionHandler.NotificationNotFoundException;
+import com.event4u.notificationservice.exception.NotificationNotFoundException;
 import com.event4u.notificationservice.model.Events;
 import com.event4u.notificationservice.model.Notification;
 import com.event4u.notificationservice.model.User;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NotificationService {
@@ -22,11 +21,9 @@ public class NotificationService {
     @Autowired
     private EventsService eventsService;
 
-    public List<Notification> findAll() {
+    public Object findAll() {
         Iterable<Notification> allNotifications = notificationRepository.findAll();
-        ArrayList<Notification> notifications = new ArrayList<Notification>();
-        allNotifications.forEach(e -> notifications.add(e));
-        return notifications;
+        return allNotifications;
     }
 
     public List<Notification> findByUserId(Long id) {

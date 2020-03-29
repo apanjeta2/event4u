@@ -7,6 +7,7 @@ import com.event4u.notificationservice.service.EventsService;
 import com.event4u.notificationservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@RequestMapping("users")
+@RequestMapping(path="users",produces = {MediaType.APPLICATION_JSON_VALUE})
 @RestController
 public class UserController {
 
@@ -23,15 +24,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("")
-    public List<User> allEvents() {
-        try {
+    public List<User> allUsers() {
             return userService.findAll();
-        }
-        catch(Exception e) {
-            return (List<User>) new ResponseEntity<String> (
-                    "Error getting users.",
-                    HttpStatus.BAD_REQUEST);
-        }
     }
 
     //Vraca user po id-u

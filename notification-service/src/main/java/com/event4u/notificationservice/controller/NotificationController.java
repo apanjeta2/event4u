@@ -2,8 +2,11 @@ package com.event4u.notificationservice.controller;
 
 import com.event4u.notificationservice.model.Notification;
 import com.event4u.notificationservice.service.NotificationService;
+import net.minidev.json.JSONObject;
+import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,22 +15,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@RequestMapping("/notifications")
+@RequestMapping(path="/notifications",produces = {MediaType.APPLICATION_JSON_VALUE})
 @RestController
 public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
     @GetMapping("")
-    public List<Notification> allNotifications() {
-        try {
+    public Object allNotifications() {
         return notificationService.findAll();
-    }
-        catch(Exception e) {
-        return (List<Notification>) new ResponseEntity<String>(
-                "Error getting notifications.",
-                HttpStatus.BAD_REQUEST);
-    }
     }
 
     //Vraca sve notifikacije za jednog korisnika
@@ -61,16 +57,21 @@ public class NotificationController {
 
     //Brisanje notifikacije po id-u
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteNotification(@PathVariable Long id) {
+    public ResponseEntity<JSONObject> deleteNotification(@PathVariable Long id) {
         try {
             notificationService.deleteById(id);
-            return  new ResponseEntity<String>(
-                    "message : Successful deletion of the notification with id: "+id,
+            JSONObject Entity = new JSONObject();
+            Entity.put("message","Successful deletion of the notification with id: "+id );
+            return  new ResponseEntity<JSONObject>(
+                    Entity,
                     HttpStatus.OK);
         }
         catch(Exception e) {
-            return  new ResponseEntity<String>(
-                    "Error deleting notifications.",
+            JSONObject Entity2 = new JSONObject();
+            Entity2.put("message","Error deleting notifications with id: "+id );
+
+            return  new ResponseEntity<JSONObject>(
+                    Entity2,
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -79,32 +80,31 @@ public class NotificationController {
     //Kreiranje nove notifikacije
     @PostMapping("")
     public Object newNotification(@RequestParam Long userId, @RequestParam Long eventId, @RequestParam String message, @RequestParam String date, @RequestParam boolean isRead) throws ParseException {
-        try {
-            Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(date);
-            return notificationService.createNotification(userId, eventId, message, date1, isRead);
-        }
-        catch (Exception e) {
-            return  new ResponseEntity<String>(
-                    "Wrong parameters.",
-                    HttpStatus.BAD_REQUEST);
-        }
+
+        Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+        return notificationService.createNotification(userId, eventId, message, date1, isRead);
+
 
     }
       //Brisanje svih notifikacija jednog korisnika
     @DeleteMapping("/deleteByUserId/{id}")
-    public ResponseEntity<String> deleteNotificationByUser(@PathVariable Long id) {
+    public ResponseEntity<JSONObject> deleteNotificationByUser(@PathVariable Long id) {
         try {
             notificationService.deleteByUser(id);
-            return  new ResponseEntity<String>(
-                    "message : Successful deletion of notifications with userid: "+id,
+            JSONObject Entity = new JSONObject();
+            Entity.put("message","Successful deletion of the notification with id: "+id );
+            return  new ResponseEntity<JSONObject>(
+                    Entity,
                     HttpStatus.OK);
         }
         catch(Exception e) {
-            return  new ResponseEntity<String>(
-                    "Error deleting notifications.",
+            JSONObject Entity2 = new JSONObject();
+            Entity2.put("message","Error deleting notifications with id: "+id );
+
+            return  new ResponseEntity<JSONObject>(
+                    Entity2,
                     HttpStatus.BAD_REQUEST);
         }
-
     }
 
 }
