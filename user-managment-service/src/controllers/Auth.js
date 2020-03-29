@@ -8,7 +8,7 @@ export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    if (!username || !password) return res.status(400).end();
+    if (!username || !password) return res.status(400).json({ error: 'Error with request params. ' });
 
     const hashedPassword = crypto
       .createHash('sha256')
@@ -17,7 +17,7 @@ export const login = async (req, res) => {
 
     const result = await db.User.findOne({ where: { username, password: hashedPassword } });
 
-    if (!result) return res.status(401).end();
+    if (!result) return res.status(401).json({ error: 'Error while trying to login. ' });
 
     const user = {
       id: result.id,
@@ -47,7 +47,7 @@ export const signUp = async (req, res) => {
   try {
     const { username, name, surname, password } = req.body;
 
-    if (!username || !name || !surname || !password) return res.status(400).end();
+    if (!username || !name || !surname || !password) return res.status(400).json({ error: 'Error with request params. ' });
 
     const hashedPassword = crypto
       .createHash('sha256')
@@ -56,9 +56,9 @@ export const signUp = async (req, res) => {
 
     const result = await db.User.create({ username, name, surname, password: hashedPassword });
 
-    if (!result) return res.status(500).end();
+    if (!result) return res.status(500).json({ error: 'Error creating user. ' });
 
-    res.sendStatus(204);
+    res.status(200).json({ username, name, surname });
   } catch (e) {
     console.log('[user-management-service] signUp - ', e.message);
     res.status(400).json({ error: 'Error creating user. ' });
@@ -70,7 +70,7 @@ export const checkValidToken = (req, res, next) => {
 
   if (token) {
     jwt.verify(token, JWT_SECRET, (err, user) => {
-      if (err) return res.status(401).json({ error: true, message: 'Unauthorized access.' });
+      if (err) return res.status(405).json({ error: true, message: 'Unauthorized access.' });
       req.user = user;
       next();
     });

@@ -8,6 +8,6 @@ authRouter.post('/login', AuthController.login);
 
 authRouter.post('/signup', AuthController.signUp);
 
-authRouter.get('/check-token', AuthController.checkValidToken, (req, res) => res.sendStatus(200));
+authRouter.get('/check-token', AuthController.checkValidToken, (req, res) => res.status(200).json({ tokenValid: true }));
 
 export default authRouter;

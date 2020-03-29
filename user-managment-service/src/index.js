@@ -2,12 +2,13 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 import database from './lib/db/';
 import userRoutes from './routes/user-routes';
 import authRoutes from './routes/auth-routes';
 
-import { DEFAULT_USERS, PORT, INITIAL_DB_SETUP } from './config/constants';
+import { DEFAULT_USERS, PORT, INITIAL_DB_SETUP, FRONTEND_URL } from './config/constants';
 
 dotenv.config();
 database.sequelize.sync({ force: INITIAL_DB_SETUP }).then(async () => {
@@ -22,6 +23,14 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(
+  '*',
+  cors({
+    origin: FRONTEND_URL,
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);

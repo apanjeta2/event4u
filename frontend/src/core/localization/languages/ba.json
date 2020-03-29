@@ -6,11 +6,19 @@
   "AUTH.INVALID_USERNAME_/_PASSWORD": "Netacno korisnicko ime/sifra.",
   "AUTH.SERVICE_UNAVAILABLE": "Servis je trenutno nedostupan",
   "AUTH.PASSWORD": "Sifra",
-  "AUTH.EMAIL_OR_USERNAME_IS_REQUIRED": "Korisnicko ime je obavezno.",
+  "AUTH.USERNAME_IS_REQUIRED": "Korisnicko ime je obavezno.",
   "AUTH.PASSWORD_IS_REQUIRED": "Sifra je obavezna.",
   "AUTH.USERNAME": "Korisnicko ime",
   "AUTH.FIRST_NAME": "Ime",
   "AUTH.LAST_NAME": "Prezime",
+  "AUTH.ERROR_LOGGING_IN": "Desio se problem prilikom logiranja, provjerite vase podatke.",
+  "AUTH.FIRST_NAME_IS_REQUIRED": "Ime je obavezno.",
+  "AUTH.LAST_NAME_IS_REQUIRED": "Prezime je obavezno.",
+  "AUTH.SUCCESSFULLY_CREATED_ACCOUNT": "Uspjesno kreiran korisnicki racun.",
+  "AUTH.ERROR_CREATING_ACCOUNT": "Error prilikom kreiranja korisnickog racuna.",
+  "AUTH.LOGIN_TEXT": "event4u - Prijava",
+  "AUTH.SIGNUP_TEXT": "event4u - Prijava racuna",
+
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Trazena stranica ne postoji."
 }

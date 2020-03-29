@@ -13,6 +13,7 @@ export const DB_HOST = process.env.DB_HOST;
 export const DB_PORT = process.env.DB_PORT;
 export const DATABASE = process.env.DATABASE;
 export const INITIAL_DB_SETUP = process.env.INITIAL_DB_SETUP === 'true' ? true : false;
+export const FRONTEND_URL = process.env.FRONTEND_URL;
 
 const password = crypto
   .createHash('sha256')
