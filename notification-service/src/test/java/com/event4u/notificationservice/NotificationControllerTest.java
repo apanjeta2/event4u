@@ -23,18 +23,15 @@ public class NotificationControllerTest {
     private MockMvc mvc;
 
     @Test
-    public void getAllNotificationsAPI() throws Exception
+    public void getAllNotificationsTest() throws Exception
     {
         mvc.perform(MockMvcRequestBuilders.get("/notifications")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventId", is(1)))
-                .andExpect(jsonPath("$[0].userId", is(122)))
-                .andExpect(jsonPath("$[0].isRead", is(false)))
-                .andExpect(jsonPath("$[1].eventId", is(1)))
-                .andExpect(jsonPath("$[1].userId", is(123)))
-                .andExpect(jsonPath("$[1].isRead", is(false)));
+                .andExpect(jsonPath("$[0].userId", is(12)))
+                .andExpect(jsonPath("$[0].isRead", is(false)));
     }
     @Test
     public void getNotificationByIdTest() throws Exception {
@@ -161,13 +158,10 @@ public class NotificationControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/notifications/getByEventId/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].notificationId", is(2)))
                 .andExpect(jsonPath("$[0].eventId", is(1)))
                 .andExpect(jsonPath("$[0].userId", is(122)))
-                .andExpect(jsonPath("$[1].notificationId", is(3)))
-                .andExpect(jsonPath("$[1].eventId", is(1)))
-                .andExpect(jsonPath("$[1].userId", is(123)))
         ;
     }
     @Test
@@ -237,6 +231,19 @@ public class NotificationControllerTest {
     @Test
     public void deleteNotificationByIdErrorTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/notifications/11"))
+                .andExpect(jsonPath("$.message", is("Error deleting notifications with id: 11")))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteNotificationByUserIdTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/notifications/deleteByUserId/123"))
+                .andExpect(jsonPath("$.message", is("Successful deletion of the notification with id: 123")))
+                .andExpect(status().isOk());
+    }
+    @Test
+    public void deleteNotificationByUserIdErrorTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/notifications/deleteByUserId/11"))
                 .andExpect(jsonPath("$.message", is("Error deleting notifications with id: 11")))
                 .andExpect(status().isBadRequest());
     }
