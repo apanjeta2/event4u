@@ -23,7 +23,7 @@ public class EventUserService {
         var it = eventUserRepository.findAll();
         var users = new ArrayList<EventUser>();
         it.forEach(eventUser -> {
-            if (eventUser.getEvent().getId() == id) {
+            if (eventUser.getEvent().getId().equals(id)) {
                 users.add(eventUser);
             }
         });
@@ -62,7 +62,7 @@ public class EventUserService {
         EventUser eu = null;
         List<EventUser> allEventUsers = getAllUsers(idEvent);
         for (EventUser eventUser : allEventUsers) {
-            if (eventUser.getId() == idUser) {
+            if (eventUser.getId().equals(idUser)) {
                 eu = eventUser;
                 break;
             }
@@ -78,7 +78,7 @@ public class EventUserService {
         EventUser eu = null;
         List<EventUser> allEventUsers = getAllUsers(idEvent);
         for (EventUser eventUser : allEventUsers) {
-            if (eventUser.getId() == idUser) {
+            if (eventUser.getId().equals(idUser)) {
                 eventUser.setGoing(Boolean.FALSE);
                 break;
             }
@@ -90,8 +90,15 @@ public class EventUserService {
         }
     }
 
-    public void removeMark(Long id) {
-        eventUserRepository.deleteById(id);
+    public void removeMark(Long idUser, Long idEvent) {
+        EventUser eu = null;
+        List<EventUser> allEventUsers = getAllUsers(idEvent);
+        for (EventUser eventUser : allEventUsers) {
+            if (eventUser.getId().equals(idUser)) {
+                eventUserRepository.deleteById(eventUser.getId());
+                break;
+            }
+        }
     }
 
 }

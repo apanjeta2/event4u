@@ -13,7 +13,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull(message = "Category name cannot be null")
-    @Column(nullable=false)
+    @Column(nullable=false, unique = true)
     private String name;
     @JsonIgnore
     @OneToMany(mappedBy = "category") //Jedna kategorija ima više događaja

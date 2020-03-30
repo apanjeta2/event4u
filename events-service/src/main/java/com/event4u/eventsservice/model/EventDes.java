@@ -1,30 +1,21 @@
 package com.event4u.eventsservice.model;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-
-import java.io.IOException;
 import java.time.LocalDate;
 
-public class NewEvent {
+public class EventDes {
+    private Long id;
     private String title;
     private String address;
     private LocalDate date;
     private String description;
-    private Long idCategory;
-    private Long idUser;
-    private Long idLocation;
     private Boolean isActive;
 
-    public NewEvent(String title, String address, LocalDate date, String description, Long idCategory, Long idCreator, Long idLocation, Boolean isActive) {
+    public EventDes(Long id, String title, String address, LocalDate date, String description, Boolean isActive) {
+        this.id = id;
         this.title = title;
         this.address = address;
         this.date = date;
         this.description = description;
-        this.idCategory = idCategory;
-        this.idUser = idCreator;
-        this.idLocation = idLocation;
         this.isActive = isActive;
     }
 
@@ -61,30 +52,6 @@ public class NewEvent {
         this.description = description;
     }
 
-    public Long getIdCategory() {
-        return idCategory;
-    }
-
-    public void setIdCategory(Long idCategory) {
-        this.idCategory = idCategory;
-    }
-
-    public Long getIdCreator() {
-        return idUser;
-    }
-
-    public void setIdUser(Long idUser) {
-        this.idUser = idUser;
-    }
-
-    public Long getIdLocation() {
-        return idLocation;
-    }
-
-    public void setIdLocation(Long idLocation) {
-        this.idLocation = idLocation;
-    }
-
     public Boolean getActive() {
         return isActive;
     }
@@ -93,4 +60,11 @@ public class NewEvent {
         isActive = active;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

@@ -61,6 +61,18 @@ public class Event {
         this.location = location;
     }
 
+    public Event(Long id, String title, String address, LocalDate date, String description, Category category, User creator, Location location,  Boolean isActive) {
+        this.title = title;
+        this.address = address;
+        this.date = date;
+        this.description = description;
+        this.isActive = isActive;
+        this.category = category;
+        this.creator = creator;
+        this.location = location;
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return String.format(
