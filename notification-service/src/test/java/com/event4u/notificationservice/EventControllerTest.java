@@ -25,8 +25,10 @@ public class EventControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/events")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(4))) //4 zbogo novog dodanog
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(4))) //4 zbog novog dodanog
                 .andExpect(jsonPath("$[0].eventId", is(1)));
+
     }
     @Test
     public void getEventByIdTest() throws Exception {
@@ -37,10 +39,25 @@ public class EventControllerTest {
     }
 
     @Test
+    public void getEventByIdErrorTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/events/getById/88") //ne postoji
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("Element not found")));
+    }
+    @Test
     public void postEventByIdTest() throws Exception {
         MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/events")
                 .content("66"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.eventId", is(66))) //ako je uspjeno upisan ispise ga
+                .andReturn();
+    }
+    @Test
+    public void postEventByIdErrorTest() throws Exception {
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/events")
+                .content(""))
+                .andExpect(status().isBadRequest())
                 .andReturn();
     }
 }

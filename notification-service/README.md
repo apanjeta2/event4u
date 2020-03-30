@@ -57,7 +57,16 @@ Vraća sve notifikacije svih usera.
 - **Error Response:**
 
   - **Code:** 500 SERVER ERROR <br />
-    **Content:** `{ 'Error getting notifications. ' }`
+    **Content:** 
+    ```
+    {
+        "status": "INTERNAL_SERVER_ERROR",
+        "message": "EntityRepresentationModel not found!",
+        "errors": [
+        "Error occurred"
+        ]
+    }
+    ```
 
 - **Sample Call:**
 
@@ -102,17 +111,27 @@ Vraća notifikaciju na osnovu njegovog id-a
     "userId": 122
     }
     ```
+   
 
 - **Error Response:**
 
   - **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "timestamp": "2020-03-22T22:30:59.846+0000",
-    "status": 404,
-    "error": "Not Found",
-    "message": "Notification id not found : 888",
-    "path": "/notifications/getById/888"
-}`
+    **Content:** 
+    ```
+    {
+        "message": "Element not found"
+    }
+    ```
+    or
+     ```
+        {
+            "status": "BAD_REQUEST",
+            "message": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"\"2\"\"",
+            "errors": [
+                "id should be of type java.lang.Long"
+            ]
+        }
+      ```
 
 - **Sample Call:**
 
@@ -163,13 +182,22 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera
 - **Error Response:**
 
   - **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "timestamp": "2020-03-22T22:43:56.678+0000",
-    "status": 404,
-    "error": "Not Found",
-    "message": "User id not found : 667",
-    "path": "/notifications/getByUserId/667"
-}`
+    **Content:** 
+    ```
+        {
+            "message": "Element not found"
+        }
+    ```
+    or
+    ```
+    {
+        "status": "BAD_REQUEST",
+        "message": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"\"2\"\"",
+        "errors": [
+            "id should be of type java.lang.Long"
+        ]
+    }
+    ```
 
 - **Sample Call:**
 
@@ -219,13 +247,22 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera koje su pročitane
 - **Error Response:**
 
   - **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "timestamp": "2020-03-22T22:43:56.678+0000",
-    "status": 404,
-    "error": "Not Found",
-    "message": "User id not found : 667",
-    "path": "/notifications/getByUserId/667"
-    }`
+    **Content:** 
+    ```
+            {
+                "message": "Element not found"
+            }
+      ```
+       or
+      ```
+        {
+            "status": "BAD_REQUEST",
+            "message": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"\"2\"\"",
+            "errors": [
+                "id should be of type java.lang.Long"
+            ]
+        }
+   ```
 
 - **Sample Call:**
 
@@ -276,13 +313,22 @@ Vraća sve notifikacije za jednog usera na osnovu id-a usera koje nisu pročitan
 - **Error Response:**
 
   - **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "timestamp": "2020-03-22T22:56:42.065+0000",
-    "status": 404,
-    "error": "Not Found",
-    "message": "User id not found : 1277",
-    "path": "/notifications/getByUserIdNotRead/1277"
-}`
+    **Content:** 
+    ```
+            {
+                "message": "Element not found"
+            }
+      ```
+        or
+      ```
+        {
+            "status": "BAD_REQUEST",
+            "message": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"\"2\"\"",
+            "errors": [
+                "id should be of type java.lang.Long"
+            ]
+        }
+      ```
 
 - **Sample Call:**
 
@@ -333,13 +379,22 @@ Vraća sve notifikacije na osnovu id-a eventa
 - **Error Response:**
 
   - **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "timestamp": "2020-03-22T22:58:16.299+0000",
-    "status": 404,
-    "error": "Not Found",
-    "message": "Event id not found : 55",
-    "path": "/notifications/getByEventId/55"
-}`
+    **Content:** 
+    ```
+            {
+                "message": "Element not found"
+            }
+      ```
+        or
+    ```
+        {
+            "status": "BAD_REQUEST",
+            "message": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"\"2\"\"",
+            "errors": [
+                "id should be of type java.lang.Long"
+            ]
+        }
+     ```
 
 - **Sample Call:**
 
@@ -375,15 +430,21 @@ Briše notifikaciju na osnovu id-a
   - **Code:** 200 OK <br />
     **Content:**
     ```
-    message : Successful deletion of the notification with id: 1
+    {
+        "message": "Successful deletion of the notification with id: 1"
+    }
     ```
 
 - **Error Response:**
 
   - **Code:** 400 BAD REQUEST <br />
-    **Content:** `
-Error deleting notifications.`
-
+    **Content:** 
+    ```
+    {
+        "message": "Error deleting notifications with id: 13"
+    }
+    ```
+    
 - **Sample Call:**
 
   ```
@@ -417,14 +478,20 @@ Briše sve notifikacije za jednog user-a na osnovu njegovog id-a
   - **Code:** 200 OK <br />
     **Content:**
     ```
-    message : Successful deletion of  notifications with userid: 1
+        {
+            "message": "Successful deletion of the notification with id: 1"
+        }
     ```
 
 - **Error Response:**
 
   - **Code:** 400 BAD REQUEST <br />
-    **Content:** `
-Error deleting notifications.`
+    **Content:** 
+     ```
+     {
+         "message": "Error deleting notifications with id: 13"
+     }
+     ```
 
 - **Sample Call:**
 
@@ -476,8 +543,27 @@ Briše sve notifikacije za jednog user-a na osnovu njegovog id-a
 - **Error Response:**
 
   - **Code:** 400 BAD REQUEST <br />
-    **Content:** `
-	Wrong parameters.
+    **Content:** 
+ ```
+    {
+        "status": "BAD_REQUEST",
+        "message": "Required boolean parameter 'isRead' is not present",
+        "errors": [
+            "isRead parameter is missing"
+        ]
+    }
+```
+or
+```
+{
+    "status": "BAD_REQUEST",
+    "message": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"\"23\"\"",
+    "errors": [
+        "userId should be of type java.lang.Long"
+    ]
+}
+```
+
 - **Sample Call:**
 
   ```
@@ -528,7 +614,16 @@ Vraća sve evente.
 - **Error Response:**
 
   - **Code:** 500 SERVER ERROR <br />
-    **Content:** `{ 'Error getting events. ' }`
+    **Content:** 
+ ```
+     {
+         "status": "INTERNAL_SERVER_ERROR",
+         "message": "EntityRepresentationModel not found!",
+         "errors": [
+         "Error occurred"
+         ]
+     }
+  ```
 
 - **Sample Call:**
 
@@ -572,13 +667,22 @@ Vraća event na osnovu njegovog id-a
 - **Error Response:**
 
   - **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "timestamp": "2020-03-22T21:56:22.783+0000",
-    "status": 404,
-    "error": "Not Found",
-    "message": "Event id not found : 166",
-    "path": "/events/getById/166"
-}`
+    **Content:** 
+    ```
+    {
+        "message": "Element not found"
+    }
+    ```
+    or
+    ```
+    {
+        "status": "BAD_REQUEST",
+        "message": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"\"99\"\"",
+        "errors": [
+            "id should be of type java.lang.Long"
+        ]
+    }
+    ```
 
 - **Sample Call:**
 
@@ -682,7 +786,16 @@ Vraća sve usere.
 - **Error Response:**
 
   - **Code:** 500 SERVER ERROR <br />
-    **Content:** `{ 'Error getting users. ' }`
+    **Content:** 
+ ```
+      {
+          "status": "INTERNAL_SERVER_ERROR",
+          "message": "EntityRepresentationModel not found!",
+          "errors": [
+          "Error occurred"
+          ]
+      }
+  ```
 
 - **Sample Call:**
 
@@ -726,13 +839,22 @@ Vraća korisnika na osnovu njegovog id-a
 - **Error Response:**
 
   - **Code:** 404 NOT FOUND <br />
-    **Content:** `{
-    "timestamp": "2020-03-22T21:38:59.714+0000",
-    "status": 404,
-    "error": "Not Found",
-    "message": "User id not found : 1",
-    "path": "/users/getById/1"
-}`
+    **Content:** 
+ ```
+     {
+         "message": "Element not found"
+     }
+ ```
+  or
+  ```
+     {
+         "status": "BAD_REQUEST",
+         "message": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"\"99\"\"",
+         "errors": [
+             "id should be of type java.lang.Long"
+         ]
+     }
+  ```
 
 - **Sample Call:**
 
