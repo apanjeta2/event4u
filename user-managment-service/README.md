@@ -1,7 +1,5 @@
-## 
-
-## Run localy
-In order to run `user-management-service` localy you must define these env variables:
+## Run locally
+In order to run `user-management-service` locally you must define these env variables in an .env file:
 
 ```
 DB_USERNAME=your_db_username
