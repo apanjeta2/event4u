@@ -1,5 +1,10 @@
 # Events routes
 
+**Swagger**
+* **URL**
+
+  /swagger-ui.html
+
 **Get all cateogries**
 ----
   API for getting all cateogries
