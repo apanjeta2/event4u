@@ -1,5 +1,8 @@
+## Endpoints
+- You can find the endpoints for this service [here](https://github.com/MasovicHaris/event4u/wiki/User-Management-service---endpoints).
+
 ## Run locally
-In order to run `user-management-service` locally you must define these env variables in an .env file:
+- In order to run `user-management-service` locally you must define these env variables in an .env file:
 
 ```
 DB_USERNAME=your_db_username
@@ -15,8 +18,9 @@ FULL_BASE_URL=http://localhost:4000 or your own url
 FRONTEND_URL=http://localhost:3000 or your own url
 ```
 
-After that, you need to run `npm install` or `npm ci`. Finally to start the app hit `npm start`
+- After that, in order to install the dependencies, you need to run `npm install` or `npm ci`. 
+- Finally to start the app hit `npm start`
 
 ## Running tests
 
-In order to run tests, open a second terminal (first one must be active) and type `npm test`
+- In order to run tests, open a second terminal (first one must be active) and type `npm test`
