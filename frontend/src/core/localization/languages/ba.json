@@ -20,5 +20,12 @@
   "AUTH.SIGNUP_TEXT": "event4u - Prijava racuna",
 
   "NOT_FOUND.404": "404",
-  "NOT_FOUND.MSG": "Trazena stranica ne postoji."
+  "NOT_FOUND.MSG": "Trazena stranica ne postoji.",
+  "HEADER.EVENT4U": "Dobrodosli na event4u!",
+  "HEADER.SEARCH_EVENTS": "Potrazite dogadjaje..",
+  "HEADER.ENGLISH": "Engleski",
+  "HEADER.BOSNIAN": "Bosanski",
+  "HEADER.MY_ACCOUNT": "Moj racun",
+  "HEADER.LOGOUT": "Logaut",
+  "HEADER.EVENTS": "Dogadjaji"
 }

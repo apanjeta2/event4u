@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +14,7 @@ import * as Yup from 'yup';
 
 import { handleLogin } from '../actions/auth-actions';
 
+import ApplicationHeader from '../../shared-components/header';
 import Button from '../../shared-components/button';
 
 import signUpLogo from '../../../config/images/sign-up-white.png';
@@ -79,54 +80,57 @@ function Login() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Image src={signUpLogo} alt="logo" />
-        <Header>{t('AUTH.LOGIN_TEXT')}</Header>
-        <form className={classes.form} onSubmit={handleSubmit} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                value={values.username}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                label={t('AUTH.USERNAME')}
-                error={Boolean(usernameError)}
-                helperText={usernameError}
-                variant="outlined"
-                name="username"
-                fullWidth
-              />
+    <Fragment>
+      <ApplicationHeader isAuthPage />
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Image src={signUpLogo} alt="logo" />
+          <Header>{t('AUTH.LOGIN_TEXT')}</Header>
+          <form className={classes.form} onSubmit={handleSubmit} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  value={values.username}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  label={t('AUTH.USERNAME')}
+                  error={Boolean(usernameError)}
+                  helperText={usernameError}
+                  variant="outlined"
+                  name="username"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={Boolean(passwordError)}
+                  helperText={passwordError}
+                  name="password"
+                  label={t('AUTH.PASSWORD')}
+                  type="password"
+                  variant="outlined"
+                  fullWidth
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={Boolean(passwordError)}
-                helperText={passwordError}
-                name="password"
-                label={t('AUTH.PASSWORD')}
-                type="password"
-                variant="outlined"
-                fullWidth
-              />
+            <Button type="submit" fullWidth variant="contained" color="primary" loadingInProgress={loginInProgress} className={classes.submit}>
+              {t('AUTH.SIGN_IN')}
+            </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link href="/signup" variant="body2">
+                  {t('AUTH.DONT_HAVE_ACCOUNT')}
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-          <Button type="submit" fullWidth variant="contained" color="primary" loadingInProgress={loginInProgress} className={classes.submit}>
-            {t('AUTH.SIGN_IN')}
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/signup" variant="body2">
-                {t('AUTH.DONT_HAVE_ACCOUNT')}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
+          </form>
+        </div>
+      </Container>
+    </Fragment>
   );
 }
 

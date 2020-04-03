@@ -25,9 +25,11 @@ export const auth = (state = getAuthInitialState(), action) => {
       return { ...state, loginInProgress: action.status };
     case AUTH_ACTIONS.HANDLE_LOGIN_SUCCESS:
       const { user, token } = action.data;
-      return { ...state, user, token };
+      return { ...state, user, token, userLoggedIn: true };
     case AUTH_ACTIONS.HANDLE_SIGNUP_IN_PROGRESS:
       return { ...state, signupInProgress: action.status };
+    case AUTH_ACTIONS.HANDLE_LOGOUT:
+      return getAuthInitialState();
     default:
       return state;
   }

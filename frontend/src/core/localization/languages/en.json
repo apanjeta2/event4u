@@ -20,5 +20,12 @@
   "AUTH.SIGNUP_TEXT": "event4u - Signup",
 
   "NOT_FOUND.404": "404",
-  "NOT_FOUND.MSG": "Page not found."
+  "NOT_FOUND.MSG": "Page not found.",
+  "HEADER.EVENT4U": "Welcome to event4u!",
+  "HEADER.SEARCH_EVENTS": "Search events..",
+  "HEADER.ENGLISH": "English",
+  "HEADER.BOSNIAN": "Bosnian",
+  "HEADER.MY_ACCOUNT": "My account",
+  "HEADER.LOGOUT": "Logout",
+  "HEADER.EVENTS": "Events"
 }

@@ -1,6 +1,8 @@
 import SignUp from '../../features/auth/components/signup';
 import Login from '../../features/auth/components/login';
 import NotFound from './not-found';
+import EventsPage from '../../features/events-page/components/events-page';
+import MyAccountPage from '../../features/auth/components/my-account';
 
 const routes = [
   {
@@ -17,16 +19,16 @@ const routes = [
   },
   {
     path: '/',
-    component: NotFound,
-    routes: [
-      {
-        path: '/',
-        component: NotFound,
-        exact: true,
-      },
-      { component: NotFound },
-    ],
+    component: EventsPage,
+    exact: true,
   },
+  {
+    path: '/my-account',
+    component: MyAccountPage,
+    exact: true,
+    requireAuth: true,
+  },
+  { component: NotFound },
 ];
 
 export default routes;
