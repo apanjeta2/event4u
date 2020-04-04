@@ -15,6 +15,6 @@ Maven plugin can be used to run `events-service` form a command line like in the
 
 In order to run the app you have to position yourself to the events-service folder in command prompt or terminal.
 
-To run `events-service` an IDE can be used to (like InteliJ)
+To run `events-service` an IDE can be used too (like IntelliJ)
 
 
