@@ -4,6 +4,7 @@
 
 ## Running locally
 
+- You must setup your database and remember the connection parameters
 - In order to run `user-management-service` locally you must define these env variables in an .env file:
 
 ```
