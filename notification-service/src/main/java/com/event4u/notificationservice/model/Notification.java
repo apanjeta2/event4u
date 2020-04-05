@@ -50,15 +50,18 @@ public class Notification {
     @AssertFalse
     private boolean isRead;
 
+    private int type;
+
     protected Notification() {
     }
 
-    public Notification(User u, Events e, String message, LocalDate date, boolean isRead) {
+    public Notification(User u, Events e, String message, LocalDate date, boolean isRead, int type) {
         this.user=u;
         this.event=e;
         this.message=message;
         this.date=date;
         this.isRead=isRead;
+        this.type=type;
   }
       
     @Override
@@ -92,6 +95,31 @@ public class Notification {
         return isRead;
     }
 
+
+
     public void setIsRead(boolean b) { this.isRead=b;}
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setEvent(Events event) {
+        this.event = event;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 }

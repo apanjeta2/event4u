@@ -4,6 +4,7 @@ import javax.validation.constraints.*;
 import javax.persistence.*;
 
 import javax.persistence.ManyToMany;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,9 @@ public class Events {
 
     @ManyToMany(mappedBy = "events")
     private Set<User> users = new HashSet<>();
+
+    private String name;
+    private LocalDate date;
 
     protected Events() {
     }
@@ -49,4 +53,19 @@ public class Events {
         this.users = users;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

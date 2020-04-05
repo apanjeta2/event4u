@@ -3,15 +3,21 @@ package com.event4u.notificationservice.controller;
 import com.event4u.notificationservice.model.Events;
 import com.event4u.notificationservice.model.Notification;
 import com.event4u.notificationservice.model.User;
+import com.event4u.notificationservice.model.UserBody;
 import com.event4u.notificationservice.service.EventsService;
 import com.event4u.notificationservice.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.DatatypeConverter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,17 +48,29 @@ public class UserController {
         return userService.createUser(Long.parseLong(id));
     }
 
+    @Value("${jwt.secret}")
+    private String key;
     @PostMapping("subscribeTo")
-    public ResponseEntity<JSONObject> subscribeTo(@RequestHeader("Authorization") String header, @RequestBody String idS){
+    public ResponseEntity<JSONObject> subscribeTo(@RequestHeader("Authorization") String token, @RequestBody String idS){
 
         //Iz headrea dobija token i odatle generisemo id
-        Long id1= Long.valueOf(12);//user koji se subscribe-a dobijen iz tokena????
+        //user koji se subscribe-a dobijen iz tokena????
+        token=token.replace("Bearer ","");
+        String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
+        byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
+        Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token).getBody();
+        ObjectMapper mapper = new ObjectMapper();
+
+        UserBody u = mapper.convertValue(claim, UserBody.class);
+        //return claim;
+
+        Long id1=u.getId();
         Long id2= Long.parseLong(idS); //User na kojeg se subscribe
 
         //Upisivanje u bazu subscribera
         userService.addSubscriber(id1,id2);
         JSONObject Entity = new JSONObject();
-        Entity.put("message", "Subscribed to user "+header );
+        Entity.put("message", "Subscribed to user "+u.getName() );
         return  new ResponseEntity<JSONObject>(
                 Entity,
                 HttpStatus.OK);

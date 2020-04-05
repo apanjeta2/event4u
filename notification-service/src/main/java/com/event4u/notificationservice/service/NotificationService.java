@@ -1,17 +1,20 @@
 package com.event4u.notificationservice.service;
 
 import com.event4u.notificationservice.exception.NotificationNotFoundException;
-import com.event4u.notificationservice.model.Events;
-import com.event4u.notificationservice.model.Notification;
-import com.event4u.notificationservice.model.User;
+import com.event4u.notificationservice.model.*;
 import com.event4u.notificationservice.repository.NotificationRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.DatatypeConverter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class NotificationService {
@@ -42,9 +45,15 @@ public class NotificationService {
         ArrayList<Notification> notifications = new ArrayList<Notification>();
         all.forEach(e -> {
             if(e.getIsRead()==true)
-            notifications.add(e);
+                notifications.add(e);
         });
         return notifications;
+    }
+    public Iterable<Notification> findAllByEvent(Long id) {
+        Events event = eventsService.getEventById(id);
+        Iterable<Notification> all = notificationRepository.findByEvent(event);
+
+        return all;
     }
 
     public List<Notification> findByUserIdNotRead(Long id) {
@@ -63,10 +72,48 @@ public class NotificationService {
     }
 
 
-    public Notification createNotification(Long userId, Long eventId, String message, LocalDate date, boolean isRead){
+    public Notification createNotification(Long userId, Long eventId, String message, LocalDate date, boolean isRead, int type){
         User user = userService.getUserById(userId);
         Events event = eventsService.getEventById(eventId);
-        return notificationRepository.save(new Notification(user,event,message,date,isRead));
+        return notificationRepository.save(new Notification(user,event,message,date,isRead, type));
+    }
+
+    public Notification createNotificationNew(String token, NotificationBody not, String key, int type) {
+        //parse token
+        token=token.replace("Bearer ","");
+        String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
+        byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
+        Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token).getBody();
+
+        //Nadji adresu user managment servisa
+        //List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("user-management-service");
+
+        //String url = listOfUrls.get(0);
+        //String fooResourceUrl = url;
+        //ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl , String.class);
+
+        //AKo jeste nastavi
+        //Kreiranje poruke
+
+        String message = "{\"event\": \""+not.getName() +"\" , \"date\": \""+not.getDate()+"\""+"\" , \"name\": \"\"}";
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        UserBody u = mapper.convertValue(claim, UserBody.class);
+        //return claim;
+
+        Long userid=u.getId();
+        userService.createUser(userid);
+        if (type==1)
+        return createNotification(userid, not.getEventId(), message, not.getDate(), false, type);
+        else //salji samo subscriberima
+        {
+            Set<User> all= userService.getSubscribers(userid);
+            all.forEach(e -> {
+                createNotification(e.getUserId(), not.getEventId(), message, not.getDate(), false, type);
+            });
+            return createNotification(userid, not.getEventId(), message, not.getDate(), false, type);
+        }
     }
 
     public List<Notification> findByEventId(Long id) {
@@ -78,5 +125,19 @@ public class NotificationService {
         User user = userService.getUserById(userId);
         List<Notification> lista = notificationRepository.findByUser(user);
         notificationRepository.deleteAll(lista);
+    }
+    public Notification updateNotification(Long id, NotificationBody tijelo) {
+        Events e =eventsService.getEventById(tijelo.getEventId());
+        LocalDate ld = tijelo.getDate();
+
+        String message = "{\"event\": \""+tijelo.getName() +"\" , \"date\": \""+tijelo.getDate()+"\""+"\" , \"name\": \"\"}";
+
+        Notification n = notificationRepository.findById(id).map(us -> {
+            us.setEvent(e);
+            us.setMessage(message);
+            us.setDate(ld);
+            return notificationRepository.save(us);
+        }).orElseThrow();
+        return n;
     }
 }

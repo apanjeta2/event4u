@@ -6,6 +6,7 @@ import com.event4u.notificationservice.repository.EventsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +33,24 @@ public class EventsService {
 
     public Events createEvent(Long eventId){
         return eventsRepository.save(new Events(eventId));
+    }
+    public Events createEventNew(Long eventId, String name, LocalDate date){
+        Events e =new Events(eventId);
+        e.setName(name);
+        e.setDate(date);
+        return eventsRepository.save(e);
+    }
+    public void deleteById(Long id) {
+        eventsRepository.deleteById(id);
+    }
+    public Events updateEvent(Long id, String name, LocalDate date) {
+        Events e = eventsRepository.findById(id).map(event -> {
+            event.setEventId(id);
+            event.setName(name);
+            event.setDate(date);
+            //event.setDate(date);
+            return eventsRepository.save(event);
+        }).orElseThrow();
+        return e;
     }
 }

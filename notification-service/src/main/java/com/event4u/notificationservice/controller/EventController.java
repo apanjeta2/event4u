@@ -1,13 +1,21 @@
 package com.event4u.notificationservice.controller;
 
 import com.event4u.notificationservice.model.Events;
+import com.event4u.notificationservice.model.Notification;
+import com.event4u.notificationservice.model.NotificationBody;
 import com.event4u.notificationservice.service.EventsService;
+import com.event4u.notificationservice.service.NotificationService;
 import com.netflix.discovery.DiscoveryClient;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 @RequestMapping(path="events",produces = {MediaType.APPLICATION_JSON_VALUE})
 @RestController
@@ -15,6 +23,8 @@ public class EventController {
 
     @Autowired
     private EventsService eventService;
+    @Autowired
+    private NotificationService notificationService;
     //@Autowired
     //private DiscoveryClient discoveryClient;
 
@@ -23,6 +33,7 @@ public class EventController {
     public Events getEventById(@PathVariable Long id){
         return eventService.getEventById(id);
     }
+
     @GetMapping(path="",produces = {MediaType.APPLICATION_JSON_VALUE})
     public Object allEvents() {
         return eventService.findAll();
@@ -32,5 +43,49 @@ public class EventController {
     @PostMapping(path="",produces = {MediaType.APPLICATION_JSON_VALUE})
     public Events newEvent(@RequestBody String eventId) {
         return eventService.createEvent(Long.parseLong(eventId));
+    }
+    //Brisanje evnta
+    @DeleteMapping("/{id}")
+    public ResponseEntity<JSONObject> deleteEvents(@PathVariable Long id) {
+        try {
+            eventService.deleteById(id);
+            JSONObject Entity = new JSONObject();
+            Entity.put("message","Successful deletion of the event with id: "+id );
+            return  new ResponseEntity<JSONObject>(
+                    Entity,
+                    HttpStatus.OK);
+        }
+        catch(Exception e) {
+            JSONObject Entity2 = new JSONObject();
+            Entity2.put("message","Error deleting event with id: "+id );
+
+            return  new ResponseEntity<JSONObject>(
+                    Entity2,
+                    HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @Value("${jwt.secret}")
+    private String key;
+
+    //Dodavanje event-a
+    @PostMapping(path="createEvent",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public NotificationBody newEventCreate (@RequestHeader("Authorization") String token, @RequestBody NotificationBody event) {
+        Events e = eventService.createEventNew(event.getEventId(), event.getName(), event.getDate());
+        //Kreiraj notifikaciju odmah
+        Notification n = notificationService.createNotificationNew(token, event, key, 2);
+        return event;
+    }
+
+    @PutMapping(path ="/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Events updateEvent(@RequestBody NotificationBody tijelo, @PathVariable Long id) {
+        //update notifikacija sa tim eventom
+        Iterable<Notification> all=notificationService.findAllByEvent(id);
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
+        all.forEach(e -> {
+            notificationService.updateNotification(e.getNotificationId(), tijelo);
+        });
+        return eventService.updateEvent(id, tijelo.getName(), tijelo.getDate());
     }
 }
