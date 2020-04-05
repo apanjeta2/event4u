@@ -7,7 +7,7 @@ const getServiceUrl = (serviceName = SERVICES.EVENT_SERVICE) => {
 
   switch (serviceName) {
     case SERVICES.EVENT_SERVICE:
-      return `${signUpEventUrl}/events-micro`;
+      return `${baseUrl}/events-micro`;
     default:
       return null;
   }
