@@ -1,14 +1,13 @@
 import request from 'request';
 import dotenv from 'dotenv';
+import { v4 as uuidv4 } from 'uuid';
 import { expect } from 'chai';
-
-import db from '../lib/db';
 
 dotenv.config();
 
 let token = null;
 
-before(done => {
+before((done) => {
   request.post(
     {
       headers: {
@@ -30,7 +29,7 @@ before(done => {
 });
 
 describe('Get all users', () => {
-  it('Treba da vrati 200, sa svim userima', done => {
+  it('Treba da vrati 200, sa svim userima', (done) => {
     request.get(
       {
         headers: {
@@ -49,7 +48,7 @@ describe('Get all users', () => {
 });
 
 describe('Get specific user', () => {
-  it('Treba da vrati specific usera, sve ok', done => {
+  it('Treba da vrati specific usera, sve ok', (done) => {
     request.get(
       {
         headers: {
@@ -66,7 +65,7 @@ describe('Get specific user', () => {
     );
   });
 
-  it('Treba da vrati 404, nema tog usera', done => {
+  it('Treba da vrati 404, nema tog usera', (done) => {
     request.get(
       {
         headers: {
@@ -85,8 +84,10 @@ describe('Get specific user', () => {
 });
 
 describe('Update and delete', () => {
-  it('Treba da kreira user-a, update-uje ga i delete-a ga', done => {
+  it('Treba da kreira user-a, update-uje ga i delete-a ga', (done) => {
     let token = null;
+    const randomValue = uuidv4();
+    const username = `randomUsername${randomValue}`;
     request.post(
       {
         headers: {
@@ -97,12 +98,12 @@ describe('Update and delete', () => {
           name: 'ajla',
           surname: 'ajlaprez',
           password: 'passworddd',
-          username: 'randomusername',
+          username,
         },
         json: true,
       },
       (error, response, body) => {
-        expect(response && response.statusCode).to.equal(204);
+        expect(response && response.statusCode).to.equal(200, 'Please check if other services are running!');
 
         request.post(
           {
@@ -111,7 +112,7 @@ describe('Update and delete', () => {
             },
             url: `${process.env.FULL_BASE_URL}/api/auth/login`,
             body: {
-              username: 'randomusername',
+              username,
               password: 'passworddd',
             },
             json: true,
@@ -146,7 +147,7 @@ describe('Update and delete', () => {
                     json: true,
                   },
                   async (error, response, body) => {
-                    expect(response && response.statusCode).to.equal(204);
+                    expect(response && response.statusCode).to.equal(200, 'Please check if other services are running!');
                     done();
                   }
                 );

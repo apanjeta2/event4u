@@ -10,7 +10,7 @@ dotenv.config();
 let randomUsername = uuidv4();
 let token = null;
 
-before(done => {
+before((done) => {
   request.post(
     {
       headers: {
@@ -31,12 +31,12 @@ before(done => {
   );
 });
 
-after(done => {
+after((done) => {
   db.User.destroy({ where: { username: randomUsername } }).then(() => done());
 });
 
 describe('Login', () => {
-  it('Treba da se login vrati 200, bez greske', done => {
+  it('Treba da se login vrati 200, bez greske', (done) => {
     request.post(
       {
         headers: {
@@ -56,7 +56,7 @@ describe('Login', () => {
     );
   });
 
-  it('Treba da se login vrati 400, jer nije poslan password', done => {
+  it('Treba da se login vrati 400, jer nije poslan password', (done) => {
     request.post(
       {
         headers: {
@@ -77,7 +77,7 @@ describe('Login', () => {
 });
 
 describe('Signup', () => {
-  it('Treba da signup vrati 200, bez greske', done => {
+  it('Treba da signup vrati 200, bez greske', (done) => {
     request.post(
       {
         headers: {
@@ -92,14 +92,14 @@ describe('Signup', () => {
         },
         json: true,
       },
-      async (error, response, body) => {
-        expect(response && response.statusCode).to.equal(204);
+      (error, response, body) => {
+        expect(response && response.statusCode).to.equal(200, 'Please check if other services are running!');
         done();
       }
     );
   });
 
-  it('Treba da signup vrati 400, losi parametri', done => {
+  it('Treba da signup vrati 400, losi parametri', (done) => {
     request.post(
       {
         headers: {
@@ -121,7 +121,7 @@ describe('Signup', () => {
 });
 
 describe('Check token', () => {
-  it('Treba da signup vrati 200, dobar token', done => {
+  it('Treba da signup vrati 200, dobar token', (done) => {
     request.get(
       {
         headers: {
@@ -138,7 +138,7 @@ describe('Check token', () => {
     );
   });
 
-  it('Treba da vrati 403, nema tokena ', done => {
+  it('Treba da vrati 403, nema tokena ', (done) => {
     request.get(
       {
         headers: {

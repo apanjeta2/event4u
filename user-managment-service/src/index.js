@@ -15,7 +15,7 @@ dotenv.config();
 database.sequelize.sync({ force: INITIAL_DB_SETUP }).then(async () => {
   if (INITIAL_DB_SETUP) {
     await database.User.bulkCreate(DEFAULT_USERS);
-    console.log('[user-managment-service] Successfully crated a new database and imported initial data!');
+    console.log('[user-managment-service] Successfully created a new database and imported initial data!');
   }
 });
 
