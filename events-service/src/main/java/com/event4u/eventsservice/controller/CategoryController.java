@@ -42,8 +42,8 @@ public class CategoryController {
     //Delete category by id
     @DeleteMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public SuccessMessage deleteCategory(@PathVariable String id) {
-        Long userId = Long.parseLong(id);
-        categoryService.deleteById(userId);
+        Long categoryId = Long.parseLong(id);
+        categoryService.deleteById(categoryId);
         return new SuccessMessage("Category with id " +  id + " successfully deleted");
     }
 

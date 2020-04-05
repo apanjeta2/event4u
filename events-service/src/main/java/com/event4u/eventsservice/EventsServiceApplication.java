@@ -60,9 +60,10 @@ public class EventsServiceApplication {
 			log.info("");
 
 			// save a few users
-			User u1 = uRepository.save(new User());
-			uRepository.save(new User());
-			uRepository.save(new User());
+			Long id = Long.valueOf(1);
+			User u1 = uRepository.save(new User(id));
+			uRepository.save(new User(++id));
+			uRepository.save(new User(++id));
 
 			log.info("Users found with findAll():");
 			log.info("-------------------------------");

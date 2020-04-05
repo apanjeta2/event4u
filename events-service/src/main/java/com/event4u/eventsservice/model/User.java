@@ -7,7 +7,6 @@ import java.util.List;
 @Table(name = "User")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     //Jedan korisnik moze kreirati vise dogadjaja
     @OneToMany(mappedBy = "creator")
@@ -15,7 +14,13 @@ public class User {
     @OneToMany(mappedBy = "user") //Jedan korisnik moze oznaciti vise dogadjaja
     private List<EventUser> eu;
 
-    public User() {}
+    protected User() {
+
+    }
+
+    public User(Long id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {

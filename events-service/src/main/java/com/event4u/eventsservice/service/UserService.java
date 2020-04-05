@@ -23,4 +23,12 @@ public class UserService {
         it.forEach(e -> users.add(e));
         return users;
     }
+
+    public User createUser(Long id) {
+        return userRepository.save(new User(id));
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
 }
