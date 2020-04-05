@@ -1,7 +1,10 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import axios from 'axios';
 
 import db from '../lib/db';
+import servicesHelper from '../lib/helpers/services-helper';
+
 import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN } from '../config/constants';
 
 export const login = async (req, res) => {
@@ -10,10 +13,7 @@ export const login = async (req, res) => {
 
     if (!username || !password) return res.status(400).json({ error: 'Error with request params. ' });
 
-    const hashedPassword = crypto
-      .createHash('sha256')
-      .update(password)
-      .digest('base64');
+    const hashedPassword = crypto.createHash('sha256').update(password).digest('base64');
 
     const result = await db.User.findOne({ where: { username, password: hashedPassword } });
 
@@ -49,14 +49,15 @@ export const signUp = async (req, res) => {
 
     if (!username || !name || !surname || !password) return res.status(400).json({ error: 'Error with request params. ' });
 
-    const hashedPassword = crypto
-      .createHash('sha256')
-      .update(password)
-      .digest('base64');
+    const hashedPassword = crypto.createHash('sha256').update(password).digest('base64');
 
     const result = await db.User.create({ username, name, surname, password: hashedPassword });
 
     if (!result) return res.status(500).json({ error: 'Error creating user. ' });
+
+    // event
+    const signUpEventUrl = servicesHelper.getServiceUrl();
+    await axios.post(`${signUpEventUrl}/users/${result.id}`);
 
     res.status(200).json({ username, name, surname });
   } catch (e) {

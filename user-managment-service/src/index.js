@@ -28,6 +28,7 @@ const client = new Eureka({
     hostName: BACKEND_HOST_BASE_URL,
     ipAddr: '127.0.0.1',
     statusPageUrl: FULL_BASE_URL,
+    homePageUrl: FULL_BASE_URL,
     vipAddress: APPLICATION_NAME,
     port: {
       $: PORT,
@@ -47,7 +48,7 @@ const client = new Eureka({
   },
 });
 
-client.start(error => {
+client.start((error) => {
   console.log('[user-managment-service-eureka]', error || 'Eureka connected!');
 
   app.use(bodyParser.json());
@@ -67,3 +68,5 @@ client.start(error => {
 });
 
 app.listen(PORT, () => console.log(`[user-managment-service] Listening on port ${PORT}!`));
+
+export default client;

@@ -80,7 +80,7 @@ export default function SignUp() {
     { value: values.name, label: 'AUTH.FIRST_NAME', error: touched.name && errors.name, name: 'name', grid: true },
     { value: values.surname, label: 'AUTH.LAST_NAME', error: touched.surname && errors.surname, name: 'surname', grid: true },
     { value: values.username, label: 'AUTH.USERNAME', error: touched.username && errors.username, name: 'username' },
-    { value: values.password, label: 'AUTH.PASSWORD', error: touched.password && errors.password, name: 'password' },
+    { value: values.password, label: 'AUTH.PASSWORD', error: touched.password && errors.password, name: 'password', password: true },
   ];
 
   if (userLoggedIn) {
@@ -109,6 +109,7 @@ export default function SignUp() {
                     variant="outlined"
                     name={field.name}
                     fullWidth
+                    type={field.password ? 'password' : 'text'}
                   />
                 </Grid>
               ))}

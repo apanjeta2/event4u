@@ -1,7 +1,10 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 
 import db from '../lib/db';
+import servicesHelper from '../lib/helpers/services-helper';
+
 import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN } from '../config/constants';
 
 export const getAllUsers = async (req, res) => {
@@ -47,10 +50,7 @@ export const updateUser = async (req, res) => {
     }
 
     if (req.body.password) {
-      req.body.password = crypto
-        .createHash('sha256')
-        .update(req.body.password)
-        .digest('base64');
+      req.body.password = crypto.createHash('sha256').update(req.body.password).digest('base64');
     }
 
     await db.User.update(req.body, { where: { username } });
@@ -95,6 +95,10 @@ export const deleteUser = async (req, res) => {
     }
 
     await db.User.destroy({ where: { username: result.username } });
+
+    // event
+    const deleteEventUrl = servicesHelper.getServiceUrl();
+    await axios.delete(`${deleteEventUrl}/users/${result.id}`);
 
     res.status(200).json({ message: 'User successfully deleted. ' });
   } catch (e) {
