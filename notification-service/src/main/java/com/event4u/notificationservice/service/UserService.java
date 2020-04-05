@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -33,4 +34,32 @@ public class UserService {
     public User createUser(Long userId){
         return userRepository.save(new User(userId));
     }
+
+    public void addSubscriber(Long id1, Long id2) {
+        User koSeSubscriba = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
+        User naKogaSeSubscriba = userRepository.findById(id2).orElseThrow(() -> new UserNotFoundException(id2));
+
+        koSeSubscriba.getSubsribedTo().add(naKogaSeSubscriba);
+        naKogaSeSubscriba.getSubscriber().add(koSeSubscriba);
+
+        userRepository.save(koSeSubscriba);
+        userRepository.save(naKogaSeSubscriba);
+    }
+
+    public Set<User> getSubscribers(Long id1) {
+        User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
+        return user1.getSubscriber();
+    }
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public void deleteSubscriber(Long id1, Long id2) {
+        User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
+        User user2 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id2));
+
+        var lista = user1.getSubscriber();
+        lista.remove(user2);
+    }
+
 }

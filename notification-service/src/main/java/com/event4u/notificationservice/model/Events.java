@@ -4,7 +4,9 @@ import javax.validation.constraints.*;
 import javax.persistence.*;
 
 import javax.persistence.ManyToMany;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Events {
@@ -17,7 +19,7 @@ public class Events {
     private List<Notification> notifications;
 
     @ManyToMany(mappedBy = "events")
-    private List<User> users;
+    private Set<User> users = new HashSet<>();
 
     protected Events() {
     }
@@ -37,6 +39,14 @@ public class Events {
     }
     public void setEventId(Long eventId) {
         this.eventId=eventId;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
 }

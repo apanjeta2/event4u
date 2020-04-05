@@ -8,6 +8,7 @@ import com.event4u.notificationservice.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,7 +63,7 @@ public class NotificationService {
     }
 
 
-    public Notification createNotification(Long userId, Long eventId, String message, Date date, boolean isRead){
+    public Notification createNotification(Long userId, Long eventId, String message, LocalDate date, boolean isRead){
         User user = userService.getUserById(userId);
         Events event = eventsService.getEventById(eventId);
         return notificationRepository.save(new Notification(user,event,message,date,isRead));

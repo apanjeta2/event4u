@@ -6,16 +6,22 @@
 package com.event4u.notificationservice.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
  * @author DT User
  */
 @Entity
+
+@JsonIgnoreProperties({"events", "subscriber", "subscribedTo"})
 public class User {
 
     @Id
@@ -24,16 +30,16 @@ public class User {
     private Long userId;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<User> subscriber;
+    private Set<User> subscriber = new HashSet<>();
 
     @ManyToMany(mappedBy = "subscriber")
-    private List<User> subsribedTo;
+    private Set<User> subscribedTo = new HashSet<>();
 
     @OneToMany (mappedBy = "user")
     private List<Notification> notifications;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<Events> events;
+    private Set<Events> events = new HashSet<>();
 
     protected User() {
     }
@@ -57,4 +63,17 @@ public class User {
     }
 
 
+    public Set<Events> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Events> events) {
+        this.events=events;
+    }
+    public Set<User> getSubscriber() {
+        return subscriber;
+    }
+    public Set<User> getSubsribedTo() {
+        return subscribedTo;
+    }
 }

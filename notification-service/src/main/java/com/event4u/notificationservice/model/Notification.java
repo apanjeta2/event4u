@@ -10,6 +10,7 @@ import com.event4u.notificationservice.model.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.*;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -44,7 +45,7 @@ public class Notification {
     private String message;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date date;
+    private LocalDate date;
 
     @AssertFalse
     private boolean isRead;
@@ -52,7 +53,7 @@ public class Notification {
     protected Notification() {
     }
 
-    public Notification(User u, Events e, String message, Date date, boolean isRead) {
+    public Notification(User u, Events e, String message, LocalDate date, boolean isRead) {
         this.user=u;
         this.event=e;
         this.message=message;
@@ -79,7 +80,7 @@ public class Notification {
         return message;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
