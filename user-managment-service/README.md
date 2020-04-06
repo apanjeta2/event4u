@@ -4,7 +4,7 @@
 
 ## Running locally
 
-- You must setup your database and remember the connection parameters
+- You must setup your MYSQL database and remember the connection parameters
 - All other services (`eureka-service`, `events-service`, `notification-service`) must be started
 - In order to run `user-management-service` locally you must define these env variables in an .env file:
 
@@ -29,4 +29,4 @@ BACKEND_HOST_BASE_URL=localhost
 
 ## Running tests
 
-- In order to run tests, open a second terminal (first one must be active) and type `npm test`
+- In order to run tests, open a second terminal (all services must be active) and type `npm test`
