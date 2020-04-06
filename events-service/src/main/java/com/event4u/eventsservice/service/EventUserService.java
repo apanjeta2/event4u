@@ -16,8 +16,10 @@ public class EventUserService {
     private EventUserRepository eventUserRepository;
     @Autowired
     private EventService eventService;
-     @Autowired
-     private UserService userService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private  NotificationHelperService notificationHelperService;
 
     private List<EventUser> getAllUsers(Long id){
         var it = eventUserRepository.findAll();
@@ -58,7 +60,7 @@ public class EventUserService {
         eventUserRepository.save(new EventUser(user, event, isGoing));
     }
 
-    public void markAsGoing(Long idUser, Long idEvent) {
+    public void markAsGoing(Long idUser, Long idEvent, String token) {
         EventUser eu = null;
         List<EventUser> allEventUsers = getAllUsers(idEvent);
         for (EventUser eventUser : allEventUsers) {
@@ -72,6 +74,7 @@ public class EventUserService {
         if (eu == null) {
             markNew(user, event, Boolean.TRUE);
         }
+        //notificationHelperService.createGoingToNotificaion(idEvent, token); TODO: fix this
     }
 
     public void markAsInterested(Long idUser, Long idEvent) {

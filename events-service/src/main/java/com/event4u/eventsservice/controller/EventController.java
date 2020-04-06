@@ -35,20 +35,20 @@ public class EventController {
     }
 
     @PostMapping(path = "", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Event newEvent(@RequestBody NewEvent event) {
-        return eventService.createEvent(event.getTitle(), event.getAddress(), event.getDate() ,event.getDescription() ,event.getIdCategory(), event.getIdCreator(), event.getIdLocation());
+    public Event newEvent(@RequestHeader("Authorization") String token, @RequestBody NewEvent event) {
+        return eventService.createEvent(event.getTitle(), event.getAddress(), event.getDate() ,event.getDescription() ,event.getIdCategory(), event.getIdCreator(), event.getIdLocation(), token);
     }
 
     @DeleteMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public SuccessMessage deleteEvent(@PathVariable String id) {
+    public SuccessMessage deleteEvent(@RequestHeader("Authorization") String token, @PathVariable String id) {
         Long userId = Long.parseLong(id);
-        eventService.deleteById(userId);
+        eventService.deleteById(userId, token);
         return new SuccessMessage("Event with id " + id + " successfully deleted");
     }
 
     @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Event updateEvent(@RequestBody NewEvent event, @PathVariable Long id) {
-        return eventService.updateEvent(id, event.getTitle(),event.getAddress(), event.getDate(), event.getDescription(), event.getActive(), event.getIdCategory(), event.getIdLocation());
+    public Event updateEvent(@RequestHeader("Authorization") String token, @RequestBody NewEvent event, @PathVariable Long id) {
+        return eventService.updateEvent(id, event.getTitle(),event.getAddress(), event.getDate(), event.getDescription(), event.getActive(), event.getIdCategory(), event.getIdLocation(), token);
     }
 
 

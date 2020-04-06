@@ -42,8 +42,8 @@ public class EventUserController {
     }
 
     @PostMapping(path = "/going/{idEvent}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    SuccessMessage markEventGoing(@PathVariable Long idEvent, @RequestBody Long idUser) {
-        eventUserService.markAsGoing(idUser, idEvent);
+    SuccessMessage markEventGoing(@RequestHeader("Authorization") String token, @PathVariable Long idEvent, @RequestBody Long idUser) {
+        eventUserService.markAsGoing(idUser, idEvent, token);
         return new SuccessMessage("Event successfully marked as going");
     }
 

@@ -26,6 +26,12 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping(path = "/count", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Long count() {
+        return userService.count();
+    }
+
+
     @PostMapping(path ="/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public User newUser(@PathVariable Long id) {
         return userService.createUser(id);
