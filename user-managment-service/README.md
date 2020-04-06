@@ -5,6 +5,7 @@
 ## Running locally
 
 - You must setup your database and remember the connection parameters
+- All other services (`eureka-service`, `events-service`, `notification-service`) must be started
 - In order to run `user-management-service` locally you must define these env variables in an .env file:
 
 ```
