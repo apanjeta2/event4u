@@ -1,5 +1,6 @@
 package com.event4u.notificationservice.service;
 
+import com.event4u.notificationservice.ServiceInstanceRestController;
 import com.event4u.notificationservice.exception.NotificationNotFoundException;
 import com.event4u.notificationservice.model.*;
 import com.event4u.notificationservice.repository.NotificationRepository;
@@ -7,7 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.xml.bind.DatatypeConverter;
 import java.time.LocalDate;
@@ -24,6 +27,8 @@ public class NotificationService {
     private UserService userService;
     @Autowired
     private EventsService eventsService;
+    @Autowired
+    private ServiceInstanceRestController serviceInstanceRestController;
 
     public Object findAll() {
         Iterable<Notification> allNotifications = notificationRepository.findAll();
@@ -85,14 +90,7 @@ public class NotificationService {
         byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
         Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token).getBody();
 
-        //Nadji adresu user managment servisa
-        //List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("user-management-service");
 
-        //String url = listOfUrls.get(0);
-        //String fooResourceUrl = url;
-        //ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl , String.class);
-
-        //AKo jeste nastavi
         //Kreiranje poruke
 
         String message = "{\"event\": \""+not.getName() +"\" , \"date\": \""+not.getDate()+"\""+"\" , \"name\": \"\"}";
