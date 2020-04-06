@@ -26,7 +26,6 @@ public class EventControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(4))) //4 zbog novog dodanog
                 .andExpect(jsonPath("$[0].eventId", is(1)));
 
     }
@@ -59,5 +58,30 @@ public class EventControllerTest {
                 .content(""))
                 .andExpect(status().isBadRequest())
                 .andReturn();
+    }
+
+    @Test
+    public void updateEventTest() throws Exception {
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.put("/events/2").header("Content-Type", "application/json")
+                .content("{\"eventId\": 2,\"name\": \"promjena\",\"date\": \"2020-09-07\" }"))
+
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.eventId", is(2))) //ako je uspjeno upisan ispise ga
+                .andReturn();
+    }
+
+    @Test
+    public void postEventByIdTest2() throws Exception {
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/events")
+                .content("666"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.eventId", is(666))) //ako je uspjeno upisan ispise ga
+                .andReturn();
+    }
+    @Test
+    public void deleteEventTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/events/666"))
+                .andExpect(jsonPath("$.message", is("Successful deletion of the event with id: 666")))
+                        .andExpect(status().isOk());
     }
 }

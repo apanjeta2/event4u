@@ -43,7 +43,7 @@ public class UserController {
 
     @GetMapping("")
     public List<User> allUsers() {
-            return userService.findAll();
+        return userService.findAll();
     }
 
     //Vraca user po id-u
@@ -140,7 +140,7 @@ public class UserController {
             int finalI = i;
             users.forEach(e -> {
                 if (e.getUserId()==Long.parseLong(ts.get(finalI).getId())) {
-                sviSubscriberi.add(ts.get(finalI));
+                    sviSubscriberi.add(ts.get(finalI));
                 }
             });
         }
@@ -151,6 +151,7 @@ public class UserController {
     @DeleteMapping("/subscriber/{id}")
     public ResponseEntity<JSONObject> deleteSubscriber(@PathVariable Long id) {
         try {
+            //Citati iz tokena kome brisemo
             Long id1 = Long.valueOf(12);
             userService.deleteSubscriber(id1, id);
             JSONObject Entity = new JSONObject();

@@ -173,7 +173,7 @@ public class NotificationControllerTest {
     }
     @Test
     public void getNotificationByUserIdErrorTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/notifications/getByUserId/1")
+        mvc.perform(MockMvcRequestBuilders.get("/notifications/getByUserId/18888888")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
         ;
@@ -217,7 +217,7 @@ public class NotificationControllerTest {
     }
     @Test
     public void postNotificationBadDateFormatTest() throws Exception {
-        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/notifications?userId=12&eventId=2&message=\"poruka test\"&date=22.06.2020&isRead=false"))
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/notifications?userId=12&eventId=2&message=\"poruka test\"&date=tt222.06.2020&isRead=false"))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.errors[0]", is("Error occurred")))
                 .andReturn();

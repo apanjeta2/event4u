@@ -27,8 +27,7 @@ public class UserControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/users")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4))) //4 zbog novog dodanog
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].userId", Matchers.is(12)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].userId", Matchers.is(1)));
     }
     @org.junit.jupiter.api.Test
     public void getUserByIdTest() throws Exception {
@@ -58,5 +57,30 @@ public class UserControllerTest {
                 .content(""))
                 .andExpect(status().isBadRequest())
                 .andReturn();
+    }
+
+    @Test
+    public void updateUserTest() throws Exception {
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.put("/events/2").header("Content-Type", "application/json")
+                .content("{\"eventId\": 2,\"name\": \"promjena\",\"date\": \"2020-09-07\" }"))
+
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.eventId", is(2))) //ako je uspjeno upisan ispise ga
+                .andReturn();
+    }
+
+    @Test
+    public void postUserByIdTest2() throws Exception {
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/users")
+                .content("666"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(666)))
+                .andReturn();
+    }
+    @Test
+    public void deleteUserTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/users/666"))
+                .andExpect(jsonPath("$.message", is("Successful deletion of the user with id: 666")))
+                .andExpect(status().isOk());
     }
 }
