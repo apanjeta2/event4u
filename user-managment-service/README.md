@@ -30,3 +30,4 @@ BACKEND_HOST_BASE_URL=localhost
 ## Running tests
 
 - In order to run tests, open a second terminal (all services must be active) and type `npm test`
+- Note: Due to the written endpoint flows (prerequisites, orm, handling responses), tests are written in a way that provides a 100% assurance regarding that endpoints are working or not 
