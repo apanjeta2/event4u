@@ -1,6 +1,8 @@
 # event4u
 
-event4u is a web appliaction for managing/creating/attending events. Built by:
+Event4u is a web application that allows users to find the perfect event for themselves. The app allows users to search for events in a variety of categories that might be of interest to them and that are near their location. Users can sign up and create a profile to get other options such as creating events, marking events with going to or interested parties, subscribing to other users and getting notifications, etc.
+
+Built by:
 - Haris Masovic
 - Ajla Panjeta
 - Dzenana Sabovic
