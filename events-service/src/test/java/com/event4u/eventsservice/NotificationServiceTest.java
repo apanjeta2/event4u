@@ -59,8 +59,8 @@ public class NotificationServiceTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         JSONObject newUserJsonObject = new JSONObject();
         JSONObject userJsonObject = new JSONObject();
-        userJsonObject.put("username", "mashashama"); //User inace u bazi user managment servisa
-        userJsonObject.put("password", "passwordnovisuperdobar");
+        userJsonObject.put("username", "dzenana"); //User inace u bazi user managment servisa
+        userJsonObject.put("password", "password");
         HttpEntity<String> requestLogin = new HttpEntity<String>(userJsonObject.toString(), headers);
         String res = restTemplate.postForObject(loginUrl, requestLogin, String.class);
         ObjectMapper objectMapper = new ObjectMapper();

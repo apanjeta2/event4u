@@ -56,8 +56,8 @@ public class EventUserControllerTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         JSONObject newUserJsonObject = new JSONObject();
         JSONObject userJsonObject = new JSONObject();
-        userJsonObject.put("username", "mashashama"); //User inace u bazi user managment servisa
-        userJsonObject.put("password", "passwordnovisuperdobar");
+        userJsonObject.put("username", "dzenana"); //User inace u bazi user managment servisa
+        userJsonObject.put("password", "password");
         HttpEntity<String> requestLogin = new HttpEntity<String>(userJsonObject.toString(), headers);
         String res = restTemplate.postForObject(loginUrl, requestLogin, String.class);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -239,6 +239,7 @@ public class EventUserControllerTest {
                         "}"))
                 .andReturn()
         ;
+        getInterestedForEventById(7,2);
     }
 
     @Order(1)
@@ -256,7 +257,7 @@ public class EventUserControllerTest {
                         "}"))
                 .andReturn()
         ;
-        getGoingForEventById(event.getId().intValue(), 1);
+        getGoingForEventById(event.getId().intValue(), 2);
     }
 
     @Order(3)
@@ -274,12 +275,6 @@ public class EventUserControllerTest {
                         "}"))
                 .andReturn()
         ;
-    }
-
-    @Order(2)
-    @Test
-    public void checkIfInsertedInDB() throws Exception {
-        getInterestedForEventById(7,1);
     }
 
     @Order(3)
