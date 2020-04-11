@@ -25,8 +25,6 @@ public class EventController {
     private EventsService eventService;
     @Autowired
     private NotificationService notificationService;
-    //@Autowired
-    //private DiscoveryClient discoveryClient;
 
     //Vraca event po id-u
     @GetMapping(path="/getById/{id}",produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -45,6 +43,7 @@ public class EventController {
         return eventService.createEvent(Long.parseLong(eventId));
     }
     //Brisanje evnta
+
     @DeleteMapping("/{id}")
     public ResponseEntity<JSONObject> deleteEvents(@PathVariable Long id) {
         try {

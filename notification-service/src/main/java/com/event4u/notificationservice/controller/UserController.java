@@ -80,79 +80,39 @@ public class UserController {
         //Upisivanje u bazu subscribera
         userService.addSubscriber(id1,id2);
         JSONObject Entity = new JSONObject();
-        Entity.put("message", "Subscribed to user "+u.getName() );
+        Entity.put("message", "Subscribed to user with id "+id2 );
         return  new ResponseEntity<JSONObject>(
                 Entity,
                 HttpStatus.OK);
-    }
-    @GetMapping("getSubscribers")
-    public Set<User> getSubscribers(@RequestHeader("Authorization") String header, @RequestBody String idS) {
-
-        //Iz headrea dobija token i odatle generisemo id
-        Long id1 = Long.valueOf(idS);//user koji se subscribe-a dobijen iz tokena????
-
-
-        return userService.getSubscribers(id1);
     }
 
     //Vraća cijele objekte usera
     @GetMapping("getFullSubscribers")
     public Object getFullSubscribers(@RequestHeader("Authorization") String token) throws JsonProcessingException, ParseException {
+        return userService.getAllSubscribers(token, key);
 
-        String token1=token.replace("Bearer ","");
-        String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
-        byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
-        Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token1).getBody();
-        ObjectMapper mapper = new ObjectMapper();
+    }
 
-        UserBody u = mapper.convertValue(claim, UserBody.class);
+    @GetMapping("/getValidTokenForTesting")
+    public Object getValidToken() throws JsonProcessingException, ParseException {
+        return userService.getValidToken();
 
-        Long id1=u.getId();
-
-        Set<User> users=userService.getSubscribers(id1);
-
-        //Nadji adresu user managment servisa
-
-        RestTemplate restTemplate = new RestTemplate();
-        List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("user-management-service");
-
-        String url = listOfUrls.get(0);
-        String fooResourceUrl = url;
-
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add("Content-Type", "application/json");
-        headers.add("Authorization", token);
-        ResponseEntity<String> response = restTemplate.exchange(fooResourceUrl + "/api/users", HttpMethod.GET, new HttpEntity<Object>(headers), String.class);
-
-        String odg = response.getBody();
-        JSONParser parser = new JSONParser(odg);
-        ArrayList<UserAll> json =(ArrayList<UserAll>)  parser.parse();
-
-
-        ArrayList<UserAll> sviSubscriberi = new ArrayList<UserAll>();
-
-        ObjectMapper MAPPER = new ObjectMapper();
-        List<UserAll> ts = MAPPER.readValue(odg, MAPPER.getTypeFactory().constructCollectionType(ArrayList.class, UserAll.class));
-        //UserAll ua = mapper.convertValue(json.get(0), UserAll.class);
-
-        for (int i=0; i<json.size(); i++) {
-
-            int finalI = i;
-            users.forEach(e -> {
-                if (e.getUserId()==Long.parseLong(ts.get(finalI).getId())) {
-                    sviSubscriberi.add(ts.get(finalI));
-                }
-            });
-        }
-
-        return sviSubscriberi;
     }
     //Brisanje subscribera po id-u
     @DeleteMapping("/subscriber/{id}")
-    public ResponseEntity<JSONObject> deleteSubscriber(@PathVariable Long id) {
+    public ResponseEntity<JSONObject> deleteSubscriber(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         try {
             //Citati iz tokena kome brisemo
-            Long id1 = Long.valueOf(12);
+            token=token.replace("Bearer ","");
+            String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
+            byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
+            Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token).getBody();
+            ObjectMapper mapper = new ObjectMapper();
+
+            UserBody u = mapper.convertValue(claim, UserBody.class);
+            //return claim;
+
+            Long id1=u.getId();
             userService.deleteSubscriber(id1, id);
             JSONObject Entity = new JSONObject();
             Entity.put("message","Successful deletion of the subscriber with id: "+id );

@@ -1,21 +1,47 @@
 package com.event4u.notificationservice.service;
 
+import com.event4u.notificationservice.NotificationServiceApplication;
+import com.event4u.notificationservice.ServiceInstanceRestController;
 import com.event4u.notificationservice.exception.UserNotFoundException;
-import com.event4u.notificationservice.model.Events;
 import com.event4u.notificationservice.model.User;
+import com.event4u.notificationservice.model.UserAll;
+import com.event4u.notificationservice.model.UserBody;
 import com.event4u.notificationservice.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import net.minidev.json.JSONObject;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.json.JSONParser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import javax.xml.bind.DatatypeConverter;
+import java.util.*;
 
 @Service
 public class UserService {
+
+
+    private static final Logger log =
+            LoggerFactory.getLogger(NotificationServiceApplication.class);
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ServiceInstanceRestController serviceInstanceRestController;
 
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
@@ -37,8 +63,14 @@ public class UserService {
     }
 
     public void addSubscriber(Long id1, Long id2) {
+
+
         User koSeSubscriba = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
         User naKogaSeSubscriba = userRepository.findById(id2).orElseThrow(() -> new UserNotFoundException(id2));
+
+
+        log.info("Subscribe se na: "+ naKogaSeSubscriba.getUserId().toString());
+        log.info("Ko se subscribe: "+ koSeSubscriba.getUserId().toString());
 
         koSeSubscriba.getSubsribedTo().add(naKogaSeSubscriba);
         naKogaSeSubscriba.getSubscriber().add(koSeSubscriba);
@@ -47,9 +79,15 @@ public class UserService {
         userRepository.save(naKogaSeSubscriba);
     }
 
-    public Set<User> getSubscribers(Long id1) {
+    public Set<Long> getSubscribers(Long id1) {
         User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
-        return user1.getSubscriber();
+        Set<User> lista = user1.getSubscriber();
+        Set<Long> odg= new HashSet<>();
+
+        lista.forEach(e -> {
+            odg.add(e.getUserId());
+        });
+        return  odg;
     }
 
     public void deleteById(Long id) {
@@ -60,8 +98,8 @@ public class UserService {
         User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
         User user2 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id2));
 
-        var lista = user1.getSubscriber();
-        lista.remove(user2);
+        user1.getSubscriber().remove(user2);
+
     }
     public User updateUser(Long id) {
         User e = userRepository.findById(id).map(us -> {
@@ -72,6 +110,80 @@ public class UserService {
             return userRepository.save(us);
         }).orElseThrow();
         return e;
+    }
+
+    public Object getAllSubscribers(String token, String key) throws JsonProcessingException, ParseException {
+
+        String token1=token.replace("Bearer ","");
+        String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
+        byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
+        Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token1).getBody();
+        ObjectMapper mapper = new ObjectMapper();
+
+        UserBody u = mapper.convertValue(claim, UserBody.class);
+
+        Long id1=u.getId();
+
+        Set<Long> users=getSubscribers(id1);
+        log.info("Subscriber  od "+ id1.toString());
+        users.forEach(e -> {
+
+                    log.info("Subscriber  od "+ id1.toString() + "je" + e.toString());
+            });
+        //Nadji adresu user managment servisa
+
+        RestTemplate restTemplate = new RestTemplate();
+        List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("user-management-service");
+
+        String url = listOfUrls.get(0);
+        String fooResourceUrl = url;
+
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", token);
+        ResponseEntity<String> response = restTemplate.exchange(fooResourceUrl + "/api/users", HttpMethod.GET, new HttpEntity<Object>(headers), String.class);
+
+        String odg = response.getBody();
+        JSONParser parser = new JSONParser(odg);
+        ArrayList<UserAll> json =(ArrayList<UserAll>)  parser.parse();
+
+
+        ArrayList<UserAll> sviSubscriberi = new ArrayList<UserAll>();
+
+        ObjectMapper MAPPER = new ObjectMapper();
+        List<UserAll> ts = MAPPER.readValue(odg, MAPPER.getTypeFactory().constructCollectionType(ArrayList.class, UserAll.class));
+        //UserAll ua = mapper.convertValue(json.get(0), UserAll.class);
+
+        for (int i=0; i<json.size(); i++) {
+            int finalI = i;
+
+            log.info("Svi useri su "+ ts.get(finalI).getId());
+            users.forEach(e -> {
+                if (e==Long.parseLong(ts.get(finalI).getId())) {
+                    log.info("Svi jednaki useri su "+ ts.get(finalI).getId());
+                    sviSubscriberi.add(ts.get(finalI));
+                }
+            });
+        }
+
+        return sviSubscriberi;
+    }
+    public String getValidToken() {
+        RestTemplate restTemplate = new RestTemplate();
+        List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("user-management-service");
+        String url = listOfUrls.get(0);
+        String fooResourceUrl = url;
+
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+
+        JSONObject Entity2 = new JSONObject();
+        Entity2.put("username","mashashama");
+        Entity2.put("password","passwordnovisuperdobar");
+        ResponseEntity<String> response = restTemplate.exchange(fooResourceUrl + "/api/auth/login", HttpMethod.POST, new HttpEntity<Object>(Entity2, headers), String.class);
+
+        String odg = response.getBody();
+        return odg;
     }
 
 }

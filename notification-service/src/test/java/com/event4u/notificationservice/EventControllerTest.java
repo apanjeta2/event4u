@@ -3,11 +3,14 @@ package com.event4u.notificationservice;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.event4u.notificationservice.service.UserService;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -20,13 +23,17 @@ public class EventControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private UserService userService;
+
     @Test
     public void getAllEventsTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/events")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$[0].eventId", is(1)));
+                .andExpect(jsonPath("$[0].eventId", is(1)))
+                .andExpect(jsonPath("$[1].eventId", is(2)));
 
     }
     @Test
@@ -56,7 +63,7 @@ public class EventControllerTest {
     public void postEventByIdErrorTest() throws Exception {
         MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/events")
                 .content(""))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().is4xxClientError())
                 .andReturn();
     }
 
@@ -82,6 +89,45 @@ public class EventControllerTest {
     public void deleteEventTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/events/666"))
                 .andExpect(jsonPath("$.message", is("Successful deletion of the event with id: 666")))
-                        .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
+    @Test
+    public void deleteEventTestError() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/events/6666"))
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message", is("Error deleting event with id: 6666")));
+    }
+
+    public String token="";
+    @Before
+    public void setup() {
+        String odg =  userService.getValidToken();
+        int intIndex = odg.indexOf("token") +8;
+        token=odg.substring(intIndex,350);
+    }
+    public void postEvent2Test() throws Exception {
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/events/createEvent")
+                .content("{\n" +
+                        "\t\"eventId\": 19,\n" +
+                        "\t\"name\": \"Ime eventa\",\n" +
+                        "\t\"date\": \"2020-07-07\"\n" +
+                        "}").headers(httph))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Ime eventa")))
+                .andExpect(jsonPath("$.eventId", is(19)))
+                .andReturn();
+    }
+    public void postEvent2TestChcekCreatedNotification() throws Exception {
+            mvc.perform(MockMvcRequestBuilders.get("/notifications/getByEventId/19")
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", hasSize(1)))
+                    .andExpect(jsonPath("$[0].notificationId", is(4)))
+                    .andExpect(jsonPath("$[0].eventId", is(19)))
+            ;
+        }
 }

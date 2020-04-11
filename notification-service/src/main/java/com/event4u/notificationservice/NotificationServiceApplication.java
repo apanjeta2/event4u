@@ -98,9 +98,7 @@ public class NotificationServiceApplication {
             e2.getUsers().add(u1);
 
             u1.getSubscriber().add(u2);
-            u1.getSubscriber().add(u3);
             u2.getSubsribedTo().add(u1);
-            u3.getSubsribedTo().add(u1);
 
             repository3.save(u1);
             repository3.save(u2);

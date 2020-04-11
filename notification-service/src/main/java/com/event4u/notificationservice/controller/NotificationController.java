@@ -28,6 +28,7 @@ import java.security.Key;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +37,8 @@ import java.util.List;
 @RestController
 public class NotificationController {
 
-
     private static final Logger log =
             LoggerFactory.getLogger(NotificationServiceApplication.class);
-
-
 
     @Autowired
     private NotificationService notificationService;
@@ -57,15 +55,8 @@ public class NotificationController {
 
     @GetMapping("")
     public Object allNotifications() {
-        //RestTemplate restTemplate = new RestTemplate();
-        List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("user-management-service");
-        //String url = listOfUrls.get(0);
-        //String fooResourceUrl = url;
-        //ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl , String.class);
-        //return response;
         return notificationService.findAll();
     }
-
     //Vraca sve notifikacije za jednog korisnika
     @GetMapping("/getByUserId/{id}")
     public List<Notification> getNotificationsByUserId(@PathVariable Long id) {
@@ -89,6 +80,7 @@ public class NotificationController {
     public Notification getNotificationsById(@PathVariable Long id) {
         return notificationService.findById(id);
     }
+
     //Vraca sve notifikacije za jednog korisnika
     @GetMapping("/getByEventId/{id}")
     public List<Notification> getNotificationsByEventId(@PathVariable Long id) {
@@ -121,9 +113,10 @@ public class NotificationController {
     @PostMapping("")
     public Object newNotification(@RequestParam Long userId, @RequestParam Long eventId, @RequestParam String message, @RequestParam String date, @RequestParam boolean isRead) throws ParseException {
 
-        LocalDate date1 = LocalDate.of(2020,2,2);
-        return notificationService.createNotification(userId, eventId, message, date1, isRead,1);
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        //convert String to LocalDate
+        LocalDate dateL = LocalDate.parse(date, formatter);
+        return notificationService.createNotification(userId, eventId, message, dateL, isRead,1);
     }
 
     @Value("${jwt.secret}")
@@ -131,7 +124,6 @@ public class NotificationController {
     //Kreiranje nove notifikacije sa body
     @PostMapping(path="/postNotification", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Object postNewNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody not) {
-
        return notificationService.createNotificationNew(token, not, key,2);
     }
 
@@ -142,14 +134,14 @@ public class NotificationController {
         try {
             notificationService.deleteByUser(id);
             JSONObject Entity = new JSONObject();
-            Entity.put("message","Successful deletion of the notification with id: "+id );
+            Entity.put("message","Successful deletion of the notification with user id: "+id );
             return  new ResponseEntity<JSONObject>(
                     Entity,
                     HttpStatus.OK);
         }
         catch(Exception e) {
             JSONObject Entity2 = new JSONObject();
-            Entity2.put("message","Error deleting notifications with id: "+id );
+            Entity2.put("message","Error deleting notifications with user id: "+id );
 
             return  new ResponseEntity<JSONObject>(
                     Entity2,
@@ -157,10 +149,9 @@ public class NotificationController {
         }
     }
 
-    //Update category
+    //Update notification
     @PutMapping(path ="/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Notification updateNotification(@RequestBody NotificationBody tijelo, @PathVariable Long id) {
-
         return notificationService.updateNotification(id,tijelo);
     }
 

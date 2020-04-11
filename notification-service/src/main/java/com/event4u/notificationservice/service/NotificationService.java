@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.xml.bind.DatatypeConverter;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -97,18 +98,20 @@ public class NotificationService {
 
         ObjectMapper mapper = new ObjectMapper();
 
+        //Iz tokena dobijemo info o useru
         UserBody u = mapper.convertValue(claim, UserBody.class);
         //return claim;
 
         Long userid=u.getId();
+        //Doadace se user ako ne postoji jer se kupi sa user managment servisa
         userService.createUser(userid);
         if (type==1)
         return createNotification(userid, not.getEventId(), message, not.getDate(), false, type);
         else //salji samo subscriberima
         {
-            Set<User> all= userService.getSubscribers(userid);
+            Set<Long> all= userService.getSubscribers(userid);
             all.forEach(e -> {
-                createNotification(e.getUserId(), not.getEventId(), message, not.getDate(), false, type);
+                createNotification(e, not.getEventId(), message, not.getDate(), false, type);
             });
             return createNotification(userid, not.getEventId(), message, not.getDate(), false, type);
         }

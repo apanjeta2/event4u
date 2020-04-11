@@ -60,7 +60,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     public void springHandleNotFound(HttpServletResponse response) throws IOException {
 
         JSONObject Entity2 = new JSONObject();
+        Entity2.put("status","Not found");
         Entity2.put("message","Element not found");
+        Entity2.put("errors","Element not found");
         PrintWriter out = response.getWriter();
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         response.setCharacterEncoding("UTF-8");
@@ -284,11 +286,18 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler({ NullPointerException.class, IllegalArgumentException.class, IllegalStateException.class })
     /*500*/public ResponseEntity<Object> handleInternal(final RuntimeException ex, final WebRequest request) {
-        logger.error("500 Status Code", ex);
-        final String bodyOfResponse = "Other exceptions";
+        ApiError apiError = new ApiError(
+                HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "Other exception");
+        try {
+            String jsonObject = new ObjectMapper().writeValueAsString(apiError);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("application/json"));
-        return handleExceptionInternal(ex, bodyOfResponse, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.valueOf("application/json"));
+            return new ResponseEntity<Object>(
+                    jsonObject, headers, apiError.getStatus());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

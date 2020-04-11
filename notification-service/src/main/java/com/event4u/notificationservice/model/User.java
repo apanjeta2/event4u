@@ -6,7 +6,9 @@
 package com.event4u.notificationservice.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,7 +23,7 @@ import java.util.Set;
  */
 @Entity
 
-@JsonIgnoreProperties({"events", "subscriber", "subscribedTo"})
+@JsonIgnoreProperties({"events","subscribedTo", "subscriber"})
 public class User {
 
     @Id
@@ -29,9 +31,12 @@ public class User {
     @NotNull(message = "Id cannot be null")
     private Long userId;
 
+    @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<User> subscriber = new HashSet<>();
 
+
+    @JsonBackReference
     @ManyToMany(mappedBy = "subscriber")
     private Set<User> subscribedTo = new HashSet<>();
 
