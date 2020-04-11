@@ -1,6 +1,6 @@
 ## Endpoints
 
-- You can find the endpoints for this service [here](https://github.com/MasovicHaris/event4u/wiki/Events-service---endpoints) or on the URL listed below after running the app
+- You can find the endpoints for this service [here](https://github.com/MasovicHaris/event4u/wiki/Events-service---endpoints), or on the URL listed below after running the app (file save as pdf - Swagger UI)
 
 **Swagger**
 * **URL**
