@@ -12,7 +12,8 @@ event4u is a web appliaction for managing/creating/attending events. Built by:
 - notifications
 - frontend
 
-2020. © Mašović Haris, Šabović Dženana, Panejta Ajla
+
+2020. © Mašović Haris, Šabović Dženana, Panjeta Ajla
 
 *University of Sarajevo*
 
