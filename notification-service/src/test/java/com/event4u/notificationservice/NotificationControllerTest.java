@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.InjectMocks;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,6 +40,9 @@ import java.util.List;
 
 public class NotificationControllerTest {
 
+
+    private static final Logger log =
+            LoggerFactory.getLogger(NotificationServiceApplication.class);
 
     @Autowired
     private MockMvc mvc;
@@ -289,11 +294,21 @@ public class NotificationControllerTest {
     //Kreiranje nove notifikacije preko body
 
     public String token="";
+    public String idUsera;
     @Before
     public void setup() {
         String odg =  userService.getValidToken();
         int intIndex = odg.indexOf("token") +8;
-        token=odg.substring(intIndex,350);
+
+        int intIndexId = odg.indexOf("id") + 4;
+
+        //Da dobijemo id usera čiji je token
+        idUsera=odg.substring(intIndexId, odg.indexOf(","));
+
+        log.info("User jeee"+ idUsera + " "+ odg.indexOf(","));
+
+        token=odg.substring(intIndex);
+        token=token.substring(0, token.length() - 2);
     }
     @Test
     public void postNotification2Test() throws Exception {
@@ -308,9 +323,8 @@ public class NotificationControllerTest {
                         "\t\"date\": \"2020-07-07\"\n" +
                         "}").headers(httph))//.header("Authorization", "Bearer "+token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.notificationId", is(6)))
                 .andExpect(jsonPath("$.eventId", is(1)))
-                .andExpect(jsonPath("$.userId", is(1)))
+                .andExpect(jsonPath("$.userId", is(Integer.parseInt(idUsera))))
                 .andReturn();
     }
     @Test

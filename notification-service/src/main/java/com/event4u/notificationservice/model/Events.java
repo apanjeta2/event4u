@@ -16,10 +16,11 @@ public class Events {
     @NotNull(message = "Event id cannot be null")
     private Long eventId;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private List<Notification> notifications;
 
-    @ManyToMany(mappedBy = "events")
+
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "events")
     private Set<User> users = new HashSet<>();
 
     private String name;
@@ -67,5 +68,13 @@ public class Events {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 }

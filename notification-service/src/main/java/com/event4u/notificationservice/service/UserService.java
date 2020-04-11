@@ -24,11 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.util.json.JSONParser;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class UserService {
@@ -54,6 +53,18 @@ public class UserService {
         return u;
     }
 
+    public boolean isThere(Long id) {
+        Iterable<User> allUsers = userRepository.findAll();
+        AtomicBoolean tu= new AtomicBoolean(false);
+        ArrayList<User> u = new ArrayList<User>();
+        allUsers.forEach(e -> {
+            if (e.getUserId()==id) {
+                tu.set(true);
+            }
+        });
+        return tu.get();
+    }
+
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
@@ -64,6 +75,8 @@ public class UserService {
 
     public void addSubscriber(Long id1, Long id2) {
 
+        if (!isThere(id1)) createUser(id1);
+        if (!isThere(id2)) createUser(id2);
 
         User koSeSubscriba = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
         User naKogaSeSubscriba = userRepository.findById(id2).orElseThrow(() -> new UserNotFoundException(id2));
@@ -80,6 +93,9 @@ public class UserService {
     }
 
     public Set<Long> getSubscribers(Long id1) {
+
+        if (!isThere(id1)) createUser(id1);
+
         User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
         Set<User> lista = user1.getSubscriber();
         Set<Long> odg= new HashSet<>();
@@ -176,14 +192,29 @@ public class UserService {
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
+        try {
+            JSONObject Entity1 = new JSONObject();
+            Entity1.put("username", "testAjla");
+            Entity1.put("name", "Ajla");
+            Entity1.put("surname", "Panjeta");
+            Entity1.put("password", "passwordnovi");
+            ResponseEntity<String> response1 = restTemplate.exchange(fooResourceUrl + "/api/auth/signup", HttpMethod.POST, new HttpEntity<Object>(Entity1, headers), String.class);
+
+        }
+        catch (Exception e) {
+
+        }
+        finally {
 
         JSONObject Entity2 = new JSONObject();
-        Entity2.put("username","mashashama");
-        Entity2.put("password","passwordnovisuperdobar");
+        Entity2.put("username","testAjla");
+        Entity2.put("password","passwordnovi");
         ResponseEntity<String> response = restTemplate.exchange(fooResourceUrl + "/api/auth/login", HttpMethod.POST, new HttpEntity<Object>(Entity2, headers), String.class);
 
         String odg = response.getBody();
         return odg;
+
+        }
     }
 
 }

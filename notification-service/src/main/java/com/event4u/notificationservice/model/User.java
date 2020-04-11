@@ -37,7 +37,7 @@ public class User {
 
 
     @JsonBackReference
-    @ManyToMany(mappedBy = "subscriber")
+    @ManyToMany(cascade = CascadeType.ALL,mappedBy = "subscriber")
     private Set<User> subscribedTo = new HashSet<>();
 
     @OneToMany (mappedBy = "user")

@@ -8,6 +8,8 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +24,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
+
+    private static final Logger log =
+            LoggerFactory.getLogger(NotificationServiceApplication.class);
     @Autowired
     private MockMvc mvc;
     @Autowired
@@ -90,12 +95,21 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
     public String token="";
-
+    public String idUsera;
     @Before
     public void setup() {
         String odg =  userService.getValidToken();
         int intIndex = odg.indexOf("token") +8;
-        token=odg.substring(intIndex,350);
+
+        int intIndexId = odg.indexOf("id") + 4;
+
+        //Da dobijemo id usera čiji je token
+        idUsera=odg.substring(intIndexId, odg.indexOf(","));
+
+        log.info("User jeee"+ idUsera + " "+ odg.indexOf(","));
+
+        token=odg.substring(intIndex);
+        token=token.substring(0, token.length() - 2);
     }
     @Test
     public void subscribeToTest() throws Exception {
@@ -104,9 +118,9 @@ public class UserControllerTest {
         httph.add("Content-Type","application/json");
         httph.add("Authorization", "Bearer "+token);
         MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/users/subscribeTo")
-                .content("1").headers(httph))  //U bazi user managmenta je samo user sa id-om 1 pa njega dodajemo u listu subscriber-a
+                .content(idUsera).headers(httph))  //U bazi user managmenta je samo user sa id-om 1 pa njega dodajemo u listu subscriber-a
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message", is("Subscribed to user with id 1")))
+                .andExpect(jsonPath("$.message", is("Subscribed to user with id "+idUsera)))
                 .andReturn();
     }
     @Test
@@ -131,9 +145,9 @@ public class UserControllerTest {
                 .content("").headers(httph))  //U bazi user managmenta je samo user sa id-om 1 pa njega dodajemo u listu subscriber-a
                 .andExpect(status().isOk())
                 //AKo je uspjesno dodan susbscriber u prethodnom testu ovaj test će pravilno pokupiti iz baze sa usermanagment servisa
-                .andExpect(jsonPath("$[0].id", is("1")))
-                .andExpect(jsonPath("$[0].username", is("mashashama")))
-                .andExpect(jsonPath("$[0].name", is("mashonista")))
+                .andExpect(jsonPath("$[0].id", is(idUsera)))
+                .andExpect(jsonPath("$[0].username", is("testAjla")))
+                .andExpect(jsonPath("$[0].name", is("Ajla")))
 
                 .andReturn();
     }
