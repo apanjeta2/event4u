@@ -17,23 +17,12 @@ public class ServiceInstanceRestController {
 	@Autowired
 	private DiscoveryClient discoveryClient;
 
-	@RequestMapping("/service-instances/{applicationName}")
-	public List<ServiceInstance> serviceInstancesByApplicationName(
-			@PathVariable String applicationName) {
-		return this.discoveryClient.getInstances(applicationName);
-	}
-
-	@RequestMapping(value = "/services", method = RequestMethod.GET)
-	public List<String> getRegisteredServices()
+	@RequestMapping(value = "/services/{name}", method = RequestMethod.GET)
+	public String getRegisteredServicesByName(@PathVariable String name)
 	{
-		List<String> services = new ArrayList<String>();
-		discoveryClient.getServices().forEach(serviceName ->
-		{
-			discoveryClient.getInstances(serviceName).forEach(instance ->
-			{
-				services.add(String.format("%s:%s", serviceName, instance.getUri()));
-			});
-		});
-		return services;
+		for (ServiceInstance instance : discoveryClient.getInstances(name)) {
+			return String.format("%s", instance.getUri());
+		}
+		return "";
 	}
 }

@@ -45,7 +45,7 @@ public class LocationController {
 
     @PutMapping(path ="/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Location updateLocation(@RequestBody Location location, @PathVariable Long id)  {
-        return locationService.updateLocation(id, location.getCoordinates(), location.getCity(), location.getCountry()).orElseThrow();
+        return locationService.updateLocation(id, location.getCoordinates(), location.getCity(), location.getCountry());
 
     }
 

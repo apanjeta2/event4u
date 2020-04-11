@@ -16,7 +16,7 @@ public class Category {
     @Column(nullable=false, unique = true)
     private String name;
     @JsonIgnore
-    @OneToMany(mappedBy = "category") //Jedna kategorija ima više događaja
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<Event> events;
 
     protected Category() {}

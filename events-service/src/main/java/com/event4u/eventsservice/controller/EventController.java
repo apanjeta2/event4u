@@ -36,7 +36,7 @@ public class EventController {
 
     @PostMapping(path = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Event newEvent(@RequestHeader("Authorization") String token, @RequestBody NewEvent event) {
-        return eventService.createEvent(event.getTitle(), event.getAddress(), event.getDate() ,event.getDescription() ,event.getIdCategory(), event.getIdCreator(), event.getIdLocation(), token);
+        return eventService.createEvent(event.getTitle(), event.getAddress(), event.getDate() ,event.getDescription() ,event.getIdCategory(), event.getIdLocation(), token);
     }
 
     @DeleteMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})

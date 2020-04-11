@@ -1,20 +1,20 @@
 package com.event4u.eventsservice.service;
 
+import com.event4u.eventsservice.exceptionHandling.NotAuthorizedException;
+import com.event4u.eventsservice.exceptionHandling.NotFoundException;
 import com.event4u.eventsservice.model.*;
 import com.event4u.eventsservice.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class EventService {
-
     @Autowired
     private EventRepository eventRepository;
     @Autowired
@@ -27,6 +27,8 @@ public class EventService {
     private NotificationHelperService notificationHelperService;
     @Autowired
     private DiscoveryService discoveryService;
+    @Autowired
+    private TokenHelperService tokenHelperService;
 
     public List<Event> findAll() {
         var it = eventRepository.findAll();
@@ -35,9 +37,16 @@ public class EventService {
         return events;
     }
 
+    public Boolean existsById(Long id) {
+        return eventRepository.existsById(id);
+    }
+
     public Event findById(Long id) {
-        Event e = eventRepository.findById(id).orElseThrow();
-        return e;
+        Optional<Event> e = eventRepository.findById(id);
+        if (!e.isPresent()) {
+            throw new NotFoundException("Event with id " + id.toString());
+        }
+        return e.get();
     }
 
     public Long count() {
@@ -45,23 +54,31 @@ public class EventService {
     }
 
     public void deleteById(Long eventId, String token) {
+        Optional<Event> e = eventRepository.findById(eventId);
+        if (!e.isPresent()) {
+            throw new NotFoundException("Event with id " + eventId.toString());
+        }
         eventRepository.deleteById(eventId);
-        notificationHelperService.deleteEventNotifications(eventId, token); //TODO: fix this
+        notificationHelperService.deleteEventNotifications(eventId, token);
     }
 
-    public Event createEvent(String title, String address, LocalDate date, String description, Long idCategory, Long idUser, Long idLocation, String token){
+    public Event createEvent(String title, String address, LocalDate date, String description, Long idCategory, Long idLocation, String token){
+        Long idUser = tokenHelperService.getUserIdFromToken(token);
         Category category = categoryService.findById(idCategory);
         User crator = userService.getUserById(idUser);
         Location location = locationService.findById(idLocation);
         Event e = new Event(title,address,date,description,Boolean.TRUE, category, crator, location);
         eventRepository.save(e);
-        //notificationHelperService.getEvents(token);
-        notificationHelperService.createEventNotifications(e, token); //TODO: fix this
+        notificationHelperService.createEventNotifications(e, token);
         return e;
     }
 
     public Event updateEvent(Long id, String title, String address, LocalDate date, String description, Boolean isActive, Long idCategory, Long idLocation, String token) {
-        Event e = eventRepository.findById(id).map(event -> {
+        Long idUser = tokenHelperService.getUserIdFromToken(token);
+        Optional<Event> e = eventRepository.findById(id).map(event -> {
+            if (!idUser.equals(event.getCreator().getId())) {
+                throw new NotAuthorizedException();
+            }
             event.setActive(isActive);
             event.setAddress(address);
             event.setTitle(title);
@@ -76,8 +93,12 @@ public class EventService {
                 event.setLocation(l);
             }
             return eventRepository.save(event);
-        }).orElseThrow();
-        notificationHelperService.updateEventNotifications(e, token); //TODO:fix this
-        return e;
+        });
+        if (!e.isPresent()) {
+            throw new NotFoundException("Event with id " + id.toString());
+        }
+        Event event = e.get();
+        notificationHelperService.updateEventNotifications(event, token);
+        return event;
     }
 }

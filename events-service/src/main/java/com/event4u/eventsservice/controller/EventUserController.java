@@ -36,20 +36,20 @@ public class EventUserController {
     }
 
     @PostMapping(path = "/interested/{idEvent}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    SuccessMessage markEventInterested(@PathVariable Long idEvent, @RequestBody Long idUser) {
-        eventUserService.markAsInterested(idUser, idEvent);
+    SuccessMessage markEventInterested(@RequestHeader("Authorization") String token, @PathVariable Long idEvent) {
+        eventUserService.markAsInterested(idEvent, token);
         return new SuccessMessage("Event successfully marked as interested");
     }
 
     @PostMapping(path = "/going/{idEvent}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    SuccessMessage markEventGoing(@RequestHeader("Authorization") String token, @PathVariable Long idEvent, @RequestBody Long idUser) {
-        eventUserService.markAsGoing(idUser, idEvent, token);
+    SuccessMessage markEventGoing(@RequestHeader("Authorization") String token, @PathVariable Long idEvent) {
+        eventUserService.markAsGoing(idEvent, token);
         return new SuccessMessage("Event successfully marked as going");
     }
 
     @DeleteMapping(path = "/removeMark/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    SuccessMessage deleteMark(@PathVariable Long idEvent, @RequestBody Long idUser) {
-        eventUserService.removeMark(idEvent, idUser);
+    SuccessMessage deleteMark(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        eventUserService.removeMark(id, token);
         return new SuccessMessage("Mark successfully removed");
     }
 }

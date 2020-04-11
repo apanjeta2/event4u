@@ -6,7 +6,6 @@ import java.util.List;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-import com.event4u.eventsservice.exceptionHandling.ApiError;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -89,11 +88,19 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     //
-    @ExceptionHandler({CategoryAlreadyExistsException.class})
-    public ResponseEntity<Object> handleCategoryAlreadyExists(final CategoryAlreadyExistsException ex, final WebRequest request) {
+    @ExceptionHandler({AlreadyExistsException.class})
+    public ResponseEntity<Object> handleAlreadyExists(final AlreadyExistsException ex, final WebRequest request) {
         logger.info(ex.getClass().getName());
         logger.error("error", ex);
-        //
+        final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), "error occurred");
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+
+    }
+
+    @ExceptionHandler({InvalidParameterException.class})
+    public ResponseEntity<Object> InvalidParameterException(final InvalidParameterException ex, final WebRequest request) {
+        logger.info(ex.getClass().getName());
+        logger.error("error", ex);
         final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), "error occurred");
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
 
@@ -133,6 +140,24 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<Object> handleNotFound(final NotFoundException ex, final WebRequest request) {
+        logger.info(ex.getClass().getName());
+        logger.error("error", ex);
+        final ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), "error occurred");
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({NotAuthorizedException.class})
+    public ResponseEntity<Object> handleNotAuthorized(final NotAuthorizedException ex, final WebRequest request) {
+        logger.info(ex.getClass().getName());
+        logger.error("error", ex);
+        final ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage(), "error occurred");
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+
+
     // 405
 
     @Override
@@ -164,7 +189,6 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     // 500
-
     @ExceptionHandler({ Exception.class })
     public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request) {
         logger.info(ex.getClass().getName());

@@ -13,17 +13,15 @@ public class NewEvent {
     private LocalDate date;
     private String description;
     private Long idCategory;
-    private Long idUser;
     private Long idLocation;
     private Boolean isActive;
 
-    public NewEvent(String title, String address, LocalDate date, String description, Long idCategory, Long idCreator, Long idLocation, Boolean isActive) {
+    public NewEvent(String title, String address, LocalDate date, String description, Long idCategory, Long idLocation, Boolean isActive) {
         this.title = title;
         this.address = address;
         this.date = date;
         this.description = description;
         this.idCategory = idCategory;
-        this.idUser = idCreator;
         this.idLocation = idLocation;
         this.isActive = isActive;
     }
@@ -67,14 +65,6 @@ public class NewEvent {
 
     public void setIdCategory(Long idCategory) {
         this.idCategory = idCategory;
-    }
-
-    public Long getIdCreator() {
-        return idUser;
-    }
-
-    public void setIdUser(Long idUser) {
-        this.idUser = idUser;
     }
 
     public Long getIdLocation() {

@@ -36,11 +36,11 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("movies")))
+                .andExpect(jsonPath("$[0].name", is("Outdoors&Adventure")))
                 .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].name", is("books")))
+                .andExpect(jsonPath("$[1].name", is("Tech")))
                 .andExpect(jsonPath("$[2].id", is(3)))
-                .andExpect(jsonPath("$[2].name", is("IT")))
+                .andExpect(jsonPath("$[2].name", is("Learning")))
                 ;
     }
 
@@ -50,7 +50,7 @@ public class CategoryControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("movies")))
+                .andExpect(jsonPath("$.name", is("Outdoors&Adventure")))
         ;
     }
 
@@ -58,8 +58,8 @@ public class CategoryControllerTest {
     public void getCategoryByIdBadParameter() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/events-micro/categories/-11")
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.message", is("No value present")))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("Category with id -11 not found!")))
         ;
     }
 
@@ -81,90 +81,94 @@ public class CategoryControllerTest {
         ;
     }
 
-    String res;
-    Category newCategory;
-
-    public void convertResToCategory() {
+    public Category convertResToCategory(String res) {
         ObjectMapper m = new ObjectMapper();
-
         try {
-            newCategory = m.readValue(res, Category.class);
+            Category newCategory = m.readValue(res, Category.class);
+            return newCategory;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     @Order(3)
     @Test
     public void createCategory() throws Exception {
         MvcResult r = mvc.perform(MockMvcRequestBuilders.post("/events-micro/categories")
-                .content("Fun"))
+                .content("Fitness"))
                 .andExpect(status().isOk())
                 .andReturn()
                 ;
-        res = r.getResponse().getContentAsString();
-        convertResToCategory();
+        convertResToCategory(r.getResponse().getContentAsString());
+
     }
 
     @Order(4)
     @Test
     public void createCategoryAlreadyExists() throws Exception {
-        MvcResult r = mvc.perform(MockMvcRequestBuilders.post("/events-micro/categories")
-                .content("Fun"))
+        mvc.perform(MockMvcRequestBuilders.post("/events-micro/categories")
+                .content("Fitness"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message",is("Category with name Fun already exists!")))
-                .andReturn()
+                .andExpect(jsonPath("$.message",is("Category with name Fitness already exists!")))
                 ;
-        res = r.getResponse().getContentAsString();
-        convertResToCategory();
     }
 
     @Test
     public void createCategoryNoBody() throws Exception {
-        MvcResult r = mvc.perform(MockMvcRequestBuilders.post("/events-micro/categories"))
+        mvc.perform(MockMvcRequestBuilders.post("/events-micro/categories"))
                 .andExpect(status().isBadRequest())
-                .andReturn()
-                ;
+            ;
     }
 
-    public void createCategoryHelper(String content) throws Exception {
+    public Category createCategoryHelper(String content) throws Exception {
         MvcResult r = mvc.perform(MockMvcRequestBuilders.post("/events-micro/categories")
                 .content(content))
                 .andExpect(status().isOk())
                 .andReturn()
                 ;
-        res = r.getResponse().getContentAsString();
-        convertResToCategory();
+        return convertResToCategory(r.getResponse().getContentAsString());
     }
 
     @Order(5)
     @Test
     public void updateCategoryById() throws Exception {
-        createCategoryHelper("Sports");
-        String url = "/events-micro/categories/"+newCategory.getId().toString();
+        Category newCategory = createCategoryHelper("Sports");
+        String id = newCategory.getId().toString();
+        String url = "/events-micro/categories/"+ id;
         MvcResult r = mvc.perform(MockMvcRequestBuilders.put(url)
                 .content("NWT"))
                 .andExpect(status().isOk())
                 .andReturn()
                 ;
-        res = r.getResponse().getContentAsString();
-        convertResToCategory();
+        Category updatedCategory = convertResToCategory(r.getResponse().getContentAsString());
+        if (!updatedCategory.getName().equals("NWT")) {
+            throw new Exception("Not updated");
+        }
     }
 
     @Test
     public void updateCategoryByIdBadRequest() throws Exception {
         createCategoryHelper("Cooking");
         String url = "/events-micro/categories/lkdsfjsldjf";
-        MvcResult r = mvc.perform(MockMvcRequestBuilders.put(url)
+        mvc.perform(MockMvcRequestBuilders.put(url)
                 .content("NWT"))
                 .andExpect(status().isBadRequest())
-                .andReturn()
                 ;
     }
 
     @Test
+    public void updateCategoryByIdNotFound() throws Exception {
+        createCategoryHelper("Books");
+        String url = "/events-micro/categories/-11";
+        mvc.perform(MockMvcRequestBuilders.delete(url))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("Category with id -11 not found!")));
+    }
+
+    @Test
     public void deleteCategoryById() throws Exception {
-        createCategoryHelper("Cooking");
+        Category newCategory = createCategoryHelper("Cooking");
         String url = "/events-micro/categories/"+newCategory.getId().toString();
         mvc.perform(MockMvcRequestBuilders.delete(url)).andExpect(status().isOk());
     }
@@ -174,5 +178,14 @@ public class CategoryControllerTest {
         createCategoryHelper("Running");
         String url = "/events-micro/categories/sdf";
         mvc.perform(MockMvcRequestBuilders.delete(url)).andExpect(status().is5xxServerError());
+    }
+
+    @Test
+    public void deleteCategoryByIdNotFound() throws Exception {
+        createCategoryHelper("Music");
+        String url = "/events-micro/categories/-11";
+        mvc.perform(MockMvcRequestBuilders.delete(url))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("Category with id -11 not found!")));
     }
 }

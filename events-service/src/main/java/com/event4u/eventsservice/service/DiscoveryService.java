@@ -13,11 +13,20 @@ public class DiscoveryService {
     private DiscoveryClient discoveryClient;
 
     public String getNotificationInstance() {
-    List<String> services = new ArrayList<String>();
-        discoveryClient.getInstances("notification-service").forEach(instance ->
+        List<String> services = new ArrayList<String>();
+            discoveryClient.getInstances("notification-service").forEach(instance ->
+            {
+                services.add(String.format("%s", instance.getUri()));
+            });
+            return services.get(0);
+    }
+
+    public String getUserManagmentInstance() {
+        List<String> services = new ArrayList<String>();
+        discoveryClient.getInstances("USER-MANAGEMENT-SERVICE").forEach(instance ->
         {
             services.add(String.format("%s", instance.getUri()));
         });
-		return services.get(0);
+        return services.get(0);
     }
 }

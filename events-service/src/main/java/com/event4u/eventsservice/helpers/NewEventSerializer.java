@@ -20,7 +20,6 @@ public class NewEventSerializer extends StdSerializer<NewEvent>  {
         jsonGenerator.writeStringField("date", event.getDate().toString());
         jsonGenerator.writeStringField("description", event.getDescription());
         jsonGenerator.writeNumberField("idCategory", event.getIdCategory());
-        jsonGenerator.writeNumberField("idUser", event.getIdCreator());
         jsonGenerator.writeNumberField("idLocation", event.getIdLocation());
         jsonGenerator.writeBooleanField("isActive", event.getActive());
     }

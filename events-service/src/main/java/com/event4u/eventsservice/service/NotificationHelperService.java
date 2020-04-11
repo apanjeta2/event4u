@@ -2,7 +2,6 @@ package com.event4u.eventsservice.service;
 
 import com.event4u.eventsservice.model.Event;
 import com.event4u.eventsservice.model.EventNotification;
-import com.event4u.eventsservice.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -38,14 +37,14 @@ public class NotificationHelperService {
 
     public void updateEventNotifications(Event e, String token) {
         RestTemplate restTemplate = new RestTemplate();
-        String deleteEventUrl = discoveryService.getNotificationInstance() + "/events/" + e.getId();
+        String UpdateEventUrl = discoveryService.getNotificationInstance() + "/events/" + e.getId();
         HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle(), e.getDate()), getHeaders(token));
-        ResponseEntity<String> res = restTemplate.exchange(deleteEventUrl, HttpMethod.PUT , req, String.class);
+        ResponseEntity<String> res = restTemplate.exchange(UpdateEventUrl, HttpMethod.PUT , req, String.class);
     }
 
     public void createGoingToNotificaion(Long idEvent, String token) {
         RestTemplate restTemplate = new RestTemplate();
-        String deleteEventUrl = discoveryService.getNotificationInstance() + "/notifications/" + idEvent;
-        ResponseEntity<String> res = restTemplate.exchange(deleteEventUrl, HttpMethod.POST , new HttpEntity<>(getHeaders(token)), String.class);
+        String createNotificationUrl = discoveryService.getNotificationInstance() + "/notifications/createGoingTo/" + idEvent;
+        ResponseEntity<String> res = restTemplate.exchange(createNotificationUrl, HttpMethod.POST , new HttpEntity<>(getHeaders(token)), String.class);
     }
 }

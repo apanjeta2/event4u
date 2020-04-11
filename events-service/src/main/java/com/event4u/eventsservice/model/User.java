@@ -8,10 +8,9 @@ import java.util.List;
 public class User {
     @Id
     private Long id;
-    //Jedan korisnik moze kreirati vise dogadjaja
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
     private List<Event> events;
-    @OneToMany(mappedBy = "user") //Jedan korisnik moze oznaciti vise dogadjaja
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<EventUser> eu;
 
     protected User() {

@@ -23,7 +23,7 @@ public class Location {
     @NotBlank(message = "Country cannot be null or empty")
     @Column(nullable=false)
     private String country;
-    @OneToMany(mappedBy = "location") //Jedna lokacija ima više događaja
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "location")
     private List<Event> events;
 
     protected Location() {

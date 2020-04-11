@@ -37,7 +37,7 @@ public class Event {
     @NotNull(message = "Event must have a location")
     @ManyToOne
     private Location location;
-    @OneToMany(mappedBy = "event") //Jedan dogadjas moze oznaciti vise korisnika
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private List<EventUser> eu;
 
     protected Event() {}

@@ -46,10 +46,9 @@ public class EventsServiceApplication {
 	@Bean
 	public CommandLineRunner demo(CategoryRepository cRepository, UserRepository uRepository, LocationRepository lRepository, EventRepository eRepository, EventUserRepository euRepository) {
 		return (args) -> {
-			// save a few categories
-			Category c1 = cRepository.save(new Category("movies"));
-			cRepository.save(new Category("books"));
-			cRepository.save(new Category("IT"));
+			Category c1 = cRepository.save(new Category("Outdoors&Adventure"));
+			cRepository.save(new Category("Tech"));
+			cRepository.save(new Category("Learning"));
 
 			log.info("Categories found with findAll():");
 			log.info("-------------------------------");
@@ -59,10 +58,9 @@ public class EventsServiceApplication {
 			}
 			log.info("");
 
-			// save a few users
 			Long id = Long.valueOf(1);
 			User u1 = uRepository.save(new User(id));
-			uRepository.save(new User(++id));
+			User u2 = uRepository.save(new User(++id));
 			uRepository.save(new User(++id));
 
 			log.info("Users found with findAll():");
@@ -73,7 +71,6 @@ public class EventsServiceApplication {
 			}
 			log.info("");
 
-			// save a few locations
 			Location l1 = lRepository.save(new Location(new Point(0,0), "Sarajevo", "Bosna i Hercegovina"));
 			lRepository.save(new Location(new Point(0,0), "Mostar", "Bosna i Hercegovina"));
 			lRepository.save(new Location(new Point(0,0), "Banja Luka", "Bosna i Hercegovina"));
@@ -86,7 +83,6 @@ public class EventsServiceApplication {
 			}
 			log.info("");
 
-			// save a few events
 			Event e1 = eRepository.save(new Event("LV4 NWT",
 					"Zmaja od Bosne bb",
 					LocalDate.of(2020, 3, 23),
@@ -97,7 +93,6 @@ public class EventsServiceApplication {
 					l1
 					));
 
-			// save a few events
 			Event e2 = eRepository.save(
 					new Event("LV4 NWT",
 					"Zmaja od Bosne bb",
@@ -117,8 +112,7 @@ public class EventsServiceApplication {
 			}
 			log.info("");
 
-			// mark a few events
-			euRepository.save(new EventUser(u1, e1, Boolean.TRUE));
+			euRepository.save(new EventUser(u2, e1, Boolean.TRUE));
 
 			log.info("Event-User found with findAll():");
 			log.info("-------------------------------");

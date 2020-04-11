@@ -51,7 +51,7 @@ public class EventUser {
     public String toString() {
         return String.format(
                 "User with id=%d is going to event with id=%d",
-                id, user.getId(), event.getId()
+                user.getId(), event.getId()
         );
     }
 }
