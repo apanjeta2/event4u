@@ -4,6 +4,7 @@
 
 ## Running locally
 
+- You must have node (`>= 10` version) as well as npm installed (`>= 6` version)
 - You must setup your MYSQL database and remember the connection parameters
 - All other services (`eureka-service`, `events-service`, `notification-service`) must be started
 - In order to run `user-management-service` locally you must define these env variables in an .env file:
