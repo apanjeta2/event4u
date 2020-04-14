@@ -1,9 +1,17 @@
 
+## Endpoints
+
+Endpoints for this service are [here](https://github.com/MasovicHaris/event4u/wiki/Notification-service-endpoints)
+
 ## Running locally
 
-Endpoints: https://github.com/MasovicHaris/event4u/wiki/Notification-service-endpoints
+In order to run the app you have to position yourself to the notification-service folder  and type ```mvn spring-boot:run``` in command prompt. (using Maven plugin)
 
-In order to run the app you have to position yourself to the notification-service folder  and type **mvn spring-boot:run** in command prompt.
+You must have java(>=10 version) installed
 
-In order to run test, type **mvn test**
+## Running tests
+
+In order to run test, type ```mvn test``` in command prompt (and you have to position yourself to the notification-service folder)
+
+
 
