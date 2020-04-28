@@ -4,8 +4,9 @@ import axios from 'axios';
 
 import db from '../lib/db';
 import servicesHelper from '../lib/helpers/services-helper';
+import eventsSystemHelper from '../lib/helpers/events-system-helper';
 
-import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN } from '../config/constants';
+import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN, SERVICES, GRPC_ACTION_TYPES, GRPC_USER_RESOURCE } from '../config/constants';
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -100,7 +101,22 @@ export const deleteUser = async (req, res) => {
     const deleteEventUrl = servicesHelper.getServiceUrl();
     await axios.delete(`${deleteEventUrl}/users/${result.id}`);
 
-    res.status(200).json({ message: 'User successfully deleted. ' });
+    // inform system events about newly created event
+    eventsSystemHelper.logEvent(
+      {
+        serviceName: SERVICES.USER_MANAGEMENT_SERVICE,
+        userId: result.id,
+        actionType: GRPC_ACTION_TYPES.DELETE,
+        resourceName: GRPC_USER_RESOURCE,
+      },
+      (result) => {
+        if (!result) {
+          console.log('[user-management-service] deleteUser - Error sending grpc message!');
+          return res.status(400).json({ error: 'Error deleting user. ' });
+        }
+        res.status(200).json({ message: 'User successfully deleted. ' });
+      }
+    );
   } catch (e) {
     console.log('[user-management-service] deleteUser - ', e.message);
     res.status(400).json({ error: 'Error deleting user. ' });

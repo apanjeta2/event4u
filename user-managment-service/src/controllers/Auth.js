@@ -4,8 +4,9 @@ import axios from 'axios';
 
 import db from '../lib/db';
 import servicesHelper from '../lib/helpers/services-helper';
+import eventsSystemHelper from '../lib/helpers/events-system-helper';
 
-import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN } from '../config/constants';
+import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN, SERVICES, GRPC_ACTION_TYPES, GRPC_USER_RESOURCE } from '../config/constants';
 
 export const login = async (req, res) => {
   try {
@@ -59,7 +60,22 @@ export const signUp = async (req, res) => {
     const signUpEventUrl = servicesHelper.getServiceUrl();
     await axios.post(`${signUpEventUrl}/users/${result.id}`);
 
-    res.status(200).json({ username, name, surname });
+    // inform system events about newly created event
+    eventsSystemHelper.logEvent(
+      {
+        serviceName: SERVICES.USER_MANAGEMENT_SERVICE,
+        userId: result.id,
+        actionType: GRPC_ACTION_TYPES.CREATE,
+        resourceName: GRPC_USER_RESOURCE,
+      },
+      (result) => {
+        if (!result) {
+          console.log('[user-management-service] signUp - Error sending grpc message!');
+          return res.status(500).json({ error: 'Error creating user. ' });
+        }
+        res.status(200).json({ username, name, surname });
+      }
+    );
   } catch (e) {
     console.log('[user-management-service] signUp - ', e.message);
     res.status(400).json({ error: 'Error creating user. ' });

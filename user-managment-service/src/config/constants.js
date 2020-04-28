@@ -29,4 +29,16 @@ export const DEFAULT_USERS = [
 // list of services
 export const SERVICES = {
   EVENT_SERVICE: 'EVENT-SERVICE',
+  SYSTEM_EVENTS_SERVICE: 'SYSTEM-EVENTS-SERVICE',
+  USER_MANAGEMENT_SERVICE: 'USER-MANAGEMENT-SERVICE',
 };
+
+// grpc action type & resource names
+export const GRPC_ACTION_TYPES = {
+  CREATE: 0,
+  DELETE: 1,
+  GET: 2,
+  UPDATE: 3,
+};
+
+export const GRPC_USER_RESOURCE = 'User';
