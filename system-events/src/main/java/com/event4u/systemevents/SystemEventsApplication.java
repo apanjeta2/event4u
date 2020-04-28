@@ -24,7 +24,7 @@ public class SystemEventsApplication {
 
 			try {
 				System.out.println("Service name: " + request.getServiceName() + ", resource name: " + request.getResourceName());
-				actionService.createAction(request.getTimestamp().toString(), request.getServiceName(), request.getUserId(), request.getActionType(), request.getResourceName());
+				actionService.createAction(request.getServiceName(), request.getUserId(), request.getActionType(), request.getResourceName());
 				Event4U.APIResponse.Builder response = Event4U.APIResponse.newBuilder();
 				response.setResponseMessage("Action saved");
 				response.setResponseType(Event4U.APIResponse.ResponseType.SUCCESS);

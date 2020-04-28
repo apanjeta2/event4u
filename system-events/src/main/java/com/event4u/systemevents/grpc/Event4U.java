@@ -19,48 +19,43 @@ public final class Event4U {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-     */
-    boolean hasTimestamp();
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-     */
-    com.google.protobuf.Timestamp getTimestamp();
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-     */
-    com.google.protobuf.TimestampOrBuilder getTimestampOrBuilder();
-
-    /**
-     * <code>string serviceName = 2;</code>
+     * <pre>
+     *google.protobuf.Timestamp timestamp = 1;
+     * </pre>
+     *
+     * <code>string serviceName = 1;</code>
      */
     java.lang.String getServiceName();
     /**
-     * <code>string serviceName = 2;</code>
+     * <pre>
+     *google.protobuf.Timestamp timestamp = 1;
+     * </pre>
+     *
+     * <code>string serviceName = 1;</code>
      */
     com.google.protobuf.ByteString
         getServiceNameBytes();
 
     /**
-     * <code>int64 userId = 3;</code>
+     * <code>int64 userId = 2;</code>
      */
     long getUserId();
 
     /**
-     * <code>.Request.ActionType actionType = 4;</code>
+     * <code>.Request.ActionType actionType = 3;</code>
      */
     int getActionTypeValue();
     /**
-     * <code>.Request.ActionType actionType = 4;</code>
+     * <code>.Request.ActionType actionType = 3;</code>
      */
     com.event4u.systemevents.grpc.Event4U.Request.ActionType getActionType();
 
     /**
-     * <code>string resourceName = 5;</code>
+     * <code>string resourceName = 4;</code>
      */
     java.lang.String getResourceName();
     /**
-     * <code>string resourceName = 5;</code>
+     * <code>string resourceName = 4;</code>
      */
     com.google.protobuf.ByteString
         getResourceNameBytes();
@@ -109,36 +104,23 @@ public final class Event4U {
               done = true;
               break;
             case 10: {
-              com.google.protobuf.Timestamp.Builder subBuilder = null;
-              if (timestamp_ != null) {
-                subBuilder = timestamp_.toBuilder();
-              }
-              timestamp_ = input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(timestamp_);
-                timestamp_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
               serviceName_ = s;
               break;
             }
-            case 24: {
+            case 16: {
 
               userId_ = input.readInt64();
               break;
             }
-            case 32: {
+            case 24: {
               int rawValue = input.readEnum();
 
               actionType_ = rawValue;
               break;
             }
-            case 42: {
+            case 34: {
               java.lang.String s = input.readStringRequireUtf8();
 
               resourceName_ = s;
@@ -292,31 +274,14 @@ public final class Event4U {
       // @@protoc_insertion_point(enum_scope:Request.ActionType)
     }
 
-    public static final int TIMESTAMP_FIELD_NUMBER = 1;
-    private com.google.protobuf.Timestamp timestamp_;
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-     */
-    public boolean hasTimestamp() {
-      return timestamp_ != null;
-    }
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-     */
-    public com.google.protobuf.Timestamp getTimestamp() {
-      return timestamp_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : timestamp_;
-    }
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-     */
-    public com.google.protobuf.TimestampOrBuilder getTimestampOrBuilder() {
-      return getTimestamp();
-    }
-
-    public static final int SERVICENAME_FIELD_NUMBER = 2;
+    public static final int SERVICENAME_FIELD_NUMBER = 1;
     private volatile java.lang.Object serviceName_;
     /**
-     * <code>string serviceName = 2;</code>
+     * <pre>
+     *google.protobuf.Timestamp timestamp = 1;
+     * </pre>
+     *
+     * <code>string serviceName = 1;</code>
      */
     public java.lang.String getServiceName() {
       java.lang.Object ref = serviceName_;
@@ -331,7 +296,11 @@ public final class Event4U {
       }
     }
     /**
-     * <code>string serviceName = 2;</code>
+     * <pre>
+     *google.protobuf.Timestamp timestamp = 1;
+     * </pre>
+     *
+     * <code>string serviceName = 1;</code>
      */
     public com.google.protobuf.ByteString
         getServiceNameBytes() {
@@ -347,25 +316,25 @@ public final class Event4U {
       }
     }
 
-    public static final int USERID_FIELD_NUMBER = 3;
+    public static final int USERID_FIELD_NUMBER = 2;
     private long userId_;
     /**
-     * <code>int64 userId = 3;</code>
+     * <code>int64 userId = 2;</code>
      */
     public long getUserId() {
       return userId_;
     }
 
-    public static final int ACTIONTYPE_FIELD_NUMBER = 4;
+    public static final int ACTIONTYPE_FIELD_NUMBER = 3;
     private int actionType_;
     /**
-     * <code>.Request.ActionType actionType = 4;</code>
+     * <code>.Request.ActionType actionType = 3;</code>
      */
     public int getActionTypeValue() {
       return actionType_;
     }
     /**
-     * <code>.Request.ActionType actionType = 4;</code>
+     * <code>.Request.ActionType actionType = 3;</code>
      */
     public com.event4u.systemevents.grpc.Event4U.Request.ActionType getActionType() {
       @SuppressWarnings("deprecation")
@@ -373,10 +342,10 @@ public final class Event4U {
       return result == null ? com.event4u.systemevents.grpc.Event4U.Request.ActionType.UNRECOGNIZED : result;
     }
 
-    public static final int RESOURCENAME_FIELD_NUMBER = 5;
+    public static final int RESOURCENAME_FIELD_NUMBER = 4;
     private volatile java.lang.Object resourceName_;
     /**
-     * <code>string resourceName = 5;</code>
+     * <code>string resourceName = 4;</code>
      */
     public java.lang.String getResourceName() {
       java.lang.Object ref = resourceName_;
@@ -391,7 +360,7 @@ public final class Event4U {
       }
     }
     /**
-     * <code>string resourceName = 5;</code>
+     * <code>string resourceName = 4;</code>
      */
     public com.google.protobuf.ByteString
         getResourceNameBytes() {
@@ -421,20 +390,17 @@ public final class Event4U {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (timestamp_ != null) {
-        output.writeMessage(1, getTimestamp());
-      }
       if (!getServiceNameBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, serviceName_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, serviceName_);
       }
       if (userId_ != 0L) {
-        output.writeInt64(3, userId_);
+        output.writeInt64(2, userId_);
       }
       if (actionType_ != com.event4u.systemevents.grpc.Event4U.Request.ActionType.CREATE.getNumber()) {
-        output.writeEnum(4, actionType_);
+        output.writeEnum(3, actionType_);
       }
       if (!getResourceNameBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, resourceName_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, resourceName_);
       }
       unknownFields.writeTo(output);
     }
@@ -445,23 +411,19 @@ public final class Event4U {
       if (size != -1) return size;
 
       size = 0;
-      if (timestamp_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getTimestamp());
-      }
       if (!getServiceNameBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, serviceName_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, serviceName_);
       }
       if (userId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(3, userId_);
+          .computeInt64Size(2, userId_);
       }
       if (actionType_ != com.event4u.systemevents.grpc.Event4U.Request.ActionType.CREATE.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, actionType_);
+          .computeEnumSize(3, actionType_);
       }
       if (!getResourceNameBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, resourceName_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, resourceName_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -479,11 +441,6 @@ public final class Event4U {
       com.event4u.systemevents.grpc.Event4U.Request other = (com.event4u.systemevents.grpc.Event4U.Request) obj;
 
       boolean result = true;
-      result = result && (hasTimestamp() == other.hasTimestamp());
-      if (hasTimestamp()) {
-        result = result && getTimestamp()
-            .equals(other.getTimestamp());
-      }
       result = result && getServiceName()
           .equals(other.getServiceName());
       result = result && (getUserId()
@@ -502,10 +459,6 @@ public final class Event4U {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasTimestamp()) {
-        hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-        hash = (53 * hash) + getTimestamp().hashCode();
-      }
       hash = (37 * hash) + SERVICENAME_FIELD_NUMBER;
       hash = (53 * hash) + getServiceName().hashCode();
       hash = (37 * hash) + USERID_FIELD_NUMBER;
@@ -648,12 +601,6 @@ public final class Event4U {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (timestampBuilder_ == null) {
-          timestamp_ = null;
-        } else {
-          timestamp_ = null;
-          timestampBuilder_ = null;
-        }
         serviceName_ = "";
 
         userId_ = 0L;
@@ -688,11 +635,6 @@ public final class Event4U {
       @java.lang.Override
       public com.event4u.systemevents.grpc.Event4U.Request buildPartial() {
         com.event4u.systemevents.grpc.Event4U.Request result = new com.event4u.systemevents.grpc.Event4U.Request(this);
-        if (timestampBuilder_ == null) {
-          result.timestamp_ = timestamp_;
-        } else {
-          result.timestamp_ = timestampBuilder_.build();
-        }
         result.serviceName_ = serviceName_;
         result.userId_ = userId_;
         result.actionType_ = actionType_;
@@ -745,9 +687,6 @@ public final class Event4U {
 
       public Builder mergeFrom(com.event4u.systemevents.grpc.Event4U.Request other) {
         if (other == com.event4u.systemevents.grpc.Event4U.Request.getDefaultInstance()) return this;
-        if (other.hasTimestamp()) {
-          mergeTimestamp(other.getTimestamp());
-        }
         if (!other.getServiceName().isEmpty()) {
           serviceName_ = other.serviceName_;
           onChanged();
@@ -791,126 +730,13 @@ public final class Event4U {
         return this;
       }
 
-      private com.google.protobuf.Timestamp timestamp_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> timestampBuilder_;
-      /**
-       * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-       */
-      public boolean hasTimestamp() {
-        return timestampBuilder_ != null || timestamp_ != null;
-      }
-      /**
-       * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-       */
-      public com.google.protobuf.Timestamp getTimestamp() {
-        if (timestampBuilder_ == null) {
-          return timestamp_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : timestamp_;
-        } else {
-          return timestampBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-       */
-      public Builder setTimestamp(com.google.protobuf.Timestamp value) {
-        if (timestampBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          timestamp_ = value;
-          onChanged();
-        } else {
-          timestampBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-       */
-      public Builder setTimestamp(
-          com.google.protobuf.Timestamp.Builder builderForValue) {
-        if (timestampBuilder_ == null) {
-          timestamp_ = builderForValue.build();
-          onChanged();
-        } else {
-          timestampBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-       */
-      public Builder mergeTimestamp(com.google.protobuf.Timestamp value) {
-        if (timestampBuilder_ == null) {
-          if (timestamp_ != null) {
-            timestamp_ =
-              com.google.protobuf.Timestamp.newBuilder(timestamp_).mergeFrom(value).buildPartial();
-          } else {
-            timestamp_ = value;
-          }
-          onChanged();
-        } else {
-          timestampBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-       */
-      public Builder clearTimestamp() {
-        if (timestampBuilder_ == null) {
-          timestamp_ = null;
-          onChanged();
-        } else {
-          timestamp_ = null;
-          timestampBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-       */
-      public com.google.protobuf.Timestamp.Builder getTimestampBuilder() {
-        
-        onChanged();
-        return getTimestampFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-       */
-      public com.google.protobuf.TimestampOrBuilder getTimestampOrBuilder() {
-        if (timestampBuilder_ != null) {
-          return timestampBuilder_.getMessageOrBuilder();
-        } else {
-          return timestamp_ == null ?
-              com.google.protobuf.Timestamp.getDefaultInstance() : timestamp_;
-        }
-      }
-      /**
-       * <code>.google.protobuf.Timestamp timestamp = 1;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
-          getTimestampFieldBuilder() {
-        if (timestampBuilder_ == null) {
-          timestampBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
-                  getTimestamp(),
-                  getParentForChildren(),
-                  isClean());
-          timestamp_ = null;
-        }
-        return timestampBuilder_;
-      }
-
       private java.lang.Object serviceName_ = "";
       /**
-       * <code>string serviceName = 2;</code>
+       * <pre>
+       *google.protobuf.Timestamp timestamp = 1;
+       * </pre>
+       *
+       * <code>string serviceName = 1;</code>
        */
       public java.lang.String getServiceName() {
         java.lang.Object ref = serviceName_;
@@ -925,7 +751,11 @@ public final class Event4U {
         }
       }
       /**
-       * <code>string serviceName = 2;</code>
+       * <pre>
+       *google.protobuf.Timestamp timestamp = 1;
+       * </pre>
+       *
+       * <code>string serviceName = 1;</code>
        */
       public com.google.protobuf.ByteString
           getServiceNameBytes() {
@@ -941,7 +771,11 @@ public final class Event4U {
         }
       }
       /**
-       * <code>string serviceName = 2;</code>
+       * <pre>
+       *google.protobuf.Timestamp timestamp = 1;
+       * </pre>
+       *
+       * <code>string serviceName = 1;</code>
        */
       public Builder setServiceName(
           java.lang.String value) {
@@ -954,7 +788,11 @@ public final class Event4U {
         return this;
       }
       /**
-       * <code>string serviceName = 2;</code>
+       * <pre>
+       *google.protobuf.Timestamp timestamp = 1;
+       * </pre>
+       *
+       * <code>string serviceName = 1;</code>
        */
       public Builder clearServiceName() {
         
@@ -963,7 +801,11 @@ public final class Event4U {
         return this;
       }
       /**
-       * <code>string serviceName = 2;</code>
+       * <pre>
+       *google.protobuf.Timestamp timestamp = 1;
+       * </pre>
+       *
+       * <code>string serviceName = 1;</code>
        */
       public Builder setServiceNameBytes(
           com.google.protobuf.ByteString value) {
@@ -979,13 +821,13 @@ public final class Event4U {
 
       private long userId_ ;
       /**
-       * <code>int64 userId = 3;</code>
+       * <code>int64 userId = 2;</code>
        */
       public long getUserId() {
         return userId_;
       }
       /**
-       * <code>int64 userId = 3;</code>
+       * <code>int64 userId = 2;</code>
        */
       public Builder setUserId(long value) {
         
@@ -994,7 +836,7 @@ public final class Event4U {
         return this;
       }
       /**
-       * <code>int64 userId = 3;</code>
+       * <code>int64 userId = 2;</code>
        */
       public Builder clearUserId() {
         
@@ -1005,13 +847,13 @@ public final class Event4U {
 
       private int actionType_ = 0;
       /**
-       * <code>.Request.ActionType actionType = 4;</code>
+       * <code>.Request.ActionType actionType = 3;</code>
        */
       public int getActionTypeValue() {
         return actionType_;
       }
       /**
-       * <code>.Request.ActionType actionType = 4;</code>
+       * <code>.Request.ActionType actionType = 3;</code>
        */
       public Builder setActionTypeValue(int value) {
         actionType_ = value;
@@ -1019,7 +861,7 @@ public final class Event4U {
         return this;
       }
       /**
-       * <code>.Request.ActionType actionType = 4;</code>
+       * <code>.Request.ActionType actionType = 3;</code>
        */
       public com.event4u.systemevents.grpc.Event4U.Request.ActionType getActionType() {
         @SuppressWarnings("deprecation")
@@ -1027,7 +869,7 @@ public final class Event4U {
         return result == null ? com.event4u.systemevents.grpc.Event4U.Request.ActionType.UNRECOGNIZED : result;
       }
       /**
-       * <code>.Request.ActionType actionType = 4;</code>
+       * <code>.Request.ActionType actionType = 3;</code>
        */
       public Builder setActionType(com.event4u.systemevents.grpc.Event4U.Request.ActionType value) {
         if (value == null) {
@@ -1039,7 +881,7 @@ public final class Event4U {
         return this;
       }
       /**
-       * <code>.Request.ActionType actionType = 4;</code>
+       * <code>.Request.ActionType actionType = 3;</code>
        */
       public Builder clearActionType() {
         
@@ -1050,7 +892,7 @@ public final class Event4U {
 
       private java.lang.Object resourceName_ = "";
       /**
-       * <code>string resourceName = 5;</code>
+       * <code>string resourceName = 4;</code>
        */
       public java.lang.String getResourceName() {
         java.lang.Object ref = resourceName_;
@@ -1065,7 +907,7 @@ public final class Event4U {
         }
       }
       /**
-       * <code>string resourceName = 5;</code>
+       * <code>string resourceName = 4;</code>
        */
       public com.google.protobuf.ByteString
           getResourceNameBytes() {
@@ -1081,7 +923,7 @@ public final class Event4U {
         }
       }
       /**
-       * <code>string resourceName = 5;</code>
+       * <code>string resourceName = 4;</code>
        */
       public Builder setResourceName(
           java.lang.String value) {
@@ -1094,7 +936,7 @@ public final class Event4U {
         return this;
       }
       /**
-       * <code>string resourceName = 5;</code>
+       * <code>string resourceName = 4;</code>
        */
       public Builder clearResourceName() {
         
@@ -1103,7 +945,7 @@ public final class Event4U {
         return this;
       }
       /**
-       * <code>string resourceName = 5;</code>
+       * <code>string resourceName = 4;</code>
        */
       public Builder setResourceNameBytes(
           com.google.protobuf.ByteString value) {
@@ -1931,18 +1773,16 @@ public final class Event4U {
   static {
     java.lang.String[] descriptorData = {
       "\n\revent4u.proto\032\037google/protobuf/timesta" +
-      "mp.proto\"\327\001\n\007Request\022-\n\ttimestamp\030\001 \001(\0132" +
-      "\032.google.protobuf.Timestamp\022\023\n\013serviceNa" +
-      "me\030\002 \001(\t\022\016\n\006userId\030\003 \001(\003\022\'\n\nactionType\030\004" +
-      " \001(\0162\023.Request.ActionType\022\024\n\014resourceNam" +
-      "e\030\005 \001(\t\"9\n\nActionType\022\n\n\006CREATE\020\000\022\n\n\006DEL" +
-      "ETE\020\001\022\007\n\003GET\020\002\022\n\n\006UPDATE\020\003\"\177\n\013APIRespons" +
-      "e\022\027\n\017responseMessage\030\001 \001(\t\022/\n\014responseTy" +
-      "pe\030\002 \001(\0162\031.APIResponse.ResponseType\"&\n\014R" +
-      "esponseType\022\013\n\007SUCCESS\020\000\022\t\n\005ERROR\020\0012-\n\006a" +
-      "ction\022#\n\tlogAction\022\010.Request\032\014.APIRespon" +
-      "seB\037\n\035com.event4u.systemevents.grpcb\006pro" +
-      "to3"
+      "mp.proto\"\250\001\n\007Request\022\023\n\013serviceName\030\001 \001(" +
+      "\t\022\016\n\006userId\030\002 \001(\003\022\'\n\nactionType\030\003 \001(\0162\023." +
+      "Request.ActionType\022\024\n\014resourceName\030\004 \001(\t" +
+      "\"9\n\nActionType\022\n\n\006CREATE\020\000\022\n\n\006DELETE\020\001\022\007" +
+      "\n\003GET\020\002\022\n\n\006UPDATE\020\003\"\177\n\013APIResponse\022\027\n\017re" +
+      "sponseMessage\030\001 \001(\t\022/\n\014responseType\030\002 \001(" +
+      "\0162\031.APIResponse.ResponseType\"&\n\014Response" +
+      "Type\022\013\n\007SUCCESS\020\000\022\t\n\005ERROR\020\0012-\n\006action\022#" +
+      "\n\tlogAction\022\010.Request\032\014.APIResponseB\037\n\035c" +
+      "om.event4u.systemevents.grpcb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1962,7 +1802,7 @@ public final class Event4U {
     internal_static_Request_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Request_descriptor,
-        new java.lang.String[] { "Timestamp", "ServiceName", "UserId", "ActionType", "ResourceName", });
+        new java.lang.String[] { "ServiceName", "UserId", "ActionType", "ResourceName", });
     internal_static_APIResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_APIResponse_fieldAccessorTable = new

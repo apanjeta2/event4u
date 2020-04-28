@@ -1,6 +1,6 @@
 package com.event4u.eventsservice.service;
 
-import com.event4u.eventsservice.grpc.Event4U;
+/*import com.event4u.eventsservice.grpc.Event4U;
 import com.event4u.eventsservice.grpc.actionGrpc;
 import com.google.protobuf.Timestamp;
 import io.grpc.ManagedChannel;
@@ -28,4 +28,4 @@ public class LogActionService {
         System.out.println(response.getResponseMessage());
         channel.shutdown();
     }
-}
+}*/

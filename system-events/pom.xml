@@ -70,9 +70,24 @@
 			<version>${grpc-spring-boot-starter.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>29.0-jre</version>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty-shaded</artifactId>
+			<version>1.15.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+			<version>1.15.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+			<version>1.15.1</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
@@ -87,17 +102,9 @@
 		</dependencies>
 	</dependencyManagement>
 	<build>
-		<defaultGoal>clean generate-sources compile install</defaultGoal>
-		<extensions>
-			<extension>
-				<groupId>kr.motd.maven</groupId>
-				<artifactId>os-maven-plugin</artifactId>
-				<version>1.6.1</version>
-			</extension>
-		</extensions>
 		<plugins>
 			<!-- compile proto file into java files. -->
-			<!--<plugin>
+			<plugin>
 				<groupId>com.github.os72</groupId>
 				<artifactId>protoc-jar-maven-plugin</artifactId>
 				<version>3.6.0.1</version>
@@ -128,8 +135,8 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>-->
-			<plugin>
+			</plugin>
+			<!--<plugin>
 				<groupId>org.xolstice.maven.plugins</groupId>
 				<artifactId>protobuf-maven-plugin</artifactId>
 				<version>${protobuf-maven-plugin.version}</version>
@@ -146,7 +153,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
