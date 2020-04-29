@@ -71,7 +71,12 @@ public class UserControllerTest {
 
     @Test
     public void updateUserTest() throws Exception {
-        MvcResult rez = mvc.perform(MockMvcRequestBuilders.put("/events/2").header("Content-Type", "application/json")
+
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.put("/events/2").headers(httph)
                 .content("{\"eventId\": 2,\"name\": \"promjena\",\"date\": \"2020-09-07\" }"))
 
                 .andExpect(status().isOk())

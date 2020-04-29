@@ -54,7 +54,23 @@ public class NotificationControllerTest {
 
     @Autowired
     private UserService userService;
+    public String token="";
+    public String idUsera;
+    @Before
+    public void setup() {
+        String odg =  userService.getValidToken();
+        int intIndex = odg.indexOf("token") +8;
 
+        int intIndexId = odg.indexOf("id") + 4;
+
+        //Da dobijemo id usera čiji je token
+        idUsera=odg.substring(intIndexId, odg.indexOf(","));
+
+        log.info("User jeee"+ idUsera + " "+ odg.indexOf(","));
+
+        token=odg.substring(intIndex);
+        token=token.substring(0, token.length() - 2);
+    }
     @Test
     public void getAllNotificationsTest() throws Exception
     {
@@ -198,7 +214,11 @@ public class NotificationControllerTest {
     }
     @Test
     public void getNotificationByEventIdTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/notifications/getByEventId/1")
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        mvc.perform(MockMvcRequestBuilders.get("/notifications/getByEventId/1").headers(httph)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -225,7 +245,11 @@ public class NotificationControllerTest {
     }
     @Test
     public void getNotificationByEventIdErrorBadParameterTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/notifications/getByEventId/\"1\"")
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        mvc.perform(MockMvcRequestBuilders.get("/notifications/getByEventId/\"1\"").headers(httph)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", is("Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"\"1\"\"")))
@@ -238,9 +262,14 @@ public class NotificationControllerTest {
 
     @Test
     public void postNotificationTest() throws Exception {
-        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/notifications?userId=12&eventId=2&message=\"poruka test\"&date=22/06/2020&isRead=false"))
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/notifications?userId=12&eventId=2&message=\"poruka test\"&date=22/06/2020&isRead=false")
+        .headers(httph))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.notificationId", is(4)))
+                .andExpect(jsonPath("$.notificationId", is(5)))
                 .andExpect(jsonPath("$.eventId", is(2)))
                 .andExpect(jsonPath("$.userId", is(12)))
                 .andReturn();
@@ -253,14 +282,24 @@ public class NotificationControllerTest {
     }
     @Test
     public void postNotificationMissingParameterTest() throws Exception {
-        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/notifications?eventId=2&message=\"poruka test\"&date=22/06/2020&isRead=false"))
+
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/notifications?eventId=2&message=\"poruka test\"&date=22/06/2020&isRead=false").headers(httph))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", is("Required Long parameter 'userId' is not present")))
                 .andReturn();
     }
     @Test
     public void postNotificationBadDateFormatTest() throws Exception {
-        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/notifications?userId=12&eventId=2&message=\"poruka test\"&date=tt222.06.2020&isRead=false"))
+
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/notifications?userId=12&eventId=2&message=\"poruka test\"&date=tt222.06.2020&isRead=false").headers(httph))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.errors[0]", is("Error occurred")))
                 .andReturn();
@@ -293,23 +332,7 @@ public class NotificationControllerTest {
 
     //Kreiranje nove notifikacije preko body
 
-    public String token="";
-    public String idUsera;
-    @Before
-    public void setup() {
-        String odg =  userService.getValidToken();
-        int intIndex = odg.indexOf("token") +8;
 
-        int intIndexId = odg.indexOf("id") + 4;
-
-        //Da dobijemo id usera čiji je token
-        idUsera=odg.substring(intIndexId, odg.indexOf(","));
-
-        log.info("User jeee"+ idUsera + " "+ odg.indexOf(","));
-
-        token=odg.substring(intIndex);
-        token=token.substring(0, token.length() - 2);
-    }
     @Test
     public void postNotification2Test() throws Exception {
         setup();

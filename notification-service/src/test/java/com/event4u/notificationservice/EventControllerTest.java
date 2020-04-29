@@ -36,9 +36,38 @@ public class EventControllerTest {
                 .andExpect(jsonPath("$[1].eventId", is(2)));
 
     }
+    public String token="";
+    public String idUsera;
+    @Before
+    public void setup() {
+        String odg =  userService.getValidToken();
+        int intIndex = odg.indexOf("token") +8;
+
+        int intIndexId = odg.indexOf("id") + 4;
+
+        //Da dobijemo id usera čiji je token
+        idUsera=odg.substring(intIndexId, odg.indexOf(","));
+
+
+        token=odg.substring(intIndex);
+        token=token.substring(0, token.length() - 2);
+    }
+
+   /// public String token="";
+   // @Before
+   // public void setup() {
+   ///     String odg =  userService.getValidToken();
+    //    int intIndex = odg.indexOf("token") +8;
+     //   token=odg.substring(intIndex,350);
+    //}
     @Test
     public void getEventByIdTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/events/getById/2")
+
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        mvc.perform(MockMvcRequestBuilders.get("/events/getById/2").headers(httph)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.eventId", is(2)));
@@ -46,14 +75,22 @@ public class EventControllerTest {
 
     @Test
     public void getEventByIdErrorTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/events/getById/88") //ne postoji
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        mvc.perform(MockMvcRequestBuilders.get("/events/getById/88").headers(httph) //ne postoji
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is("Element not found")));
     }
     @Test
     public void postEventByIdTest() throws Exception {
-        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/events")
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/events").headers(httph)
                 .content("66"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.eventId", is(66))) //ako je uspjeno upisan ispise ga
@@ -69,7 +106,11 @@ public class EventControllerTest {
 
     @Test
     public void updateEventTest() throws Exception {
-        MvcResult rez = mvc.perform(MockMvcRequestBuilders.put("/events/2").header("Content-Type", "application/json")
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.put("/events/2").headers(httph)
                 .content("{\"eventId\": 2,\"name\": \"promjena\",\"date\": \"2020-09-07\" }"))
 
                 .andExpect(status().isOk())
@@ -79,7 +120,11 @@ public class EventControllerTest {
 
     @Test
     public void postEventByIdTest2() throws Exception {
-        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/events")
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        MvcResult rez = mvc.perform(MockMvcRequestBuilders.post("/events").headers(httph)
                 .content("666"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.eventId", is(666))) //ako je uspjeno upisan ispise ga
@@ -87,24 +132,26 @@ public class EventControllerTest {
     }
     @Test
     public void deleteEventTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/events/666"))
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        mvc.perform(MockMvcRequestBuilders.delete("/events/666").headers(httph))
                 .andExpect(jsonPath("$.message", is("Successful deletion of the event with id: 666")))
                 .andExpect(status().isOk());
     }
     @Test
     public void deleteEventTestError() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/events/6666"))
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+        mvc.perform(MockMvcRequestBuilders.delete("/events/6666").headers(httph))
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.message", is("Error deleting event with id: 6666")));
     }
 
-    public String token="";
-    @Before
-    public void setup() {
-        String odg =  userService.getValidToken();
-        int intIndex = odg.indexOf("token") +8;
-        token=odg.substring(intIndex,350);
-    }
+@Test
     public void postEvent2Test() throws Exception {
         setup();
         HttpHeaders httph = new HttpHeaders();
@@ -121,8 +168,13 @@ public class EventControllerTest {
                 .andExpect(jsonPath("$.eventId", is(19)))
                 .andReturn();
     }
+
     public void postEvent2TestChcekCreatedNotification() throws Exception {
-            mvc.perform(MockMvcRequestBuilders.get("/notifications/getByEventId/19")
+        setup();
+        HttpHeaders httph = new HttpHeaders();
+        httph.add("Content-Type","application/json");
+        httph.add("Authorization", "Bearer "+token);
+            mvc.perform(MockMvcRequestBuilders.get("/notifications/getByEventId/19").headers(httph)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(1)))
