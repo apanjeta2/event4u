@@ -20,7 +20,6 @@ JWT_EXPIRE_TIME_TOKEN=1h
 INITIAL_DB_SETUP=true // SET 'true' for first time running, afterwards you can remove it
 PORT=your_port
 FULL_BASE_URL=your_base_url
-FRONTEND_URL=frontend_url
 EUREKA_HOST_BASE_URL=localhost
 BACKEND_HOST_BASE_URL=localhost
 ```
@@ -32,4 +31,4 @@ BACKEND_HOST_BASE_URL=localhost
 
 - In order to run tests the initial db setup, if you haven't done it already, is required (`INITIAL_DB_SETUP`)
 - Open a second terminal (all services must be active) and type `npm test`
-- Note: Due to the written endpoint flows (prerequisites, orm, handling responses), tests are written in a way that provides a 100% assurance regarding that endpoints are working or not 
+- Note: Due to the written endpoint flows (prerequisites, orm, handling responses), tests are written in a way that provides a 100% assurance regarding that endpoints are working or not

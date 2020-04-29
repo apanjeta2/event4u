@@ -2,24 +2,18 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import proxy from 'express-http-proxy';
 import { Eureka } from 'eureka-js-client';
 
-import database from './lib/db/';
-import userRoutes from './routes/user-routes';
-import authRoutes from './routes/auth-routes';
+import serviceHelper from './lib/helpers/services-helper';
 
-import { DEFAULT_USERS, PORT, INITIAL_DB_SETUP, FULL_BASE_URL, EUREKA_HOST_BASE_URL, BACKEND_HOST_BASE_URL } from './config/constants';
+import { PORT, FRONTEND_URL, FULL_BASE_URL, EUREKA_HOST_BASE_URL, BACKEND_HOST_BASE_URL, SERVICES } from './config/constants';
 
 dotenv.config();
-database.sequelize.sync({ force: INITIAL_DB_SETUP }).then(async () => {
-  if (INITIAL_DB_SETUP) {
-    await database.User.bulkCreate(DEFAULT_USERS);
-    console.log('[user-managment-service] Successfully created a new database and imported initial data!');
-  }
-});
 
 const app = express();
-const APPLICATION_NAME = 'user-management-service';
+const APPLICATION_NAME = 'gateway-service';
 
 const client = new Eureka({
   instance: {
@@ -48,16 +42,34 @@ const client = new Eureka({
 });
 
 client.start((error) => {
-  console.log('[user-managment-service-eureka]', error || 'Eureka connected!');
+  console.log('[gateway-service]', error || 'Eureka connected!');
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
 
-  app.use('/api/users', userRoutes);
-  app.use('/api/auth', authRoutes);
+  app.use(
+    '*',
+    cors({
+      origin: FRONTEND_URL,
+      optionsSuccessStatus: 200,
+    })
+  );
+
+  // u slucaju da treba endpoint kao proxy
+  // app.use('/agregator/api/events/nesto/bla', eventsServiceRoutes);
+
+  // u slucaju ako je direct proxy
+  const userManagementServiceUrl = serviceHelper.getServiceUrl(SERVICES.USER_MANAGEMENT_SERVICE);
+
+  app.use(
+    '/aggregator',
+    proxy(userManagementServiceUrl, {
+      filter: (req, res) => req.path.includes('/api/auth') || req.path.includes('/api/users'),
+    })
+  );
 });
 
-app.listen(PORT, () => console.log(`[user-managment-service] Listening on port ${PORT}!`));
+app.listen(PORT, () => console.log(`[gateway-service] Listening on port ${PORT}!`));
 
 export default client;
