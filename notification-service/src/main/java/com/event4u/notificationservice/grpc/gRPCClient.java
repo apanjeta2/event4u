@@ -1,9 +1,15 @@
 package com.event4u.notificationservice.grpc;
 
+import com.event4u.notificationservice.ServiceInstanceRestController;
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 import java.util.logging.Level;
@@ -13,12 +19,29 @@ import java.util.logging.Logger;
 public class gRPCClient {
     private static final Logger logger = Logger.getLogger(gRPCClient.class.getName());
 
+    @Autowired
+    private ServiceInstanceRestController serviceInstanceRestController;
+
     private actionGrpc.actionBlockingStub blockingStub;
 
-    public void createLog(String ServiceName, Long userId, Request.ActionType actionType, String resourceName) {
-        String target = "localhost:6565";
 
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
+
+    public void createLog(String ServiceName, Long userId, Request.ActionType actionType, String resourceName) {
+        //String target = "localhost:6565";
+
+        RestTemplate restTemplate = new RestTemplate();
+        List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("system-events-service");
+
+        String url = listOfUrls.get(0);
+        String fooResourceUrl = url;
+
+        String p = "dns://";
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) p += "/";
+        if ((url != null) && (url.length() > 0)) {
+            url = p  + url.substring(7, url.length() - 4) + "6565";
+        }
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(url)
+
                 .usePlaintext()
                 .build();
 
