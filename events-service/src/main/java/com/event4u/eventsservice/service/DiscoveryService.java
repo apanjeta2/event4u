@@ -29,4 +29,13 @@ public class DiscoveryService {
         });
         return services.get(0);
     }
+
+    public String getSystemEventsInstance() {
+        List<String> services = new ArrayList<String>();
+        discoveryClient.getInstances("SYSTEM-EVENTS-SERVICE").forEach(instance ->
+        {
+            services.add(String.format("%s", instance.getUri()));
+        });
+        return services.get(0);
+    }
 }

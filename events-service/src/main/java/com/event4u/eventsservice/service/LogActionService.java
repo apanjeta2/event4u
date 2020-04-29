@@ -1,16 +1,26 @@
 package com.event4u.eventsservice.service;
 
-/*import com.event4u.eventsservice.grpc.Event4U;
+import com.event4u.eventsservice.grpc.Event4U;
 import com.event4u.eventsservice.grpc.actionGrpc;
-import com.google.protobuf.Timestamp;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LogActionService {
-    public static void logAction(String resName) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8080)
+    @Autowired
+    DiscoveryService discoveryService;
+
+    public void logAction(Long userId, Event4U.Request.ActionType actionType, String resName) {
+        String url = discoveryService.getSystemEventsInstance();
+        String p = "dns://";
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) p += "/";
+        if ((url != null) && (url.length() > 0)) {
+            url = p  + url.substring(7, url.length() - 5) + "6565";
+        }
+
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(url)
                 .usePlaintext()
                 .build();
 
@@ -19,13 +29,11 @@ public class LogActionService {
 
         Event4U.APIResponse response = stub.logAction(Event4U.Request.newBuilder()
                 .setServiceName("Events-service")
-                .setUserId(20)
-                .setActionType(Event4U.Request.ActionType.GET)
-                .setTimestamp(Timestamp.newBuilder().setNanos(100).setSeconds(20).build())
+                .setUserId(userId)
+                .setActionType(actionType)
                 .setResourceName(resName)
                 .build());
-
-        System.out.println(response.getResponseMessage());
+        //System.out.println(response.getResponseMessage());
         channel.shutdown();
     }
-}*/
+}

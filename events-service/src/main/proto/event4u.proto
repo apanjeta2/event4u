@@ -9,17 +9,16 @@ service action{
 }
 
 message Request{
-  google.protobuf.Timestamp timestamp = 1;
-  string serviceName = 2 ;
-  int64 userId = 3 ;
+  string serviceName = 1 ;
+  int64 userId = 2 ;
   enum ActionType {
       CREATE = 0;
       DELETE = 1;
       GET = 2;
       UPDATE = 3;
   }
-  ActionType actionType = 4;
-  string resourceName = 5;
+  ActionType actionType = 3;
+  string resourceName = 4;
 }
 
 message APIResponse{
