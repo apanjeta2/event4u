@@ -9,9 +9,9 @@ export const EUREKA_HOST_BASE_URL = process.env.EUREKA_HOST_BASE_URL;
 export const BACKEND_HOST_BASE_URL = process.env.BACKEND_HOST_BASE_URL;
 export const FULL_BASE_URL = process.env.FULL_BASE_URL;
 
-// list of services
+// list of services that API gateway knows
 export const SERVICES = {
   EVENT_SERVICE: 'EVENT-SERVICE',
-  SYSTEM_EVENTS_SERVICE: 'SYSTEM-EVENTS-SERVICE',
   USER_MANAGEMENT_SERVICE: 'USER-MANAGEMENT-SERVICE',
+  NOTIFICATION_SERVICE: 'NOTIFICATION-SERVICE',
 };
