@@ -25,11 +25,12 @@ public class EventController {
     private EventsService eventService;
     @Autowired
     private NotificationService notificationService;
-
+    @Value("${jwt.secret}")
+    private String key;
     //Vraca event po id-u
     @GetMapping(path="/getById/{id}",produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Events getEventById(@PathVariable Long id){
-        return eventService.getEventById(id);
+    public Events getEventById(@RequestHeader("Authorization") String token, @PathVariable Long id){
+        return eventService.getEventById(token, key,id);
     }
 
     @GetMapping(path="",produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -39,15 +40,15 @@ public class EventController {
 
     //Dodavanje event-a
     @PostMapping(path="",produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Events newEvent(@RequestBody String eventId) {
-        return eventService.createEvent(Long.parseLong(eventId));
+    public Events newEvent(@RequestHeader("Authorization") String token,@RequestBody String eventId) {
+        return eventService.createEvent(token, key, Long.parseLong(eventId));
     }
     //Brisanje evnta
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<JSONObject> deleteEvents(@PathVariable Long id) {
+    public ResponseEntity<JSONObject> deleteEvents(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         try {
-            eventService.deleteById(id);
+            eventService.deleteById(token, key, id);
             JSONObject Entity = new JSONObject();
             Entity.put("message","Successful deletion of the event with id: "+id );
             return  new ResponseEntity<JSONObject>(
@@ -64,27 +65,23 @@ public class EventController {
         }
 
     }
-
-    @Value("${jwt.secret}")
-    private String key;
-
     //Dodavanje event-a
     @PostMapping(path="createEvent",produces = {MediaType.APPLICATION_JSON_VALUE})
     public NotificationBody newEventCreate (@RequestHeader("Authorization") String token, @RequestBody NotificationBody event) {
-        Events e = eventService.createEventNew(event.getEventId(), event.getName(), event.getDate());
+        Events e = eventService.createEventNew(token, key, event.getEventId(), event.getName(), event.getDate());
         //Kreiraj notifikaciju odmah
         Notification n = notificationService.createNotificationNew(token, event, key, 2);
         return event;
     }
 
     @PutMapping(path ="/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Events updateEvent(@RequestBody NotificationBody tijelo, @PathVariable Long id) {
+    public Events updateEvent(@RequestHeader("Authorization") String token, @RequestBody NotificationBody tijelo, @PathVariable Long id) {
         //update notifikacija sa tim eventom
-        Iterable<Notification> all=notificationService.findAllByEvent(id);
+        Iterable<Notification> all=notificationService.findAllByEvent(token, key, id);
         ArrayList<Notification> notifications = new ArrayList<Notification>();
         all.forEach(e -> {
-            notificationService.updateNotification(e.getNotificationId(), tijelo);
+            notificationService.updateNotification(token, key, e.getNotificationId(), tijelo);
         });
-        return eventService.updateEvent(id, tijelo.getName(), tijelo.getDate());
+        return eventService.updateEvent(token, key,id, tijelo.getName(), tijelo.getDate());
     }
 }

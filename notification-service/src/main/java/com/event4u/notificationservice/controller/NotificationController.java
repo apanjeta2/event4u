@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import net.minidev.json.JSONObject;
-import netscape.javascript.JSObject;
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +52,9 @@ public class NotificationController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Value("${jwt.secret}")
+    private String key;
+
     @GetMapping("")
     public Object allNotifications() {
         return notificationService.findAll();
@@ -83,8 +85,8 @@ public class NotificationController {
 
     //Vraca sve notifikacije za jednog korisnika
     @GetMapping("/getByEventId/{id}")
-    public List<Notification> getNotificationsByEventId(@PathVariable Long id) {
-        return notificationService.findByEventId(id);
+    public List<Notification> getNotificationsByEventId(@RequestHeader("Authorization") String token,@PathVariable Long id) {
+        return notificationService.findByEventId(token, key,id);
     }
 
     //Brisanje notifikacije po id-u
@@ -111,16 +113,14 @@ public class NotificationController {
 
     //Kreiranje nove notifikacije
     @PostMapping("")
-    public Object newNotification(@RequestParam Long userId, @RequestParam Long eventId, @RequestParam String message, @RequestParam String date, @RequestParam boolean isRead) throws ParseException {
+    public Object newNotification(@RequestHeader("Authorization") String token, @RequestParam Long userId, @RequestParam Long eventId, @RequestParam String message, @RequestParam String date, @RequestParam boolean isRead) throws ParseException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
         //convert String to LocalDate
         LocalDate dateL = LocalDate.parse(date, formatter);
-        return notificationService.createNotification(userId, eventId, message, dateL, isRead,1);
+        return notificationService.createNotification(token, key,userId, eventId, message, dateL, isRead,1);
     }
 
-    @Value("${jwt.secret}")
-    private String key;
     //Kreiranje nove notifikacije sa body
     @PostMapping(path="/postNotification", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Object postNewNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody not) {
@@ -151,13 +151,13 @@ public class NotificationController {
 
     //Update notification
     @PutMapping(path ="/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Notification updateNotification(@RequestBody NotificationBody tijelo, @PathVariable Long id) {
-        return notificationService.updateNotification(id,tijelo);
+    public Notification updateNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody tijelo, @PathVariable Long id) {
+        return notificationService.updateNotification(token, key,id,tijelo);
     }
 
     @PostMapping(path ="/createGoingTo/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public NotificationBody createGoingNotification(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Events e = eventService.getEventById(id);
+        Events e = eventService.getEventById(token, key,id);
         NotificationBody not= new NotificationBody(id, e.getName(), e.getDate());
         Notification n = notificationService.createNotificationNew(token, not, key, 1);
         return not;
