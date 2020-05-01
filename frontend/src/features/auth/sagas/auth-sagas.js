@@ -1,6 +1,8 @@
 import jwtDecode from 'jwt-decode';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
+import cookiesHelper from '../../../core/helpers/cookies-helper';
+
 import {
   handleLoginInProgress,
   handleLoginSuccess,
@@ -12,6 +14,8 @@ import {
   handleUpdateProfileSuccess,
   handleUploadNewImageSuccess,
   handleUploadNewImageInProgress,
+  handleDeleteProfileInProgress,
+  handleDeleteProfileSuccess,
 } from '../actions/auth-actions';
 import { handleShowMessage } from '../../snackbar/actions/snackbar-actions';
 
@@ -119,6 +123,23 @@ function* requestUploadImage({ file }) {
   }
 }
 
+function* requestDeleteProfile({ history }) {
+  try {
+    yield put(handleDeleteProfileInProgress(true));
+
+    cookiesHelper.removeCookie('token');
+    yield call(UserApi.requestDeleteProfile);
+
+    history.push('/');
+    yield put(handleDeleteProfileSuccess());
+    yield put(handleShowMessage('AUTH.SUCCESSFULLY_DELETED_PROFILE', SNACKBAR_SEVERITY_VARIANTS.SUCCESS));
+  } catch (err) {
+    yield put(handleShowMessage('AUTH.ERROR_DELETING_PROFILE', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+  } finally {
+    yield put(handleDeleteProfileInProgress(false));
+  }
+}
+
 export default function* saga() {
   yield takeLatest(AUTH_ACTIONS.HANDLE_LOGIN, requestLogin);
   yield takeLatest(AUTH_ACTIONS.HANDLE_SIGNUP, requestSignup);
@@ -126,4 +147,5 @@ export default function* saga() {
   yield takeLatest(AUTH_ACTIONS.HANDLE_GET_USER, getUserProfile);
   yield takeLatest(AUTH_ACTIONS.HANDLE_UPDATE_PROFILE, requestUpdateProfile);
   yield takeLatest(AUTH_ACTIONS.HANDLE_UPLOAD_NEW_IMAGE, requestUploadImage);
+  yield takeLatest(AUTH_ACTIONS.HANDLE_DELETE_PROFILE, requestDeleteProfile);
 }

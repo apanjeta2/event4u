@@ -22,4 +22,8 @@ export const AUTH_ACTIONS = {
   HANDLE_UPLOAD_NEW_IMAGE: 'authUploadNewImage',
   HANDLE_UPLOAD_NEW_IMAGE_IN_PROGRESS: 'authUploadNewImageInProgress',
   HANDLE_UPLOAD_NEW_IMAGE_SUCCESS: 'authUploadNewImageSuccess',
+
+  HANDLE_DELETE_PROFILE: 'authDeleteProfile',
+  HANDLE_DELETE_PROFILE_IN_PROGRESS: 'authDeleteProfileInProgress',
+  HANDLE_DELETE_PROFILE_SUCCESS: 'authDeleteProfileSuccess',
 };

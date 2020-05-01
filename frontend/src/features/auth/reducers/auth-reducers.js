@@ -17,7 +17,6 @@ const getAuthInitialState = () => {
       username: '',
     },
     usernameInvalid: false,
-    getProfileInProgress: false,
     profile: {
       id: 0,
       username: '',
@@ -26,9 +25,11 @@ const getAuthInitialState = () => {
       picture: '',
       description: '',
     },
+    uploadedImageUrl: '',
     updateUserProfileInProgress: false,
     uploadImageInProgress: false,
-    uploadedImageUrl: '',
+    getProfileInProgress: false,
+    deleteUserProfileInProgress: false,
   };
 };
 
@@ -55,6 +56,9 @@ export const auth = (state = getAuthInitialState(), action) => {
       return { ...state, uploadImageInProgress: action.status };
     case AUTH_ACTIONS.HANDLE_UPLOAD_NEW_IMAGE_SUCCESS:
       return { ...state, uploadedImageUrl: action.data };
+    case AUTH_ACTIONS.HANDLE_DELETE_PROFILE_IN_PROGRESS:
+      return { ...state, deleteUserProfileInProgress: action.status };
+    case AUTH_ACTIONS.HANDLE_DELETE_PROFILE_SUCCESS:
     case AUTH_ACTIONS.HANDLE_LOGOUT:
       return getAuthInitialState();
     default:

@@ -91,3 +91,18 @@ export const handleUploadNewImageSuccess = data => ({
   type: AUTH_ACTIONS.HANDLE_UPLOAD_NEW_IMAGE_SUCCESS,
   data,
 });
+
+export const handleDeleteProfile = history => ({
+  type: AUTH_ACTIONS.HANDLE_DELETE_PROFILE,
+  history,
+});
+
+export const handleDeleteProfileInProgress = status => ({
+  type: AUTH_ACTIONS.HANDLE_DELETE_PROFILE_IN_PROGRESS,
+  status,
+});
+
+export const handleDeleteProfileSuccess = data => ({
+  type: AUTH_ACTIONS.HANDLE_DELETE_PROFILE_SUCCESS,
+  data,
+});

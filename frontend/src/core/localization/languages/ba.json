@@ -27,6 +27,9 @@
   "AUTH.ERROR_GETTING_USER_PROFILE": "Greska prilikom dobavljanja korisnickog profila",
   "AUTH.SUCCESSFULLY_UPDATED_PROFILE": "Uspjesno azuriran korisnicki racun.",
   "AUTH.ERROR_UPLOADING_IMAGE": "Greska prilikom uploadavanja slike.",
+  "AUTH.DELETE_PROFILE": "Brisanje korisnickog racuna",
+  "AUTH.ERROR_DELETING_PROFILE": "Greska prilikom brisanja korisnickog racuna.",
+  "AUTH.SUCCESSFULLY_DELETED_PROFILE": "Uspjesno obrisan korisnicki racun.",
 
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Trazena stranica ne postoji.",

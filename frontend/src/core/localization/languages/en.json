@@ -27,6 +27,9 @@
   "AUTH.ERROR_GETTING_USER_PROFILE": "Error getting user profile",
   "AUTH.SUCCESSFULLY_UPDATED_PROFILE": "Successfully updated profile.",
   "AUTH.ERROR_UPLOADING_IMAGE": "Error uploading image.",
+  "AUTH.DELETE_PROFILE": "Delete profile",
+  "AUTH.ERROR_DELETING_PROFILE": "Error deleting profile.",
+  "AUTH.SUCCESSFULLY_DELETED_PROFILE": "Successfully deleted profile.",
 
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Page not found.",

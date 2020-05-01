@@ -13,7 +13,7 @@ import MaterialContainer from '@material-ui/core/Container';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 
-import { handleUsernameCheck, handleGetUser, handleUpdateProfile, handleUploadNewImage } from '../actions/auth-actions';
+import { handleUsernameCheck, handleGetUser, handleUpdateProfile, handleUploadNewImage, handleDeleteProfile } from '../actions/auth-actions';
 
 import Button from '../../shared-components/button';
 import ApplicationHeader from '../../shared-components/header';
@@ -75,10 +75,23 @@ const useStyles = makeStyles(theme => ({
       cursor: 'pointer',
     },
   },
+  spinnerIcon: {
+    position: 'absolute',
+    right: '100px',
+    top: '100px',
+    padding: '5px',
+    height: '40px',
+    width: '40px',
+  },
   inputImage: {
     display: 'none',
   },
 }));
+
+const RedButton = styled(Button)`
+  background-color: red;
+  margin-top: 30px;
+`;
 
 function MyAccountPage() {
   const { t } = useTranslation();
@@ -87,12 +100,18 @@ function MyAccountPage() {
   const history = useHistory();
   const refImageInput = createRef();
 
-  const signupInProgress = useSelector(state => state.auth.signupInProgress);
   const usernameInvalid = useSelector(state => state.auth.usernameInvalid);
   const token = useSelector(state => state.auth.token);
   const userProfile = useSelector(state => state.auth.profile);
   const getProfileInProgress = useSelector(state => state.auth.getProfileInProgress);
   const url = useSelector(state => state.auth.uploadedImageUrl);
+
+  const uploadImageInProgress = useSelector(state => state.auth.uploadImageInProgress);
+  const signupInProgress = useSelector(state => state.auth.signupInProgress);
+  const deleteUserProfileInProgress = useSelector(state => state.auth.deleteUserProfileInProgress);
+
+  const disabled = deleteUserProfileInProgress || signupInProgress || uploadImageInProgress;
+
   const [uploadedImageUrl, setUploadedImageUrl] = useState(url);
 
   const validationSchema = Yup.object().shape({
@@ -170,6 +189,10 @@ function MyAccountPage() {
     setUploadedImageUrl('');
   };
 
+  const onDeleteClicked = () => {
+    dispatch(handleDeleteProfile(history));
+  };
+
   return (
     <Fragment>
       <ApplicationHeader isMyAccount />
@@ -183,7 +206,11 @@ function MyAccountPage() {
             <div className={classes.imageInnerDiv}>
               <img className={classes.image} src={uploadedImageUrl || values.picture} alt="ProfileImage" />{' '}
               <div className={classes.uploadIconOuter}>
-                {uploadedImageUrl === '' ? (
+                {uploadImageInProgress ? (
+                  <div className={classes.spinnerIcon}>
+                    <Spinner size="30px" />
+                  </div>
+                ) : uploadedImageUrl === '' ? (
                   <Fragment>
                     <input type="file" ref={refImageInput} className={classes.inputImage} onChange={onUploadNewImage} />
                     <BackupIcon className={classes.uploadIcon} fontSize="large" onClick={() => refImageInput.current.click()} />
@@ -216,9 +243,12 @@ function MyAccountPage() {
                   </Grid>
                 ))}
               </Grid>
-              <Button type="submit" fullWidth variant="contained" color="primary" loadingInProgress={signupInProgress} className={classes.submit}>
+              <Button type="submit" fullWidth variant="contained" color="primary" loadingInProgress={signupInProgress} className={classes.submit} disabled={disabled}>
                 {t('AUTH.UPDATE_PROFILE')}
               </Button>
+              <RedButton fullWidth type="button" variant="contained" color="primary" loadingInProgress={deleteUserProfileInProgress} disabled={disabled} onClick={onDeleteClicked}>
+                {t('AUTH.DELETE_PROFILE')}
+              </RedButton>
             </form>
           </div>
         </Container>

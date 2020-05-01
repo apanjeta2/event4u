@@ -23,8 +23,16 @@ const requestImageUpload = formData => {
   });
 };
 
+const requestDeleteProfile = () => {
+  return axios({
+    method: 'DELETE',
+    url: '/api/users/delete',
+  });
+};
+
 export default {
   requestUserProfile,
   requestUpdateProfile,
   requestImageUpload,
+  requestDeleteProfile,
 };
