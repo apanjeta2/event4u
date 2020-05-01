@@ -154,3 +154,33 @@ describe('Check token', () => {
     );
   });
 });
+
+describe('Check username', () => {
+  it('Treba da check username vrati 200, invalid false', (done) => {
+    request.get(
+      {
+        url: `${process.env.FULL_BASE_URL}/api/auth/check-username/mashanovirandom123123`,
+      },
+      (error, response, body) => {
+        const des = JSON.parse(body);
+        expect(des.invalid).to.equal(false);
+        expect(response && response.statusCode).to.equal(200);
+        done();
+      }
+    );
+  });
+
+  it('Treba da check username vrati 200, invalid true', (done) => {
+    request.get(
+      {
+        url: `${process.env.FULL_BASE_URL}/api/auth/check-username/masha`,
+      },
+      (error, response, body) => {
+        const des = JSON.parse(body);
+        expect(des.invalid).to.equal(true);
+        expect(response && response.statusCode).to.equal(200);
+        done();
+      }
+    );
+  });
+});

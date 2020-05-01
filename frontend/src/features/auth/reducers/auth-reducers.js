@@ -16,6 +16,7 @@ const getAuthInitialState = () => {
       surname: '',
       username: '',
     },
+    usernameInvalid: false,
   };
 };
 
@@ -28,6 +29,8 @@ export const auth = (state = getAuthInitialState(), action) => {
       return { ...state, user, token, userLoggedIn: true };
     case AUTH_ACTIONS.HANDLE_SIGNUP_IN_PROGRESS:
       return { ...state, signupInProgress: action.status };
+    case AUTH_ACTIONS.HANDLE_USERNAME_CHECK_SUCCESS:
+      return { ...state, usernameInvalid: action.data };
     case AUTH_ACTIONS.HANDLE_LOGOUT:
       return getAuthInitialState();
     default:

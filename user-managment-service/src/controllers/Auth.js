@@ -99,8 +99,24 @@ export const checkValidToken = (req, res, next) => {
   }
 };
 
+export const checkValidUsername = async (req, res) => {
+  try {
+    const result = await db.User.findOne({ where: { username: req.params.username } });
+
+    if (!result) {
+      return res.status(200).send({ invalid: false });
+    }
+
+    return res.status(200).send({ invalid: true });
+  } catch (e) {
+    console.log('[user-management-service] checkValidUsername - ', e.message);
+    res.status(500).json({ error: 'Error checking valid username. ' });
+  }
+};
+
 export default {
   login,
   signUp,
   checkValidToken,
+  checkValidUsername,
 };

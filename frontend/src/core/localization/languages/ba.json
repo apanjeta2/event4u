@@ -18,6 +18,9 @@
   "AUTH.ERROR_CREATING_ACCOUNT": "Error prilikom kreiranja korisnickog racuna.",
   "AUTH.LOGIN_TEXT": "event4u - Prijava",
   "AUTH.SIGNUP_TEXT": "event4u - Prijava racuna",
+  "AUTH.USERNAME_MIN_4": "Username mora imati najmanje 4 karaktera.",
+  "AUTH.ERROR_CHECKING_USERNAME": "Desio se problem prilikom provjere korisnickog imena.",
+  "AUTH.USERNAME_EXISTS_ALREADY": "Korisnicko ime je zauzeto.",
 
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Trazena stranica ne postoji.",

@@ -16,7 +16,15 @@ const requestSignup = data => {
   });
 };
 
+const requestUsernameCheck = username => {
+  return axios({
+    method: 'GET',
+    url: `/api/auth/check-username/${username}`,
+  });
+};
+
 export default {
   requestLogin,
   requestSignup,
+  requestUsernameCheck,
 };

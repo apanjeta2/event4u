@@ -12,7 +12,7 @@ import MaterialContainer from '@material-ui/core/Container';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 
-import { handleSignup } from '../actions/auth-actions';
+import { handleSignup, handleUsernameCheck } from '../actions/auth-actions';
 
 import Button from '../../shared-components/button';
 import ApplicationHeader from '../../shared-components/header';
@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignUp() {
+function SignUp() {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -55,11 +55,14 @@ export default function SignUp() {
 
   const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
   const signupInProgress = useSelector(state => state.auth.signupInProgress);
+  const usernameInvalid = useSelector(state => state.auth.usernameInvalid);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('AUTH.FIRST_NAME_IS_REQUIRED')),
     surname: Yup.string().required(t('AUTH.LAST_NAME_IS_REQUIRED')),
-    username: Yup.string().required(t('AUTH.USERNAME_IS_REQUIRED')),
+    username: Yup.string()
+      .required(t('AUTH.USERNAME_IS_REQUIRED'))
+      .min(4, t('AUTH.USERNAME_MIN_4')),
     password: Yup.string().required(t('AUTH.PASSWORD_IS_REQUIRED')),
   });
 
@@ -72,20 +75,34 @@ export default function SignUp() {
     },
     validationSchema,
     onSubmit: values => {
-      dispatch(handleSignup(values, history));
+      if (!usernameError) {
+        dispatch(handleSignup(values, history));
+      }
     },
   });
-
-  const fields = [
-    { value: values.name, label: 'AUTH.FIRST_NAME', error: touched.name && errors.name, name: 'name', grid: true },
-    { value: values.surname, label: 'AUTH.LAST_NAME', error: touched.surname && errors.surname, name: 'surname', grid: true },
-    { value: values.username, label: 'AUTH.USERNAME', error: touched.username && errors.username, name: 'username' },
-    { value: values.password, label: 'AUTH.PASSWORD', error: touched.password && errors.password, name: 'password', password: true },
-  ];
 
   if (userLoggedIn) {
     return <Redirect to="/" />;
   }
+
+  const onUsernameInputChange = e => {
+    const text = e.target.value;
+
+    if (text.length >= 4) {
+      dispatch(handleUsernameCheck(text));
+    }
+
+    return handleChange(e);
+  };
+
+  const usernameError = (touched.username && errors.username) || (usernameInvalid ? t('AUTH.USERNAME_EXISTS_ALREADY') : '');
+
+  const fields = [
+    { value: values.name, label: 'AUTH.FIRST_NAME', error: touched.name && errors.name, name: 'name', grid: true },
+    { value: values.surname, label: 'AUTH.LAST_NAME', error: touched.surname && errors.surname, name: 'surname', grid: true },
+    { value: values.username, label: 'AUTH.USERNAME', error: usernameError, name: 'username', onChange: onUsernameInputChange },
+    { value: values.password, label: 'AUTH.PASSWORD', error: touched.password && errors.password, name: 'password', password: true },
+  ];
 
   return (
     <Fragment>
@@ -101,7 +118,7 @@ export default function SignUp() {
                 <Grid key={field.name} item xs={12} sm={field.grid ? 6 : null}>
                   <TextField
                     value={field.value}
-                    onChange={handleChange}
+                    onChange={field.onChange ? field.onChange : handleChange}
                     onBlur={handleBlur}
                     label={t(field.label)}
                     error={Boolean(field.error)}
@@ -130,3 +147,5 @@ export default function SignUp() {
     </Fragment>
   );
 }
+
+export default SignUp;

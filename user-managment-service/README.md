@@ -1,6 +1,6 @@
 ## Endpoints
 
-- You can find the endpoints for this service [here](https://github.com/MasovicHaris/event4u/wiki/User-Management-service---endpoints).
+- You can find the endpoints for this service [here](https://github.com/MasovicHaris/event4u/wiki/User-Management-service-endpoints).
 
 ## Running locally
 

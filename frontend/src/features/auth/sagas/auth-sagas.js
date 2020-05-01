@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { handleLoginInProgress, handleLoginSuccess, handleSignupInProgress } from '../actions/auth-actions';
+import { handleLoginInProgress, handleLoginSuccess, handleSignupInProgress, handleUsernameCheckSuccess } from '../actions/auth-actions';
 import { handleShowMessage } from '../../snackbar/actions/snackbar-actions';
 
 import cookieHelper from '../../../core/helpers/cookies-helper';
@@ -40,7 +40,19 @@ function* requestSignup({ data, history }) {
   }
 }
 
+function* requestUsernameCheck({ data }) {
+  try {
+    const res = yield call(AuthApi.requestUsernameCheck, data);
+
+    yield put(handleUsernameCheckSuccess(Boolean(res.data.invalid)));
+  } catch (err) {
+    yield put(handleShowMessage('AUTH.ERROR_CHECKING_USERNAME', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+    yield put(handleUsernameCheckSuccess(false));
+  }
+}
+
 export default function* saga() {
   yield takeLatest(AUTH_ACTIONS.HANDLE_LOGIN, requestLogin);
   yield takeLatest(AUTH_ACTIONS.HANDLE_SIGNUP, requestSignup);
+  yield takeLatest(AUTH_ACTIONS.HANDLE_USERNAME_CHECK, requestUsernameCheck);
 }

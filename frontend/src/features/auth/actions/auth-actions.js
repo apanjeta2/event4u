@@ -35,3 +35,13 @@ export const handleLogout = () => {
 
   return { type: AUTH_ACTIONS.HANDLE_LOGOUT };
 };
+
+export const handleUsernameCheck = data => ({
+  type: AUTH_ACTIONS.HANDLE_USERNAME_CHECK,
+  data,
+});
+
+export const handleUsernameCheckSuccess = data => ({
+  type: AUTH_ACTIONS.HANDLE_USERNAME_CHECK_SUCCESS,
+  data,
+});

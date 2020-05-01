@@ -18,6 +18,9 @@
   "AUTH.ERROR_CREATING_ACCOUNT": "Error while creating account",
   "AUTH.LOGIN_TEXT": "event4u - Login",
   "AUTH.SIGNUP_TEXT": "event4u - Signup",
+  "AUTH.USERNAME_MIN_4": "Username must have at least 4 characters.",
+  "AUTH.ERROR_CHECKING_USERNAME": "Error with checking valid username.",
+  "AUTH.USERNAME_EXISTS_ALREADY": "Username already exists.",
 
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Page not found.",
