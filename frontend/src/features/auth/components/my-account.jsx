@@ -1,12 +1,228 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, createRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { makeStyles } from '@material-ui/core/styles';
+import { useFormik } from 'formik';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import BackupIcon from '@material-ui/icons/Backup';
+import CloseIcon from '@material-ui/icons/Close';
+import Grid from '@material-ui/core/Grid';
+import MaterialContainer from '@material-ui/core/Container';
+import styled from 'styled-components';
+import * as Yup from 'yup';
 
+import { handleUsernameCheck, handleGetUser, handleUpdateProfile, handleUploadNewImage } from '../actions/auth-actions';
+
+import Button from '../../shared-components/button';
 import ApplicationHeader from '../../shared-components/header';
+import Spinner from '../../shared-components/spinner';
+import { useState } from 'react';
+
+const Container = styled(MaterialContainer)`
+  background-color: #fff;
+`;
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  imageOuterDiv: {
+    width: '100%',
+    marginTop: '30px',
+    backgroundColor: '#fff',
+  },
+  imageInnerDiv: {
+    padding: '10px',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  image: {
+    borderRadius: '50%',
+    height: '250px',
+    width: '250px',
+    objectFit: 'cover',
+    border: '1px solid black',
+  },
+  spinner: {
+    marginTop: '40px',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  uploadIconOuter: {
+    position: 'relative',
+  },
+  uploadIcon: {
+    position: 'absolute',
+    right: '100px',
+    top: '100px',
+    borderRadius: '50%',
+    padding: '5px',
+    height: '40px',
+    width: '40px',
+    '&:hover': {
+      background: '#2e4a6b',
+      cursor: 'pointer',
+    },
+  },
+  inputImage: {
+    display: 'none',
+  },
+}));
 
 function MyAccountPage() {
+  const { t } = useTranslation();
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const refImageInput = createRef();
+
+  const signupInProgress = useSelector(state => state.auth.signupInProgress);
+  const usernameInvalid = useSelector(state => state.auth.usernameInvalid);
+  const token = useSelector(state => state.auth.token);
+  const userProfile = useSelector(state => state.auth.profile);
+  const getProfileInProgress = useSelector(state => state.auth.getProfileInProgress);
+  const url = useSelector(state => state.auth.uploadedImageUrl);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(url);
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required(t('AUTH.FIRST_NAME_IS_REQUIRED')),
+    surname: Yup.string().required(t('AUTH.LAST_NAME_IS_REQUIRED')),
+    username: Yup.string()
+      .required(t('AUTH.USERNAME_IS_REQUIRED'))
+      .min(4, t('AUTH.USERNAME_MIN_4')),
+  });
+
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit, setValues } = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      name: userProfile.name || '',
+      surname: userProfile.surname || '',
+      username: userProfile.username || '',
+      password: '',
+      picture: userProfile.picture || '',
+      description: userProfile.description || '',
+    },
+    validationSchema,
+    onSubmit: values => {
+      if (uploadedImageUrl) {
+        values.picture = uploadedImageUrl;
+      }
+
+      if (!usernameError) {
+        dispatch(handleUpdateProfile(values, history));
+      }
+    },
+  });
+
+  const onUsernameInputChange = e => {
+    const text = e.target.value;
+
+    if (text.length >= 4 && text !== userProfile.username) {
+      dispatch(handleUsernameCheck(text));
+    }
+
+    return handleChange(e);
+  };
+
+  const usernameError = (touched.username && errors.username) || (usernameInvalid ? t('AUTH.USERNAME_EXISTS_ALREADY') : '');
+
+  const fields = [
+    { value: values.name, label: 'AUTH.FIRST_NAME', error: touched.name && errors.name, name: 'name', grid: true },
+    { value: values.surname, label: 'AUTH.LAST_NAME', error: touched.surname && errors.surname, name: 'surname', grid: true },
+    { value: values.username, label: 'AUTH.USERNAME', error: usernameError, name: 'username', onChange: onUsernameInputChange },
+    { value: values.password, label: 'AUTH.NEW_PASSWORD', error: touched.password && errors.password, name: 'password', password: true },
+    { value: values.description, label: 'AUTH.DESCRIPTION', name: 'description', textArea: true },
+  ];
+
+  useEffect(() => {
+    dispatch(handleGetUser(token));
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    setUploadedImageUrl(url);
+  }, [url]);
+
+  const onUploadNewImage = e => {
+    e.preventDefault();
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    if (reader && file) {
+      reader.onloadend = () => {
+        dispatch(handleUploadNewImage(file));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onCloseUploadedImage = () => {
+    setValues({ ...values, picture: userProfile.picture });
+    setUploadedImageUrl('');
+  };
+
   return (
     <Fragment>
       <ApplicationHeader isMyAccount />
-      <h1 style={{ margin: 'auto' }}>My account page</h1>
+      {getProfileInProgress ? (
+        <div className={classes.spinner}>
+          <Spinner size="50px" />
+        </div>
+      ) : (
+        <Container component="main" maxWidth="xs">
+          <div className={classes.imageOuterDiv}>
+            <div className={classes.imageInnerDiv}>
+              <img className={classes.image} src={uploadedImageUrl || values.picture} alt="ProfileImage" />{' '}
+              <div className={classes.uploadIconOuter}>
+                {uploadedImageUrl === '' ? (
+                  <Fragment>
+                    <input type="file" ref={refImageInput} className={classes.inputImage} onChange={onUploadNewImage} />
+                    <BackupIcon className={classes.uploadIcon} fontSize="large" onClick={() => refImageInput.current.click()} />
+                  </Fragment>
+                ) : (
+                  <CloseIcon className={classes.uploadIcon} fontSize="large" onClick={onCloseUploadedImage} />
+                )}
+              </div>
+            </div>
+          </div>
+          <CssBaseline />
+          <div className={classes.paper}>
+            <form className={classes.form} onSubmit={handleSubmit} noValidate>
+              <Grid container spacing={2}>
+                {fields.map(field => (
+                  <Grid key={field.name} item xs={12} sm={field.grid ? 6 : null}>
+                    <TextField
+                      value={field.value}
+                      onChange={field.onChange ? field.onChange : handleChange}
+                      onBlur={handleBlur}
+                      label={t(field.label)}
+                      error={Boolean(field.error)}
+                      helperText={field.error}
+                      variant="outlined"
+                      name={field.name}
+                      fullWidth
+                      type={field.password ? 'password' : 'text'}
+                      multiline={field.textArea || false}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+              <Button type="submit" fullWidth variant="contained" color="primary" loadingInProgress={signupInProgress} className={classes.submit}>
+                {t('AUTH.UPDATE_PROFILE')}
+              </Button>
+            </form>
+          </div>
+        </Container>
+      )}
     </Fragment>
   );
 }

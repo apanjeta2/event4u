@@ -21,6 +21,12 @@
   "AUTH.USERNAME_MIN_4": "Username mora imati najmanje 4 karaktera.",
   "AUTH.ERROR_CHECKING_USERNAME": "Desio se problem prilikom provjere korisnickog imena.",
   "AUTH.USERNAME_EXISTS_ALREADY": "Korisnicko ime je zauzeto.",
+  "AUTH.UPDATE_PROFILE": "Azuriraj korisnicki racun",
+  "AUTH.DESCRIPTION": "Deskripcija",
+  "AUTH.NEW_PASSWORD": "Nova sifra",
+  "AUTH.ERROR_GETTING_USER_PROFILE": "Greska prilikom dobavljanja korisnickog profila",
+  "AUTH.SUCCESSFULLY_UPDATED_PROFILE": "Uspjesno azuriran korisnicki racun.",
+  "AUTH.ERROR_UPLOADING_IMAGE": "Greska prilikom uploadavanja slike.",
 
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Trazena stranica ne postoji.",

@@ -21,6 +21,12 @@
   "AUTH.USERNAME_MIN_4": "Username must have at least 4 characters.",
   "AUTH.ERROR_CHECKING_USERNAME": "Error with checking valid username.",
   "AUTH.USERNAME_EXISTS_ALREADY": "Username already exists.",
+  "AUTH.UPDATE_PROFILE": "Update profile",
+  "AUTH.DESCRIPTION": "Description",
+  "AUTH.NEW_PASSWORD": "New password",
+  "AUTH.ERROR_GETTING_USER_PROFILE": "Error getting user profile",
+  "AUTH.SUCCESSFULLY_UPDATED_PROFILE": "Successfully updated profile.",
+  "AUTH.ERROR_UPLOADING_IMAGE": "Error uploading image.",
 
   "NOT_FOUND.404": "404",
   "NOT_FOUND.MSG": "Page not found.",

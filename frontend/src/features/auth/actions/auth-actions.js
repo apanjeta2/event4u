@@ -45,3 +45,49 @@ export const handleUsernameCheckSuccess = data => ({
   type: AUTH_ACTIONS.HANDLE_USERNAME_CHECK_SUCCESS,
   data,
 });
+
+export const handleGetUser = token => ({
+  type: AUTH_ACTIONS.HANDLE_GET_USER,
+  token,
+});
+
+export const handleGetUserInProgress = status => ({
+  type: AUTH_ACTIONS.HANDLE_GET_USER_IN_PROGRESS,
+  status,
+});
+
+export const handleGetUserSuccess = data => ({
+  type: AUTH_ACTIONS.HANDLE_GET_USER_SUCCESS,
+  data,
+});
+
+export const handleUpdateProfile = (data, history) => ({
+  type: AUTH_ACTIONS.HANDLE_UPDATE_PROFILE,
+  data,
+  history,
+});
+
+export const handleUpdateProfileInProgress = status => ({
+  type: AUTH_ACTIONS.HANDLE_UPDATE_PROFILE_IN_PROGRESS,
+  status,
+});
+
+export const handleUpdateProfileSuccess = data => ({
+  type: AUTH_ACTIONS.HANDLE_UPDATE_PROFILE_SUCCESS,
+  data,
+});
+
+export const handleUploadNewImage = file => ({
+  type: AUTH_ACTIONS.HANDLE_UPLOAD_NEW_IMAGE,
+  file,
+});
+
+export const handleUploadNewImageInProgress = status => ({
+  type: AUTH_ACTIONS.HANDLE_UPLOAD_NEW_IMAGE_IN_PROGRESS,
+  status,
+});
+
+export const handleUploadNewImageSuccess = data => ({
+  type: AUTH_ACTIONS.HANDLE_UPLOAD_NEW_IMAGE_SUCCESS,
+  data,
+});

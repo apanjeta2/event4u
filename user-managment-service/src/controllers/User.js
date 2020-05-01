@@ -53,6 +53,8 @@ export const updateUser = async (req, res) => {
 
     if (req.body.password) {
       req.body.password = crypto.createHash('sha256').update(req.body.password).digest('base64');
+    } else {
+      delete req.body.password;
     }
 
     await db.User.update(req.body, { where: { username } });
@@ -134,7 +136,7 @@ export const uploadImage = async (req, res) => {
       console.log('[user-management-serivce] uploadImage -', e);
       return res.status(500).json({ error: 'Error uploading image. ' });
     }
-  } else return res.status(404).send({ error: 'No file sent.' });
+  } else return res.status(400).send({ error: 'No file sent.' });
 };
 
 const uploadImageToStorage = (file) =>

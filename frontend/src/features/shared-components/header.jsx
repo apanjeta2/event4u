@@ -233,7 +233,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
               {t('HEADER.EVENT4U')}
             </Typography>
           )}
-          {userLoggedIn && (
+          {userLoggedIn && !isMyAccount && (
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />

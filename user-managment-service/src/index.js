@@ -48,7 +48,7 @@ const client = new Eureka({
 });
 
 client.start((error) => {
-  console.log('[user-managment-service-eureka]', error || 'Eureka connected!');
+  console.log('[user-managment-service]', error || 'Eureka connected!');
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));

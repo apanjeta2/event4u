@@ -43,11 +43,6 @@ const client = new Eureka({
 
 client.start((error) => {
   console.log('[gateway-service]', error || 'Eureka connected!');
-
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(cookieParser());
-
   app.use(
     '*',
     cors({
@@ -55,9 +50,6 @@ client.start((error) => {
       optionsSuccessStatus: 200,
     })
   );
-
-  // u slucaju da treba endpoint kao proxy
-  // app.use('/agregator/api/events/nesto/bla', eventsServiceRoutes);
 
   // u slucaju ako je direct proxy
   const userManagementServiceUrl = serviceHelper.getServiceUrl(SERVICES.USER_MANAGEMENT_SERVICE);
@@ -68,6 +60,13 @@ client.start((error) => {
       filter: (req, res) => req.path.includes('/api/auth') || req.path.includes('/api/users'),
     })
   );
+
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(cookieParser());
+
+  // u slucaju da treba endpoint kao proxy
+  // app.use('/agregator/api/events/nesto/bla', eventsServiceRoutes); ispod ovdje
 });
 
 app.listen(PORT, () => console.log(`[gateway-service] Listening on port ${PORT}!`));

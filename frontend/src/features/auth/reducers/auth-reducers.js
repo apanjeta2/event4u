@@ -17,6 +17,18 @@ const getAuthInitialState = () => {
       username: '',
     },
     usernameInvalid: false,
+    getProfileInProgress: false,
+    profile: {
+      id: 0,
+      username: '',
+      name: '',
+      surname: '',
+      picture: '',
+      description: '',
+    },
+    updateUserProfileInProgress: false,
+    uploadImageInProgress: false,
+    uploadedImageUrl: '',
   };
 };
 
@@ -31,6 +43,18 @@ export const auth = (state = getAuthInitialState(), action) => {
       return { ...state, signupInProgress: action.status };
     case AUTH_ACTIONS.HANDLE_USERNAME_CHECK_SUCCESS:
       return { ...state, usernameInvalid: action.data };
+    case AUTH_ACTIONS.HANDLE_GET_USER_SUCCESS:
+      return { ...state, profile: action.data };
+    case AUTH_ACTIONS.HANDLE_GET_USER_IN_PROGRESS:
+      return { ...state, getProfileInProgress: action.status };
+    case AUTH_ACTIONS.HANDLE_UPDATE_PROFILE_IN_PROGRESS:
+      return { ...state, updateUserProfileInProgress: action.status };
+    case AUTH_ACTIONS.HANDLE_UPDATE_PROFILE_SUCCESS:
+      return { ...state, token: action.data.token, uploadedImageUrl: '' };
+    case AUTH_ACTIONS.HANDLE_UPLOAD_NEW_IMAGE_IN_PROGRESS:
+      return { ...state, uploadImageInProgress: action.status };
+    case AUTH_ACTIONS.HANDLE_UPLOAD_NEW_IMAGE_SUCCESS:
+      return { ...state, uploadedImageUrl: action.data };
     case AUTH_ACTIONS.HANDLE_LOGOUT:
       return getAuthInitialState();
     default:
