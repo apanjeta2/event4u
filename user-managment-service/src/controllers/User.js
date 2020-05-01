@@ -5,8 +5,9 @@ import axios from 'axios';
 import db from '../lib/db';
 import servicesHelper from '../lib/helpers/services-helper';
 import eventsSystemHelper from '../lib/helpers/events-system-helper';
+import { bucket } from '../config/config-firebase';
 
-import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN, SERVICES, GRPC_ACTION_TYPES, GRPC_USER_RESOURCE } from '../config/constants';
+import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN, SERVICES, GRPC_ACTION_TYPES, GRPC_USER_RESOURCE, FIREBASE_STORAGE_URL } from '../config/constants';
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -123,9 +124,50 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+export const uploadImage = async (req, res) => {
+  const file = req.file;
+  if (file) {
+    try {
+      const url = await uploadImageToStorage(file);
+      return res.json({ image: url });
+    } catch (e) {
+      console.log('[user-management-serivce] uploadImage -', e);
+      return res.status(500).json({ error: 'Error uploading image. ' });
+    }
+  } else return res.status(404).send({ error: 'No file sent.' });
+};
+
+const uploadImageToStorage = (file) =>
+  new Promise((resolve, reject) => {
+    if (!file) return reject('No image file');
+
+    const newFileName = `${Date.now()}_${file.originalname}`;
+
+    const fileUpload = bucket.file(newFileName);
+
+    const blobStream = fileUpload.createWriteStream({
+      metadata: {
+        contentType: file.mimetype,
+      },
+    });
+
+    blobStream.on('error', (error) => {
+      console.log('[user-management-service] uploadImageToStorage - ', error);
+      return reject('Something is wrong! Unable to upload at the moment.');
+    });
+
+    blobStream.on('finish', () => {
+      const url = `${FIREBASE_STORAGE_URL}/${bucket.name}/${fileUpload.name}`;
+      return resolve(url);
+    });
+
+    blobStream.end(file.buffer);
+  });
+
 export default {
   getAllUsers,
   getSpecificUser,
   updateUser,
   deleteUser,
+  uploadImage,
 };

@@ -2,6 +2,7 @@ import express from 'express';
 
 import UserController from '../controllers/User';
 import AuthController from '../controllers/Auth';
+import { multer } from '../config/config-firebase';
 
 const userRouter = express.Router();
 
@@ -12,5 +13,7 @@ userRouter.get('/:username', AuthController.checkValidToken, UserController.getS
 userRouter.put('/update', AuthController.checkValidToken, UserController.updateUser);
 
 userRouter.delete('/delete', AuthController.checkValidToken, UserController.deleteUser);
+
+userRouter.post('/profile-picture', multer.single('profileImage'), UserController.uploadImage);
 
 export default userRouter;

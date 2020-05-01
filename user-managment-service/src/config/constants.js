@@ -17,12 +17,19 @@ export const EUREKA_HOST_BASE_URL = process.env.EUREKA_HOST_BASE_URL;
 export const BACKEND_HOST_BASE_URL = process.env.BACKEND_HOST_BASE_URL;
 export const FULL_BASE_URL = process.env.FULL_BASE_URL;
 
+export const STORAGE_BUCKET = process.env.STORAGE_BUCKET;
+export const FIREBASE_DATABASE_URL = process.env.FIREBASE_DATABASE_URL;
+export const FIREBASE_STORAGE_URL = process.env.FIREBASE_STORAGE_URL;
+
+const dateOfRegistration = new Date();
 const password = crypto.createHash('sha256').update(process.env.DEFAULT_PASSWORD).digest('base64');
 
+export const DEFAULT_PICTURE = 'https://storage.googleapis.com/event4u-d02b0.appspot.com/1588341903025_1f2cfd09c412c01124a5a13c11de5fd2.jpg';
+
 export const DEFAULT_USERS = [
-  { username: 'masha', name: 'Haris', surname: 'Masovic', password },
-  { username: 'dzenana', name: 'Dzenana', surname: 'Sabovic', password },
-  { username: 'ajla', name: 'Ajla', surname: 'Panjeta', password },
+  { username: 'masha', name: 'Haris', surname: 'Masovic', password, picture: DEFAULT_PICTURE, dateOfRegistration },
+  { username: 'dzenana', name: 'Dzenana', surname: 'Sabovic', password, picture: DEFAULT_PICTURE, dateOfRegistration },
+  { username: 'ajla', name: 'Ajla', surname: 'Panjeta', password, picture: DEFAULT_PICTURE, dateOfRegistration },
 ];
 
 // list of services

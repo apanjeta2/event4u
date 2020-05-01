@@ -6,7 +6,7 @@ import db from '../lib/db';
 import servicesHelper from '../lib/helpers/services-helper';
 import eventsSystemHelper from '../lib/helpers/events-system-helper';
 
-import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN, SERVICES, GRPC_ACTION_TYPES, GRPC_USER_RESOURCE } from '../config/constants';
+import { JWT_SECRET, JWT_EXPIRE_TIME_TOKEN, SERVICES, GRPC_ACTION_TYPES, GRPC_USER_RESOURCE, DEFAULT_PICTURE } from '../config/constants';
 
 export const login = async (req, res) => {
   try {
@@ -52,7 +52,7 @@ export const signUp = async (req, res) => {
 
     const hashedPassword = crypto.createHash('sha256').update(password).digest('base64');
 
-    const result = await db.User.create({ username, name, surname, password: hashedPassword });
+    const result = await db.User.create({ username, name, surname, password: hashedPassword, picture: DEFAULT_PICTURE, dateOfRegistration: new Date() });
 
     if (!result) return res.status(500).json({ error: 'Error creating user. ' });
 
