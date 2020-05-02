@@ -10,7 +10,7 @@
 
 ### Setting up firebase
 
-- In order to use firebase service, you need to add a `json` file called `firebase.json` to the root folder of this service.
+- In order to use firebase service, you need to add a `.json` file called `firebase.json` to the root folder of this service which represents the firebase private key generated via the admin SDK (`service accounts`).
 - To find your firebase config file go to the firebase web page and into your project settings you can generate a new private key configuration file in `.json` format.
 - Also you need define the `STORAGE_BUCKET`, `FIREBASE_DATABASE_URL` and `FIREBASE_STORAGE_URL`, in the .env file, which you can find also on the same site.
 - After that you have to go to the google storage site, and add a public user role to make your bucket public so anyone can see the uploaded images via links.
@@ -18,7 +18,7 @@
 ### In the end
 
 - You must have node (`>= 10` version) as well as npm installed (`>= 6` version)
-- All other services (`eureka-service`, `events-service`, `notification-service`) must be started
+- All other services must be started
 - In order to run `user-management-service` locally you must define these env variables in an .env file:
 
 ```
