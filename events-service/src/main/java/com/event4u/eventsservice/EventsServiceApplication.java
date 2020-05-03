@@ -1,13 +1,8 @@
 package com.event4u.eventsservice;
 
-import com.event4u.eventsservice.grpc.Event4U;
-import com.event4u.eventsservice.grpc.actionGrpc;
 import com.event4u.eventsservice.model.*;
 import com.event4u.eventsservice.model.Event;
 import com.event4u.eventsservice.repository.*;
-
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

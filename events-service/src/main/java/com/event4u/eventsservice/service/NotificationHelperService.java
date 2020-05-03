@@ -24,27 +24,27 @@ public class NotificationHelperService {
 
     public void deleteEventNotifications (Long eventId, String token) {
         RestTemplate restTemplate = new RestTemplate();
-        String deleteEventUrl = discoveryService.getNotificationInstance() + "/events/" + eventId.toString();
+        String deleteEventUrl = discoveryService.getGatewayService() + "/aggregator/events/" + eventId.toString();
         ResponseEntity<String> res = restTemplate.exchange(deleteEventUrl, HttpMethod.DELETE , new HttpEntity<>(getHeaders(token)), String.class);
     }
 
     public void createEventNotifications(Event e, String token) {
         RestTemplate restTemplate = new RestTemplate();
-        String createEventUrl = discoveryService.getNotificationInstance() + "/events/createEvent";
+        String createEventUrl = discoveryService.getGatewayService() + "/aggregator/events/createEvent";
         HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle(), e.getDate()), getHeaders(token));
         ResponseEntity<String> res = restTemplate.exchange(createEventUrl, HttpMethod.POST, req, String.class);
     }
 
     public void updateEventNotifications(Event e, String token) {
         RestTemplate restTemplate = new RestTemplate();
-        String UpdateEventUrl = discoveryService.getNotificationInstance() + "/events/" + e.getId();
+        String UpdateEventUrl = discoveryService.getGatewayService() + "/aggregator/events/" + e.getId();
         HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle(), e.getDate()), getHeaders(token));
         ResponseEntity<String> res = restTemplate.exchange(UpdateEventUrl, HttpMethod.PUT , req, String.class);
     }
 
     public void createGoingToNotificaion(Long idEvent, String token) {
         RestTemplate restTemplate = new RestTemplate();
-        String createNotificationUrl = discoveryService.getNotificationInstance() + "/notifications/createGoingTo/" + idEvent;
+        String createNotificationUrl = discoveryService.getGatewayService() + "/aggregator/notifications/createGoingTo/" + idEvent;
         ResponseEntity<String> res = restTemplate.exchange(createNotificationUrl, HttpMethod.POST , new HttpEntity<>(getHeaders(token)), String.class);
     }
 }

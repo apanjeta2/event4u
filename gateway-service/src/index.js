@@ -53,16 +53,28 @@ client.start((error) => {
 
   // direct proxy
   const userManagementServiceUrl = serviceHelper.getServiceUrl(SERVICES.USER_MANAGEMENT_SERVICE);
+  const eventsServiceUrl = serviceHelper.getServiceUrl(SERVICES.EVENT_SERVICE);
   const notificationsServiceUrl = serviceHelper.getServiceUrl(SERVICES.NOTIFICATION_SERVICE);
+
 
   app.use(
     '/aggregator',
     proxy(userManagementServiceUrl, {
       filter: (req, res) => req.path.includes('/api/auth') || req.path.includes('/api/users'),
     }),
+    proxy(eventsServiceUrl, {
+      filter: (req, res) => {
+        if (req.path.includes('/events-micro')) {
+          if(req.path.includes('/locations') && req.method != "GET") return false;
+          if(req.path.includes('/categories') && req.method != "GET") return false;
+          return true;
+        }
+        return false;
+      },
+    }),
     proxy(notificationsServiceUrl, {
       filter: (req, res) => req.path.includes('/users') || req.path.includes('/notifications') || req.path.includes('/events'),
-    })
+    }) 
   );
 
   app.use(bodyParser.json());

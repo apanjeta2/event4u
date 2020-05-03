@@ -38,4 +38,13 @@ public class DiscoveryService {
         });
         return services.get(0);
     }
+
+    public String getGatewayService() {
+        List<String> services = new ArrayList<String>();
+        discoveryClient.getInstances("GATEWAY-SERVICE").forEach(instance ->
+        {
+            services.add(String.format("%s", instance.getUri()));
+        });
+        return services.get(0);
+    }
 }
