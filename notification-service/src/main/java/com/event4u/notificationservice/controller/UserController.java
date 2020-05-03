@@ -42,20 +42,20 @@ public class UserController {
     private ServiceInstanceRestController serviceInstanceRestController;
 
     @GetMapping("")
-    public List<User> allUsers() {
-        return userService.findAll();
+    public List<User> allUsers(@RequestHeader("Authorization") String token) {
+        return userService.findAll(token , key);
     }
 
     //Vraca user po id-u
     @GetMapping("/getById/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public User getUserById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        return userService.getUserById(token, key,id);
     }
 
     //Dodavanje user-a
     @PostMapping("")
-    public User newUser(@RequestBody String id) {
-        return userService.createUser(Long.parseLong(id));
+    public User newUser(@RequestHeader("Authorization") String token, @RequestBody String id) {
+        return userService.createUser(token, key,Long.parseLong(id));
     }
 
     @Value("${jwt.secret}")
@@ -78,7 +78,7 @@ public class UserController {
         Long id2= Long.parseLong(idS); //User na kojeg se subscribe
 
         //Upisivanje u bazu subscribera
-        userService.addSubscriber(id1,id2);
+        userService.addSubscriber(token, key,id1,id2);
         JSONObject Entity = new JSONObject();
         Entity.put("message", "Subscribed to user with id "+id2 );
         return  new ResponseEntity<JSONObject>(
@@ -132,9 +132,9 @@ public class UserController {
     }
     //Brisanje usera po id-u
     @DeleteMapping("/{id}")
-    public ResponseEntity<JSONObject> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<JSONObject> deleteUser(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         try {
-            userService.deleteById(id);
+            userService.deleteById(token, key,id);
             JSONObject Entity = new JSONObject();
             Entity.put("message","Successful deletion of the user with id: "+id );
             return  new ResponseEntity<JSONObject>(

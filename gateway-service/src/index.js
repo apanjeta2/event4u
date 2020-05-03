@@ -53,11 +53,15 @@ client.start((error) => {
 
   // u slucaju ako je direct proxy
   const userManagementServiceUrl = serviceHelper.getServiceUrl(SERVICES.USER_MANAGEMENT_SERVICE);
+  const notificationsServiceUrl = serviceHelper.getServiceUrl(SERVICES.NOTIFICATION_SERVICE);
 
   app.use(
     '/aggregator',
     proxy(userManagementServiceUrl, {
       filter: (req, res) => req.path.includes('/api/auth') || req.path.includes('/api/users'),
+    }),
+    proxy(notificationsServiceUrl, {
+      filter: (req, res) => req.path.includes('/users') || req.path.includes('/notifications') || req.path.includes('/events'),
     })
   );
 

@@ -61,26 +61,26 @@ public class NotificationController {
     }
     //Vraca sve notifikacije za jednog korisnika
     @GetMapping("/getByUserId/{id}")
-    public List<Notification> getNotificationsByUserId(@PathVariable Long id) {
-        return notificationService.findByUserId(id);
+    public List<Notification> getNotificationsByUserId(@RequestHeader("Authorization") String token,@PathVariable Long id) {
+        return notificationService.findByUserId(token, key,id);
     }
 
     //Vraca sve notifikacije za jednog korisnika koje su procitane
     @GetMapping("/getByUserIdRead/{id}")
-    public List<Notification> getNotificationsByUserIdRead(@PathVariable Long id) {
-        return notificationService.findByUserIdRead(id);
+    public List<Notification> getNotificationsByUserIdRead(@RequestHeader("Authorization") String token,@PathVariable Long id) {
+        return notificationService.findByUserIdRead(token, key,id);
     }
 
     //Vraca sve notifikacije za jednog korisnika koje nisu procitane
     @GetMapping("/getByUserIdNotRead/{id}")
-    public List<Notification> getNotificationsByUserIdNotRead(@PathVariable Long id) {
-        return notificationService.findByUserIdNotRead(id);
+    public List<Notification> getNotificationsByUserIdNotRead(@RequestHeader("Authorization") String token,@PathVariable Long id) {
+        return notificationService.findByUserIdNotRead(token, key,id);
     }
 
     //Vraca notifikaciju po id-u
     @GetMapping("/getById/{id}")
-    public Notification getNotificationsById(@PathVariable Long id) {
-        return notificationService.findById(id);
+    public Notification getNotificationsById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        return notificationService.findById(token, key, id);
     }
 
     //Vraca sve notifikacije za jednog korisnika
@@ -91,9 +91,9 @@ public class NotificationController {
 
     //Brisanje notifikacije po id-u
     @DeleteMapping("/{id}")
-    public ResponseEntity<JSONObject> deleteNotification(@PathVariable Long id) {
+    public ResponseEntity<JSONObject> deleteNotification(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         try {
-            notificationService.deleteById(id);
+            notificationService.deleteById(token, key, id);
             JSONObject Entity = new JSONObject();
             Entity.put("message","Successful deletion of the notification with id: "+id );
             return  new ResponseEntity<JSONObject>(
@@ -102,7 +102,7 @@ public class NotificationController {
         }
         catch(Exception e) {
             JSONObject Entity2 = new JSONObject();
-            Entity2.put("message","Error deleting notifications with id: "+id );
+            Entity2.put("message",e.toString() );
 
             return  new ResponseEntity<JSONObject>(
                     Entity2,
@@ -130,9 +130,9 @@ public class NotificationController {
 
       //Brisanje svih notifikacija jednog korisnika
     @DeleteMapping("/deleteByUserId/{id}")
-    public ResponseEntity<JSONObject> deleteNotificationByUser(@PathVariable Long id) {
+    public ResponseEntity<JSONObject> deleteNotificationByUser(@RequestHeader("Authorization") String token,@PathVariable Long id) {
         try {
-            notificationService.deleteByUser(id);
+            notificationService.deleteByUser(token, key, id);
             JSONObject Entity = new JSONObject();
             Entity.put("message","Successful deletion of the notification with user id: "+id );
             return  new ResponseEntity<JSONObject>(
@@ -141,7 +141,7 @@ public class NotificationController {
         }
         catch(Exception e) {
             JSONObject Entity2 = new JSONObject();
-            Entity2.put("message","Error deleting notifications with user id: "+id );
+            Entity2.put("message",e.toString() );
 
             return  new ResponseEntity<JSONObject>(
                     Entity2,

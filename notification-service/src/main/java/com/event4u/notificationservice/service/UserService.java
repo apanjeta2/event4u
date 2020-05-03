@@ -6,6 +6,7 @@ import com.event4u.notificationservice.exception.UserNotFoundException;
 import com.event4u.notificationservice.model.User;
 import com.event4u.notificationservice.model.UserAll;
 import com.event4u.notificationservice.model.UserBody;
+import com.event4u.notificationservice.repository.EventsRepository;
 import com.event4u.notificationservice.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,11 +43,15 @@ public class UserService {
     @Autowired
     private ServiceInstanceRestController serviceInstanceRestController;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
 
-    public List<User> findAll() {
+    public List<User> findAll(String token, String key) {
+        notificationService.validateToken(token, key);
         Iterable<User> allUsers = userRepository.findAll();
         ArrayList<User> u = new ArrayList<User>();
         allUsers.forEach(e -> u.add(e));
@@ -65,18 +70,23 @@ public class UserService {
         return tu.get();
     }
 
-    public User getUserById(Long id) {
+    public User getUserById(String token, String key,Long id) {
+
+        notificationService.validateToken(token, key);
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public User createUser(Long userId){
+    public User createUser(String token, String key, Long userId){
+
+        notificationService.validateToken(token, key);
         return userRepository.save(new User(userId));
     }
 
-    public void addSubscriber(Long id1, Long id2) {
+    public void addSubscriber(String token, String key, Long id1, Long id2) {
 
-        if (!isThere(id1)) createUser(id1);
-        if (!isThere(id2)) createUser(id2);
+
+        if (!isThere(id1)) createUser(token, key,id1);
+        if (!isThere(id2)) createUser(token, key,id2);
 
         User koSeSubscriba = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
         User naKogaSeSubscriba = userRepository.findById(id2).orElseThrow(() -> new UserNotFoundException(id2));
@@ -92,9 +102,9 @@ public class UserService {
         userRepository.save(naKogaSeSubscriba);
     }
 
-    public Set<Long> getSubscribers(Long id1) {
+    public Set<Long> getSubscribers(String token, String key, Long id1) {
 
-        if (!isThere(id1)) createUser(id1);
+        if (!isThere(id1)) createUser(token, key,id1);
 
         User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
         Set<User> lista = user1.getSubscriber();
@@ -106,7 +116,9 @@ public class UserService {
         return  odg;
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(String token, String key, Long id) {
+
+        notificationService.validateToken(token, key);
         userRepository.deleteById(id);
     }
 
@@ -140,7 +152,7 @@ public class UserService {
 
         Long id1=u.getId();
 
-        Set<Long> users=getSubscribers(id1);
+        Set<Long> users=getSubscribers(token, key, id1);
         log.info("Subscriber  od "+ id1.toString());
         users.forEach(e -> {
 
@@ -149,7 +161,7 @@ public class UserService {
         //Nadji adresu user managment servisa
 
         RestTemplate restTemplate = new RestTemplate();
-        List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("user-management-service");
+        List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("gateway-service");
 
         String url = listOfUrls.get(0);
         String fooResourceUrl = url;
@@ -157,7 +169,7 @@ public class UserService {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
         headers.add("Authorization", token);
-        ResponseEntity<String> response = restTemplate.exchange(fooResourceUrl + "/api/users", HttpMethod.GET, new HttpEntity<Object>(headers), String.class);
+        ResponseEntity<String> response = restTemplate.exchange(fooResourceUrl + "aggregator/api/users", HttpMethod.GET, new HttpEntity<Object>(headers), String.class);
 
         String odg = response.getBody();
         JSONParser parser = new JSONParser(odg);

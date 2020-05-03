@@ -42,6 +42,7 @@ public class EventsService {
 
     public Long getUserIdFromToken(String token, String key) {
 
+
         String token1=token.replace("Bearer ","");
         String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
         byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
