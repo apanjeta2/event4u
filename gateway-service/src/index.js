@@ -51,7 +51,7 @@ client.start((error) => {
     })
   );
 
-  // u slucaju ako je direct proxy
+  // direct proxy
   const userManagementServiceUrl = serviceHelper.getServiceUrl(SERVICES.USER_MANAGEMENT_SERVICE);
   const notificationsServiceUrl = serviceHelper.getServiceUrl(SERVICES.NOTIFICATION_SERVICE);
 
@@ -69,8 +69,7 @@ client.start((error) => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
 
-  // u slucaju da treba endpoint kao proxy
-  // app.use('/agregator/api/events/nesto/bla', eventsServiceRoutes); ispod ovdje
+  // new endpoints
 });
 
 app.listen(PORT, () => console.log(`[gateway-service] Listening on port ${PORT}!`));

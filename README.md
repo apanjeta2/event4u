@@ -4,13 +4,13 @@ Event4u is a web application that allows users to find the perfect event for the
 
 ### Services
 
-- user-management-service
-- events-service
-- notifications-service
-- eureka-service
-- system-events-service
-- gateway-service
-- frontend
+- [user-managment-service](https://github.com/MasovicHaris/event4u/tree/master/user-managment-service)
+- [events-service](https://github.com/MasovicHaris/event4u/tree/master/events-service)
+- [notification-service](https://github.com/MasovicHaris/event4u/tree/master/notification-service)
+- [eureka-service](https://github.com/MasovicHaris/event4u/tree/master/eureka-service)
+- [system-events-service](https://github.com/MasovicHaris/event4u/tree/master/system-events)
+- [gateway-service](https://github.com/MasovicHaris/event4u/tree/master/gateway-service)
+- [frontend](https://github.com/MasovicHaris/event4u/tree/master/frontend)
 
 #### 2020. © Mašović Haris, Šabović Dženana, Panjeta Ajla
 
