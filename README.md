@@ -22,8 +22,9 @@ Event4u is a web application that allows users to find the perfect event for the
 docker-compose up --build
 ```
 
+### Credits
 
-#### 2020. © Mašović Haris, Šabović Dženana, Panjeta Ajla
+[Mašović Haris](https://github.com/MasovicHaris), [Šabović Dženana](https://github.com/dsabovic1), [Panjeta Ajla](https://github.com/apanjeta2)
 
 _University of Sarajevo_
 
