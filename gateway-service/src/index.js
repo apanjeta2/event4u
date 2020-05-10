@@ -18,8 +18,8 @@ const APPLICATION_NAME = 'gateway-service';
 const client = new Eureka({
   instance: {
     app: APPLICATION_NAME,
-    hostName: BACKEND_HOST_BASE_URL,
-    ipAddr: '127.0.0.1',
+    hostName: SERVICES.GATEWAY_SERVICE,
+    ipAddr: BACKEND_HOST_BASE_URL,
     statusPageUrl: FULL_BASE_URL,
     homePageUrl: FULL_BASE_URL,
     vipAddress: APPLICATION_NAME,
@@ -56,7 +56,6 @@ client.start((error) => {
   const eventsServiceUrl = serviceHelper.getServiceUrl(SERVICES.EVENT_SERVICE);
   const notificationsServiceUrl = serviceHelper.getServiceUrl(SERVICES.NOTIFICATION_SERVICE);
 
-
   app.use(
     '/aggregator',
     proxy(userManagementServiceUrl, {
@@ -65,8 +64,8 @@ client.start((error) => {
     proxy(eventsServiceUrl, {
       filter: (req, res) => {
         if (req.path.includes('/events-micro')) {
-          if(req.path.includes('/locations') && req.method != "GET") return false;
-          if(req.path.includes('/categories') && req.method != "GET") return false;
+          if (req.path.includes('/locations') && req.method != 'GET') return false;
+          if (req.path.includes('/categories') && req.method != 'GET') return false;
           return true;
         }
         return false;
@@ -74,7 +73,7 @@ client.start((error) => {
     }),
     proxy(notificationsServiceUrl, {
       filter: (req, res) => req.path.includes('/users') || req.path.includes('/notifications') || req.path.includes('/events'),
-    }) 
+    })
   );
 
   app.use(bodyParser.json());

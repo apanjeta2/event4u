@@ -12,10 +12,11 @@ Event4u is a web application that allows users to find the perfect event for the
 - [gateway-service](https://github.com/MasovicHaris/event4u/tree/master/gateway-service)
 - [frontend](https://github.com/MasovicHaris/event4u/tree/master/frontend)
 
-### Running with docker (work in progress)
+### Running with docker
 
 - To run with docker, you must have docker installed and started
 - You need to change the `.env` files accordingly to the services
+- READ: If running on `windows` please change all `.sh` files in the repository and change the `EOL` format from `CRLF` to `LF`
 - Finally run:
 
 ```

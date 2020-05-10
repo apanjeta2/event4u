@@ -8,7 +8,7 @@ import database from './lib/db/';
 import userRoutes from './routes/user-routes';
 import authRoutes from './routes/auth-routes';
 
-import { DEFAULT_USERS, PORT, INITIAL_DB_SETUP, FULL_BASE_URL, EUREKA_HOST_BASE_URL, BACKEND_HOST_BASE_URL } from './config/constants';
+import { DEFAULT_USERS, PORT, INITIAL_DB_SETUP, FULL_BASE_URL, EUREKA_HOST_BASE_URL, BACKEND_HOST_BASE_URL, SERVICES } from './config/constants';
 
 dotenv.config();
 database.sequelize.sync({ force: INITIAL_DB_SETUP }).then(async () => {
@@ -24,8 +24,8 @@ const APPLICATION_NAME = 'user-management-service';
 const client = new Eureka({
   instance: {
     app: APPLICATION_NAME,
-    hostName: BACKEND_HOST_BASE_URL,
-    ipAddr: '127.0.0.1',
+    hostName: SERVICES.USER_MANAGEMENT_SERVICE,
+    ipAddr: BACKEND_HOST_BASE_URL,
     statusPageUrl: FULL_BASE_URL,
     homePageUrl: FULL_BASE_URL,
     vipAddress: APPLICATION_NAME,

@@ -19,4 +19,7 @@ while ! nc -z user-management-service 4000 ; do
     sleep 3
 done
 
+# sleep 15 seconds for connections to happen
+sleep 15
+
 npm start

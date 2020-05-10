@@ -18,6 +18,8 @@ services:
     build:
       context: ./system-events
       dockerfile: Dockerfile
+    environment:
+      - EUREKA_BASE_URL=eureka-service
     expose:
       - "6565"
     networks:
@@ -36,8 +38,6 @@ services:
       dockerfile: Dockerfile
     expose:
       - "4000"
-    ports:
-      - 4000:4000
     networks:
       - events-network
     depends_on:
@@ -60,22 +60,16 @@ services:
       - events-network
     depends_on:
       - eureka-service
-      - user-management-service
-      - events-service
-      - notification-service
     links:
       - eureka-service:eureka-service
-      - user-management-service:user-management-service
-      - events-service:events-service
-      - notification-service:notification-service
 
   notification-service:
     image: notification-service
+    environment:
+      - EUREKA_BASE_URL=eureka-service
     build:
       context: ./notification-service
       dockerfile: Dockerfile
-    ports:
-      - 8088:8088
     expose:
       - "8088"
     networks:
@@ -90,8 +84,8 @@ services:
     build:
       context: ./events-service
       dockerfile: Dockerfile
-    ports:
-      - 8081:8081
+    environment:
+      - EUREKA_BASE_URL=eureka-service
     expose:
       - "8081"
     networks:
