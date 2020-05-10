@@ -1,0 +1,136 @@
+version: "3"
+
+services:
+  eureka-service:
+    image: eureka-service
+    build:
+      context: ./eureka-service
+      dockerfile: Dockerfile
+    ports:
+      - 8761:8761
+    expose:
+      - "8761"
+    networks:
+      - events-network
+
+  system-events:
+    image: system-events
+    build:
+      context: ./system-events
+      dockerfile: Dockerfile
+    expose:
+      - "6565"
+    networks:
+      - events-network
+    depends_on:
+      - eureka-service
+    links:
+      - eureka-service:eureka-service
+
+  user-management-service:
+    image: user-management-service
+    env_file:
+      - ./user-managment-service/.env
+    build:
+      context: ./user-managment-service
+      dockerfile: Dockerfile
+    expose:
+      - "4000"
+    ports:
+      - 4000:4000
+    networks:
+      - events-network
+    depends_on:
+      - eureka-service
+    links:
+      - eureka-service:eureka-service
+
+  gateway-service:
+    image: gateway-service
+    env_file:
+      - ./gateway-service/.env
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    expose:
+      - "4200"
+    ports:
+      - 4200:4200
+    networks:
+      - events-network
+    depends_on:
+      - eureka-service
+      - user-management-service
+      - events-service
+      - notification-service
+    links:
+      - eureka-service:eureka-service
+      - user-management-service:user-management-service
+      - events-service:events-service
+      - notification-service:notification-service
+
+  notification-service:
+    image: notification-service
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    ports:
+      - 8088:8088
+    expose:
+      - "8088"
+    networks:
+      - events-network
+    depends_on:
+      - eureka-service
+    links:
+      - eureka-service:eureka-service
+
+  events-service:
+    image: events-service
+    build:
+      context: ./events-service
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    expose:
+      - "8081"
+    networks:
+      - events-network
+    depends_on:
+      - eureka-service
+    links:
+      - eureka-service:eureka-service
+
+  frontend:
+    image: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    ports:
+      - 3000:3000
+    networks:
+      - events-network
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: "userm"
+      MYSQL_USER: "root"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    networks:
+      - events-network
+    volumes:
+      - my-db:/var/lib/mysql
+
+volumes:
+  my-db:
+networks:
+  events-network:
+    driver: bridge
