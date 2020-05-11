@@ -102,7 +102,7 @@ export const deleteUser = async (req, res) => {
 
     // event
     const deleteEventUrl = servicesHelper.getServiceUrl();
-    await axios.delete(`${deleteEventUrl}/users/${result.id}`);
+    await axios.delete(`${deleteEventUrl}/users/${result.id}`, { headers: { authorization: `Bearer ${req.token}` } });
 
     // inform system events about newly created event
     eventsSystemHelper.logEvent(
