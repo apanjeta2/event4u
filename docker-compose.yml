@@ -67,6 +67,7 @@ services:
     image: notification-service
     environment:
       - EUREKA_BASE_URL=eureka-service
+      - RABBIT_BASE_URL=rabbitmq
     build:
       context: ./notification-service
       dockerfile: Dockerfile
@@ -76,8 +77,10 @@ services:
       - events-network
     depends_on:
       - eureka-service
+      - rabbitmq
     links:
       - eureka-service:eureka-service
+      - rabbitmq:rabbitmq
 
   events-service:
     image: events-service
@@ -86,14 +89,17 @@ services:
       dockerfile: Dockerfile
     environment:
       - EUREKA_BASE_URL=eureka-service
+      - RABBIT_BASE_URL=rabbitmq
     expose:
       - "8081"
     networks:
       - events-network
     depends_on:
       - eureka-service
+      - rabbitmq
     links:
       - eureka-service:eureka-service
+      - rabbitmq:rabbitmq
 
   frontend:
     image: frontend
@@ -104,6 +110,20 @@ services:
       - "3000"
     ports:
       - 3000:3000
+    networks:
+      - events-network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=kukierlang
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    expose:
+      - "5672"
+    ports:
+      - 15672:15672
     networks:
       - events-network
 
@@ -125,6 +145,7 @@ services:
 
 volumes:
   my-db:
+
 networks:
   events-network:
     driver: bridge
