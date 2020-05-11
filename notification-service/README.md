@@ -9,8 +9,6 @@ In order to run the app you have to position yourself to the notification-servic
 
 You must have java(>=10 version) installed
 
-In order to use eureka server you have to define system variable ```EUREKA_BASE_URL = localhost```
-
 ## Running tests
 
 In order to run test, type ```mvn test``` in command prompt (and you have to position yourself to the notification-service folder)
