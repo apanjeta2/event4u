@@ -62,6 +62,10 @@ public class EventService {
         notificationHelperService.deleteEventNotifications(eventId, token);
     }
 
+    public void deleteById(Long eventId) {
+        eventRepository.deleteById(eventId);
+    }
+
     public Event createEvent(String title, String address, LocalDate date, String description, Long idCategory, Long idLocation, String token){
         Long idUser = tokenHelperService.getUserIdFromToken(token);
         Category category = categoryService.findById(idCategory);

@@ -6,8 +6,10 @@ import com.event4u.notificationservice.grpc.Request;
 import com.event4u.notificationservice.grpc.Event4U;
 import com.event4u.notificationservice.grpc.gRPCClient;
 import com.event4u.notificationservice.model.Events;
+import com.event4u.notificationservice.model.NotificationBody;
 import com.event4u.notificationservice.model.UserBody;
 import com.event4u.notificationservice.repository.EventsRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -28,6 +30,8 @@ public class EventsService {
     private EventsRepository eventsRepository;
     @Autowired
     private gRPCClient ns;
+    @Autowired
+    private Sender sender;
 
     public List<Events> findAll() {
         Iterable<Events> allEvents = eventsRepository.findAll();
@@ -62,19 +66,24 @@ public class EventsService {
 
     public Events createEvent(String token, String key, Long eventId){
 
+        //sender.sendMessage(new NotificationBody(eventId, "name", LocalDate.now()));
+
         ns.createLog("Notification service", getUserIdFromToken(token,key), Request.ActionType.CREATE, "Event");
         return eventsRepository.save(new Events(eventId));
     }
-    public Events createEventNew(String token, String key, Long eventId, String name, LocalDate date){
+
+    public Events createEventNew(Long eventId, String name, LocalDate date) throws JsonProcessingException {
         //Iz tokena i key dobijamo usera kako bismo ga upisali u log
 
+
+       // sender.sendMessage(new NotificationBody(eventId, "name", LocalDate.now()));
         Events e =new Events(eventId);
         e.setName(name);
         e.setDate(date);
 
         //GRPC poziv system-events
-        Long id1=getUserIdFromToken(token, key);
-        ns.createLog("Notification service", id1, Request.ActionType.CREATE, "Event");
+        //Long id1=getUserIdFromToken(token, key);
+        //ns.createLog("Notification service", id1, Request.ActionType.CREATE, "Event");
 
         return eventsRepository.save(e);
     }

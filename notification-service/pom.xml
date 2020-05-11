@@ -145,6 +145,11 @@
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -155,7 +160,10 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+
         </dependencies>
+
     </dependencyManagement>
 
     <build>

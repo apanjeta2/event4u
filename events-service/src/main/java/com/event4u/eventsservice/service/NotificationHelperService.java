@@ -1,7 +1,9 @@
 package com.event4u.eventsservice.service;
 
+import com.event4u.eventsservice.Sender;
 import com.event4u.eventsservice.model.Event;
 import com.event4u.eventsservice.model.EventNotification;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ import java.util.Collections;
 public class NotificationHelperService {
     @Autowired
     private DiscoveryService discoveryService;
+    @Autowired
+    private Sender sender;
 
     private HttpHeaders getHeaders(String token) {
         HttpHeaders headers = new HttpHeaders();
@@ -29,10 +33,16 @@ public class NotificationHelperService {
     }
 
     public void createEventNotifications(Event e, String token) {
-        RestTemplate restTemplate = new RestTemplate();
+        try {
+            sender.sendMessageNotifications(new EventNotification(e.getId(), e.getTitle(), e.getDate()));
+        }
+        catch (JsonProcessingException ex) {
+            //TODO
+        }
+        /*RestTemplate restTemplate = new RestTemplate();
         String createEventUrl = discoveryService.getGatewayService() + "/aggregator/events/createEvent";
         HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle(), e.getDate()), getHeaders(token));
-        ResponseEntity<String> res = restTemplate.exchange(createEventUrl, HttpMethod.POST, req, String.class);
+        ResponseEntity<String> res = restTemplate.exchange(createEventUrl, HttpMethod.POST, req, String.class);*/
     }
 
     public void updateEventNotifications(Event e, String token) {

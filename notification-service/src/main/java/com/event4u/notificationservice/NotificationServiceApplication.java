@@ -5,14 +5,27 @@ import java.time.LocalDate;
 import com.event4u.notificationservice.grpc.gRPCClient;
 import com.event4u.notificationservice.model.Events;
 import com.event4u.notificationservice.model.Notification;
+import com.event4u.notificationservice.model.NotificationBody;
 import com.event4u.notificationservice.model.User;
 import com.event4u.notificationservice.repository.EventsRepository;
 import com.event4u.notificationservice.repository.NotificationRepository;
 import com.event4u.notificationservice.repository.UserRepository;
+import com.event4u.notificationservice.service.Receiver;
+import com.event4u.notificationservice.service.Sender;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,6 +38,8 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class NotificationServiceApplication {
 
+    static final String queueName = "notifications-events";
+
     private static final Logger log = 
             LoggerFactory.getLogger(NotificationServiceApplication.class);
 
@@ -34,6 +49,42 @@ public class NotificationServiceApplication {
 
     }
 
+    @Bean
+    Queue queue() {
+        return new Queue(queueName, false);
+    }
+    @Bean
+    Queue queue2() {
+        return new Queue("events-notifications", false);
+    }
+
+    @Bean
+    TopicExchange exchange()
+    {
+        return new TopicExchange("message_queue_exchange");
+    }
+
+    @Bean
+    Binding binding(Queue queue, TopicExchange exchange)
+    {
+        return BindingBuilder.bind(queue).to(exchange).with("events-notifications");
+    }
+
+    @Bean
+    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
+                                             MessageListenerAdapter listenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.setQueueNames("events-notifications");
+        container.setMessageListener(listenerAdapter);
+        return container;
+    }
+
+
+    @Bean
+    MessageListenerAdapter listenerAdapter(Receiver receiver) {
+        return new MessageListenerAdapter(receiver, "listen");
+    }
 
     @Bean
     @LoadBalanced
@@ -45,6 +96,9 @@ public class NotificationServiceApplication {
     @Bean
     public CommandLineRunner demo(NotificationRepository repository, EventsRepository repository2, UserRepository repository3) {
         return (args) -> {
+
+
+
             // save a few customers
             repository.save(new Notification(repository3.save(new User(Long.valueOf(12))), repository2.save(new Events(Long.valueOf(1))), "Podsjetnik za događaj 1", LocalDate.of(Integer.parseInt("2022"),Integer.parseInt("2"),Integer.parseInt("2")), false,1));
             repository.save(new Notification(repository3.save(new User(Long.valueOf(122))), repository2.save(new Events(Long.valueOf(1))),"Podsjetnik za događaj 2",LocalDate.of(Integer.parseInt("2022"),Integer.parseInt("2"),Integer.parseInt("2")), false,1));
