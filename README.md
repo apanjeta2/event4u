@@ -4,7 +4,7 @@ Event4u is a web application that allows users to find the perfect event for the
 
 ### Services
 
-- [user-managment-service](https://github.com/MasovicHaris/event4u/tree/master/user-managment-service)
+- [user-management-service](https://github.com/MasovicHaris/event4u/tree/master/user-managment-service)
 - [events-service](https://github.com/MasovicHaris/event4u/tree/master/events-service)
 - [notification-service](https://github.com/MasovicHaris/event4u/tree/master/notification-service)
 - [eureka-service](https://github.com/MasovicHaris/event4u/tree/master/eureka-service)
