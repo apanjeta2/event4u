@@ -39,5 +39,15 @@
   "HEADER.BOSNIAN": "Bosnian",
   "HEADER.MY_ACCOUNT": "My account",
   "HEADER.LOGOUT": "Logout",
-  "HEADER.EVENTS": "Events"
+  "HEADER.EVENTS": "Events",
+
+  "EVENTS.CATEGORIES_TITLE": "Categories",
+  "EVENTS.CATEGORIES_SUBTITLE": "Browse events by topics you're interested in.",
+  "EVENTS.EVENTS_TITLE": "Events near you",
+  "EVENTS.CATEGORIES_GET_EVENTS_BUTTON": "Check out events",
+  "EVENTS.EVENTS_GET_INFO_BUTTON": "Find out more",
+  "EVENTS.EVENTS_INTERESTED_BUTTON": "Interested",
+  "EVENTS.EVENTS_GOING_BUTTON": "Going",
+  "EVENTS.ERROR_GET_EVENTS": "Error while loading events",
+  "EVENTS.ERROR_GET_CATEGORIES": "Error while loading categories"
 }

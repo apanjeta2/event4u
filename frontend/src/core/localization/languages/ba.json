@@ -39,5 +39,15 @@
   "HEADER.BOSNIAN": "Bosanski",
   "HEADER.MY_ACCOUNT": "Moj racun",
   "HEADER.LOGOUT": "Logaut",
-  "HEADER.EVENTS": "Dogadjaji"
+  "HEADER.EVENTS": "Dogadjaji",
+
+  "EVENTS.CATEGORIES_TITLE": "Kategorije",
+  "EVENTS.CATEGORIES_SUBTITLE": "Tražite događaje na osnovu tema koje vas interesuju.",
+  "EVENTS.EVENTS_TITLE": "Događaji u vašoj blizini",
+  "EVENTS.CATEGORIES_GET_EVENTS_BUTTON": "Pretraži događaje",
+  "EVENTS.EVENTS_GET_INFO_BUTTON": "Saznaj više",
+  "EVENTS.EVENTS_INTERESTED_BUTTON": "Zainteresovan/a",
+  "EVENTS.EVENTS_GOING_BUTTON": "Idem",
+  "EVENTS.ERROR_GET_EVENTS": "Greška pri učitavanju događaja",
+  "EVENTS.ERROR_GET_CATEGORIES": "Greška pri učitavanju kategorija"
 }

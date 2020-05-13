@@ -105,4 +105,10 @@ public class EventService {
         notificationHelperService.updateEventNotifications(event, token);
         return event;
     }
+
+    public List<Event> findByCategoryId(Long id) {
+        List<Event> events = findAll();
+        events.removeIf(e-> (e.getCategory().getId()!=id));
+        return events;
+    }
 }

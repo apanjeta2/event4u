@@ -1,7 +1,9 @@
 import SignUp from '../../features/auth/components/signup';
 import Login from '../../features/auth/components/login';
 import NotFound from './not-found';
+import CategoriesPage from '../../features/events-page/components/categories-page';
 import EventsPage from '../../features/events-page/components/events-page';
+import EventsInfoPage from '../../features/events-page/components/event-info-page';
 import MyAccountPage from '../../features/auth/components/my-account';
 
 const routes = [
@@ -19,7 +21,17 @@ const routes = [
   },
   {
     path: '/',
+    component: CategoriesPage,
+    exact: true,
+  },
+  {
+    path: '/events',
     component: EventsPage,
+    exact: true,
+  },
+  {
+    path: '/event-info',
+    component: EventsInfoPage,
     exact: true,
   },
   {

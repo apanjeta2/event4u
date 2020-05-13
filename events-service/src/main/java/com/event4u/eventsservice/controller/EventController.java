@@ -32,6 +32,12 @@ public class EventController {
         return eventService.findAll();
     }
 
+    @GetMapping(path ="/category/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Event> getEventsFromCategory(@PathVariable Long id) {
+        logActionService.logAction(Long.valueOf("0"), Event4U.Request.ActionType.GET,"Event");
+        return eventService.findByCategoryId(id);
+    }
+
     @GetMapping(path = "/count", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Long count() {
         logActionService.logAction(Long.valueOf("0"), Event4U.Request.ActionType.GET,"Event");
