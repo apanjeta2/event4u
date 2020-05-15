@@ -52,7 +52,7 @@ public class EventController {
 
     @PostMapping(path = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Event newEvent(@RequestHeader("Authorization") String token, @RequestBody NewEvent event) {
-        logActionService.logAction(tokenHelperService.getUserIdFromToken(token), Event4U.Request.ActionType.CREATE,"Event");
+       // logActionService.logAction(tokenHelperService.getUserIdFromToken(token), Event4U.Request.ActionType.CREATE,"Event");
         return eventService.createEvent(event.getTitle(), event.getAddress(), event.getDate() ,event.getDescription() ,event.getIdCategory(), event.getIdLocation(), token);
     }
 

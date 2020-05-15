@@ -4,17 +4,23 @@ import com.event4u.eventsservice.Sender;
 import com.event4u.eventsservice.model.Event;
 import com.event4u.eventsservice.model.EventNotification;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
+
 @Service
 public class NotificationHelperService {
     @Autowired
     private DiscoveryService discoveryService;
+    @Autowired
+    private TokenHelperService tokenHelperService;
     @Autowired
     private Sender sender;
 
@@ -34,10 +40,10 @@ public class NotificationHelperService {
 
     public void createEventNotifications(Event e, String token) {
         try {
-            sender.sendMessageNotifications(new EventNotification(e.getId(), e.getTitle(), e.getDate()));
+            sender.sendMessageNotifications(new EventNotification(e.getId(), e.getTitle(), e.getDate(), token));
         }
         catch (JsonProcessingException ex) {
-            //TODO
+            //TODO: throw error
         }
         /*RestTemplate restTemplate = new RestTemplate();
         String createEventUrl = discoveryService.getGatewayService() + "/aggregator/events/createEvent";
@@ -48,7 +54,7 @@ public class NotificationHelperService {
     public void updateEventNotifications(Event e, String token) {
         RestTemplate restTemplate = new RestTemplate();
         String UpdateEventUrl = discoveryService.getGatewayService() + "/aggregator/events/" + e.getId();
-        HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle(), e.getDate()), getHeaders(token));
+        HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle(), e.getDate(), token), getHeaders(token));
         ResponseEntity<String> res = restTemplate.exchange(UpdateEventUrl, HttpMethod.PUT , req, String.class);
     }
 

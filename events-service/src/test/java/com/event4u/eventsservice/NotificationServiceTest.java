@@ -139,7 +139,7 @@ public class NotificationServiceTest {
         RestTemplate restTemplate = new RestTemplate();
         String createEventUrl = getNotificatonServiceUrl() + "/events/createEvent";
         try {
-            HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle(), e.getDate()), getHeaders(token));
+            HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle(), e.getDate(), token), getHeaders(token));
             ResponseEntity<String> res = restTemplate.exchange(createEventUrl, HttpMethod.POST, req, String.class);
             Assert.assertTrue(res.getStatusCode().value() == 200);
         }
@@ -155,7 +155,7 @@ public class NotificationServiceTest {
         EventDes e = getEvent();
         RestTemplate restTemplate = new RestTemplate();
         String updateEventUrl = getNotificatonServiceUrl() + "/events/7";
-        HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle() +"Izmjena", e.getDate()), getHeaders(token));
+        HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle() +"Izmjena", e.getDate(), token), getHeaders(token));
         try {
             ResponseEntity<String> res = restTemplate.exchange(updateEventUrl, HttpMethod.PUT , req, String.class);
             Assert.assertTrue(res.getStatusCode().value() == 200);

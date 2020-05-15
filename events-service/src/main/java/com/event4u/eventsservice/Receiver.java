@@ -25,12 +25,26 @@ public class Receiver {
         try {
             MessageAMQPRes mes = new ObjectMapper().readValue(in, MessageAMQPRes.class);
             System.out.println("Odgovor je:" + mes.getAckMessage());
-            //TODO: logovati
+            idEvent = mes.getId();
+            switch (mes.getAckMessage()) {
+                case "OK":
+                    eventService.changeStatus(mes.getId(), EventsServiceApplication.Status.CREATE_FINISHED);
+                    break;
+                case "ERROR":
+                    EventsServiceApplication.Status status = eventService.getStatus(idEvent);
+                    if (status.equals(EventsServiceApplication.Status.CREATE_FAILED_AGAIN)) {
+                        eventService.deleteById(idEvent);
+                    }
+                    else if (status.equals(EventsServiceApplication.Status.CREATE_STARTED)) {
+                        eventService.changeStatus(idEvent, EventsServiceApplication.Status.CREATE_FAILED);
+                    }
+                    else if (status.equals(EventsServiceApplication.Status.CREATE_FAILED)) {
+                        eventService.changeStatus(idEvent, EventsServiceApplication.Status.CREATE_FAILED_AGAIN);
+                    }
+            }
         }
         catch (Exception ex) {
-            //Neuspjesno kreirano - brisi event
-            eventService.deleteById(idEvent);
-            System.out.println("Message: " + in);
+            return;
         }
     }
 }

@@ -10,6 +10,7 @@ public class NotificationBody implements Serializable {
     private Long eventId;
     private String  name;
     private LocalDate date;
+    private String token;
 
 
     @JsonCreator
@@ -17,6 +18,14 @@ public class NotificationBody implements Serializable {
         this.name = name;
         this.eventId=eventId;
         this.date=date;
+    }
+
+    @JsonCreator
+    public NotificationBody(Long eventId, String name, LocalDate date, String token) {
+        this.name = name;
+        this.eventId=eventId;
+        this.date=date;
+        this.token=token;
     }
 
     public Long getEventId() {
@@ -30,4 +39,8 @@ public class NotificationBody implements Serializable {
     public LocalDate getDate() {
         return date;
     }
+
+    public String getToken() {return token;}
+
+
 }

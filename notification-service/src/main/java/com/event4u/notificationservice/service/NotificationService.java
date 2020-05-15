@@ -95,8 +95,10 @@ public class NotificationService {
 
 
     public Notification createNotification(String token, String key, Long userId, Long eventId, String message, LocalDate date, boolean isRead, int type){
+
         User user = userService.getUserById(token, key,userId);
-        Events event = eventsService.getEventById(token, key,eventId);
+        Events event = eventsService.getEventById(token, key, eventId);
+        System.out.println("ee3");
         return notificationRepository.save(new Notification(user,event,message,date,isRead, type));
     }
 
@@ -121,16 +123,25 @@ public class NotificationService {
         Long userid=u.getId();
         //Doadace se user ako ne postoji jer se kupi sa user managment servisa
         userService.createUser(token, key, userid);
+
+        //Tip 1 notif. je za kreiranje notifikacija za jednog uera, npr kad se neko subscribe na njegov event dobije notifikaciju
         if (type==1)
-        return createNotification(token, key,userid, not.getEventId(), message, not.getDate(), false, type);
+        return createNotification(token, key, userid, not.getEventId(), message, not.getDate(), false, type);
+        //Tip 2 notif. je za kreiranje notifikacija za sve subscribere usera koji je kreirao event
         else //salji samo subscriberima
         {
+
+            System.out.println("Kreiraju se notifikacije za sve subscribere od usera sa id-om: "+userid);
             Set<Long> all= userService.getSubscribers(token, key, userid);
+
+            System.out.println("Broj subscribera: "+all.size());
+
             String finalToken = token;
             all.forEach(e -> {
                 createNotification(finalToken, key, e, not.getEventId(), message, not.getDate(), false, type);
             });
-            return createNotification(token, key,userid, not.getEventId(), message, not.getDate(), false, type);
+
+            return createNotification(token, key, userid, not.getEventId(), message, not.getDate(), false, 1);
         }
     }
 

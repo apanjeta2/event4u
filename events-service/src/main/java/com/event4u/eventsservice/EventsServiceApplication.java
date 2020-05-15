@@ -2,7 +2,9 @@ package com.event4u.eventsservice;
 import com.event4u.eventsservice.model.*;
 import com.event4u.eventsservice.model.Event;
 import com.event4u.eventsservice.repository.*;
+import com.event4u.eventsservice.service.EventService;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.netflix.discovery.converters.Auto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Binding;
@@ -24,6 +26,7 @@ import java.time.LocalDate;
 @SpringBootApplication
 public class EventsServiceApplication {
 	static final String queueName = "events-notifications";
+	public enum Status {CREATE_STARTED, CREATE_FINISHED, CREATE_FAILED, CREATE_FAILED_AGAIN};
 	@Autowired
 	Sender sender;
 	private static final Logger log =
@@ -35,6 +38,8 @@ public class EventsServiceApplication {
 	Queue queue() {
 		return new Queue(queueName, false);
 	}
+	@Bean
+	Queue queueNE() {return new Queue("notification-events", false); }
 	@Bean
 	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
 											 MessageListenerAdapter listenerAdapter) {
@@ -58,6 +63,10 @@ public class EventsServiceApplication {
 	{
 		return BindingBuilder.bind(queue).to(exchange).with(queueName);
 	}
+
+	@Autowired
+	EventService eventService;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Bean
 	public CommandLineRunner demo(CategoryRepository cRepository, UserRepository uRepository, LocationRepository lRepository, EventRepository eRepository, EventUserRepository euRepository) {
@@ -99,6 +108,7 @@ public class EventsServiceApplication {
 					u1,
 					l1
 			));
+			eventService.changeStatus(e1.getId(),Status.CREATE_FINISHED);
 			Event e2 = eRepository.save(
 					new Event("LV4 NWT",
 							"Zmaja od Bosne bb",
@@ -109,6 +119,7 @@ public class EventsServiceApplication {
 							u1,
 							l1
 					));
+			eventService.changeStatus(e2.getId(),Status.CREATE_FINISHED);
 			log.info("Events found with findAll():");
 			log.info("-------------------------------");
 			for (Event e: eRepository.findAll()) {

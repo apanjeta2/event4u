@@ -60,6 +60,7 @@ public class EventsService {
     }
     public Events getEventById(String token, String key, Long id) {
         //logActionService.logAction(Long.valueOf("0"), Event4U.Request.ActionType.GET,"Category");
+        System.out.println("Get event prije upisa u n bazu");
         ns.createLog("Notification service", getUserIdFromToken(token,key), Request.ActionType.GET, "Event");
         return eventsRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
     }

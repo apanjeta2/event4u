@@ -1,16 +1,19 @@
 package com.event4u.eventsservice.service;
 
+import com.event4u.eventsservice.EventsServiceApplication;
 import com.event4u.eventsservice.exceptionHandling.NotAuthorizedException;
 import com.event4u.eventsservice.exceptionHandling.NotFoundException;
 import com.event4u.eventsservice.model.*;
 import com.event4u.eventsservice.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Timer;
 
 
 @Service
@@ -110,5 +113,16 @@ public class EventService {
         List<Event> events = findAll();
         events.removeIf(e-> (e.getCategory().getId()!=id));
         return events;
+    }
+
+    public void changeStatus(Long id, EventsServiceApplication.Status s) {
+        Event e = findById(id);
+        e.setCrateEventStatus(s);
+        eventRepository.save(e);
+    }
+
+    public EventsServiceApplication.Status getStatus(Long id) {
+        Event e = findById(id);
+        return e.getCrateEventStatus();
     }
 }

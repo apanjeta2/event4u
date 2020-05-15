@@ -107,13 +107,25 @@ public class UserService {
         if (!isThere(id1)) createUser(token, key,id1);
 
         User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
-        Set<User> lista = user1.getSubscriber();
-        Set<Long> odg= new HashSet<>();
+        System.out.println("trazi subscribere za usera "+id1);
 
-        lista.forEach(e -> {
-            odg.add(e.getUserId());
-        });
-        return  odg;
+        Set<Long> odg = new HashSet<>();
+        try {
+            Set<User> lista = user1.getSubscriber();
+
+            System.out.println("Pronadjeno " + lista.size() + " subscribera");
+
+            lista.forEach(e -> {
+                odg.add(e.getUserId());
+            });
+        }
+        catch(Exception e) {
+
+        }
+        finally {
+
+            return  odg;
+        }
     }
 
     public void deleteById(String token, String key, Long id) {

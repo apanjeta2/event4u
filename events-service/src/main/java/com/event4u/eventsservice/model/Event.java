@@ -1,11 +1,12 @@
 package com.event4u.eventsservice.model;
 
+import com.event4u.eventsservice.EventsServiceApplication;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import java.sql.Time;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -39,6 +40,9 @@ public class Event {
     private Location location;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private List<EventUser> eu;
+    private EventsServiceApplication.Status crateEventStatus;
+    private Time beginTime;
+    private Time endTime;
 
     protected Event() {}
 
@@ -48,6 +52,7 @@ public class Event {
         this.date = date;
         this.description = description;
         this.isActive = aTrue;
+        this.crateEventStatus = EventsServiceApplication.Status.CREATE_STARTED;
     }
 
     public Event(String title, String address, LocalDate date, String description, Boolean isActive, Category category, User creator, Location location) {
@@ -59,6 +64,7 @@ public class Event {
         this.category = category;
         this.creator = creator;
         this.location = location;
+        this.crateEventStatus = EventsServiceApplication.Status.CREATE_STARTED;
     }
 
     public Event(Long id, String title, String address, LocalDate date, String description, Category category, User creator, Location location,  Boolean isActive) {
@@ -71,6 +77,20 @@ public class Event {
         this.creator = creator;
         this.location = location;
         this.id = id;
+    }
+
+    public Event(Long id, String title, String address, LocalDate date, String description, Category category, User creator, Location location,  Boolean isActive, Time beginTime, Time endTime) {
+        this.title = title;
+        this.address = address;
+        this.date = date;
+        this.description = description;
+        this.isActive = isActive;
+        this.category = category;
+        this.creator = creator;
+        this.location = location;
+        this.id = id;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
     }
 
     @Override
@@ -143,5 +163,29 @@ public class Event {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public EventsServiceApplication.Status getCrateEventStatus() {
+        return crateEventStatus;
+    }
+
+    public void setCrateEventStatus(EventsServiceApplication.Status crateEventStatus) {
+        this.crateEventStatus = crateEventStatus;
+    }
+
+    public Time getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(Time beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Time endTime) {
+        this.endTime = endTime;
     }
 }
