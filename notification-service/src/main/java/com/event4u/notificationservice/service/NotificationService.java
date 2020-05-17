@@ -41,10 +41,24 @@ public class NotificationService {
         Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token1).getBody();
 
     }
+    public Long getUserIdFromToken(String token, String key) {
 
-    public Object findAll() {
-        Iterable<Notification> allNotifications = notificationRepository.findAll();
-        return allNotifications;
+
+        String token1=token.replace("Bearer ","");
+        String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
+        byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
+        Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token1).getBody();
+        ObjectMapper mapper = new ObjectMapper();
+
+        UserBody u = mapper.convertValue(claim, UserBody.class);
+
+        Long id1=u.getId();
+        return id1;
+    }
+
+    public Object findAll(String token, String key) {
+        User user = userService.getUserById(token ,key,getUserIdFromToken(token, key));
+        return notificationRepository.findByUser(user);
     }
 
     public List<Notification> findByUserId(String token, String key, Long id) {
@@ -112,7 +126,7 @@ public class NotificationService {
 
         //Kreiranje poruke
 
-        String message = "{\"event\": \""+not.getName() +"\" , \"date\": \""+not.getDate()+"\""+"\" , \"name\": \"\"}";
+        String message = "{\"event\": \""+not.getName() +"\" , \"date\": \""+not.getDate()+"\""+" , \"name\": \"\"}";
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -160,7 +174,7 @@ public class NotificationService {
         Events e =eventsService.getEventById(token, key, tijelo.getEventId());
         LocalDate ld = tijelo.getDate();
 
-        String message = "{\"event\": \""+tijelo.getName() +"\" , \"date\": \""+tijelo.getDate()+"\""+"\" , \"name\": \"\"}";
+        String message = "{\"event\": \""+tijelo.getName() +"\" , \"date\": \""+tijelo.getDate()+"\""+" , \"name\": \"\"}";
 
         Notification n = notificationRepository.findById(id).map(us -> {
             us.setEvent(e);
@@ -169,5 +183,15 @@ public class NotificationService {
             return notificationRepository.save(us);
         }).orElseThrow();
         return n;
+    }
+
+    public Object updateNotificationRead(String token, String key, Long id) {
+
+        System.out.println("Update notifikacije: "+id);
+        Notification n = notificationRepository.findById(id).map(us -> {
+            us.setIsRead(true);
+            return notificationRepository.save(us);
+        }).orElseThrow();
+        return findAll(token, key);
     }
 }

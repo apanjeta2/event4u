@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,8 +20,12 @@ import LanguageIcon from '@material-ui/icons/Language';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EventIcon from '@material-ui/icons/Event';
 import propTypes from 'prop-types';
-
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import { handleLogout } from '../auth/actions/auth-actions';
+import { handleGetNotifications, handlePutNotificationsById } from '../notifications/actions/notifications-actions';
+import { timeToWords } from '../../core/helpers/time-helper';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -113,11 +117,21 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [languagesAnchor, setLanguagesAnchor] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [NotificationAnchorEl, setNotificationAnchorEl] = useState(null);
+  const [count, setCount] = useState(0);
 
   const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
 
+  const notifications = useSelector(state => state.notifications.notifications);
+
+  useEffect(() => {
+    dispatch(handleGetNotifications());
+    handleNumberOfNonReadNotifications();
+  }, [dispatch]);
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isNotificationsOpen = Boolean(NotificationAnchorEl);
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -155,6 +169,31 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
     setAnchorEl(null);
     handleMobileMenuClose();
     dispatch(handleLogout());
+  };
+
+  const handleNewNotifications = event => {
+    setNotificationAnchorEl(event.currentTarget);
+    handleNumberOfNonReadNotifications();
+    dispatch(handleGetNotifications());
+  };
+  const handleNewNotificationsClose = () => {
+    setNotificationAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleNotificationClicked = notification => {
+    dispatch(handlePutNotificationsById(notification));
+    handleNumberOfNonReadNotifications();
+  };
+
+  const handleNumberOfNonReadNotifications = () => {
+    let num = 0;
+    notifications.map(element => {
+      if (element.isRead === false) {
+        num++;
+      }
+    });
+    setCount(num);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -218,6 +257,69 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
     </Menu>
   );
 
+  const notificationId = 'primary-search-notifications';
+  const renderNotification = (
+    <Menu
+      getContentAnchorEl={null}
+      keepMounted
+      anchorEl={NotificationAnchorEl}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      id={notificationId}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+      open={isNotificationsOpen}
+      onClose={handleNewNotificationsClose}
+    >
+      {notifications.reverse().map(notification => (
+        <MenuItem
+          key={notification.notificationId}
+          value={notification.notificationId}
+          onClick={() => handleNotificationClicked(notification.notificationId)}
+          style={notification.isRead ? { backgroundColor: 'white' } : { backgroundColor: '#eceef4' }}
+        >
+          {notification.type === 1 ? (
+            <ListItem>
+              <ListItemText
+                primary={t('NOTIFICATION.NEWEVENT') + ': ' + JSON.parse(notification.message).event}
+                secondary={
+                  <React.Fragment>
+                    {t('NOTIFICATION.MESSAGE') + JSON.parse(notification.message).event + t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).date}
+                    <br></br>
+                    <Typography variant="caption">
+                      <NewReleasesIcon color="primary" fontSize="small" />
+                      {timeToWords(notification.dateOfCreating)}
+                    </Typography>
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+          ) : (
+            <ListItem>
+              <ListItemText
+                primary={t('NOTIFICATION.NEWEVENT.REMINDER') + ': ' + JSON.parse(notification.message).event}
+                secondary={
+                  <React.Fragment>
+                    {t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).event + t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).date}
+                    <br></br>
+                    <Typography variant="caption">
+                      <EventIcon color="primary" fontSize="small" />
+                      {timeToWords(notification.dateOfCreating)}
+                    </Typography>
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+          )}
+        </MenuItem>
+      ))}
+    </Menu>
+  );
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -252,8 +354,8 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
           {userLoggedIn ? (
             <Fragment>
               <div className={classes.sectionDesktop}>
-                <IconButton aria-label="show 17 new notifications" color="inherit">
-                  <Badge badgeContent={0} color="secondary">
+                <IconButton aria-label="show 17 new notifications" aria-controls={notificationId} aria-haspopup="true" onClick={handleNewNotifications} color="inherit">
+                  <Badge badgeContent={count} color="secondary">
                     <NotificationsIcon />
                   </Badge>
                 </IconButton>
@@ -289,6 +391,8 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
           {renderMenu}
         </Fragment>
       )}
+
+      {renderNotification}
       {renderLanguages}
     </div>
   );

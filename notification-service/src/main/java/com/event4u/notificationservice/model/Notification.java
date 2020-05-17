@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -47,10 +48,13 @@ public class Notification {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate date;
 
-    @AssertFalse
-    private boolean isRead;
+    private boolean isRead=false;
 
     private int type;
+
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dateOfCreating = LocalDateTime.now();
 
     protected Notification() {
     }
@@ -121,5 +125,13 @@ public class Notification {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public void setDateOfCreating(LocalDateTime dateOfCreating) {
+        this.dateOfCreating = dateOfCreating;
+    }
+
+    public LocalDateTime getDateOfCreating() {
+        return dateOfCreating;
     }
 }

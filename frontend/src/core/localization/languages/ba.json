@@ -49,5 +49,11 @@
   "EVENTS.EVENTS_INTERESTED_BUTTON": "Zainteresovan/a",
   "EVENTS.EVENTS_GOING_BUTTON": "Idem",
   "EVENTS.ERROR_GET_EVENTS": "Greška pri učitavanju događaja",
-  "EVENTS.ERROR_GET_CATEGORIES": "Greška pri učitavanju kategorija"
+  "EVENTS.ERROR_GET_CATEGORIES": "Greška pri učitavanju kategorija",
+
+  "NOTIFICATION.MESSAGE":" Uspješno ste dodali event ",
+  "NOTIFICATION.MESSAGE.REMINDER1":" Podsjetnik za event ",
+  "NOTIFICATION.MESSAGE.REMINDER2":" na datum ",
+  "NOTIFICATION.NEWEVENT": "Novi događaj",
+  "NOTIFICATION.NEWEVENT.REMINDER": "Podsjetnik za događaj"
 }

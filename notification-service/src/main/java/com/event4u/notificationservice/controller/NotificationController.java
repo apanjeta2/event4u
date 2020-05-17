@@ -56,8 +56,8 @@ public class NotificationController {
     private String key;
 
     @GetMapping("")
-    public Object allNotifications() {
-        return notificationService.findAll();
+    public Object allNotifications(@RequestHeader("Authorization") String token) {
+        return notificationService.findAll(token,key);
     }
     //Vraca sve notifikacije za jednog korisnika
     @GetMapping("/getByUserId/{id}")
@@ -153,6 +153,13 @@ public class NotificationController {
     @PutMapping(path ="/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Notification updateNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody tijelo, @PathVariable Long id) {
         return notificationService.updateNotification(token, key,id,tijelo);
+    }
+
+    @PutMapping(path ="/setAsRead/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Object updateNotificationRead(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+
+        System.out.println("Update notifikacije api : "+id);
+        return notificationService.updateNotificationRead(token, key,id);
     }
 
     @PostMapping(path ="/createGoingTo/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})

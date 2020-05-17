@@ -1,1 +1,1 @@
-export const BACKEND_API = 'http://localhost:4200/aggregator';
+export const BACKEND_API = process.env.REACT_APP_BACKEND;

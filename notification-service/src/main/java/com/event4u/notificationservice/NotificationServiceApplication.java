@@ -100,9 +100,9 @@ public class NotificationServiceApplication {
 
 
             // save a few customers
-            repository.save(new Notification(repository3.save(new User(Long.valueOf(12))), repository2.save(new Events(Long.valueOf(1))), "Podsjetnik za događaj 1", LocalDate.of(Integer.parseInt("2022"),Integer.parseInt("2"),Integer.parseInt("2")), false,1));
-            repository.save(new Notification(repository3.save(new User(Long.valueOf(122))), repository2.save(new Events(Long.valueOf(1))),"Podsjetnik za događaj 2",LocalDate.of(Integer.parseInt("2022"),Integer.parseInt("2"),Integer.parseInt("2")), false,1));
-            repository.save(new Notification(repository3.save(new User(Long.valueOf(123))),repository2.save(new Events(Long.valueOf(1))),"Podsjetnik za događaj 3", LocalDate.of(Integer.parseInt("2022"),Integer.parseInt("2"),Integer.parseInt("2")), false,1));
+            repository.save(new Notification(repository3.save(new User(Long.valueOf(1))), repository2.save(new Events(Long.valueOf(1))), "{\"event\":\"event1\",\"date\":\"2021-05-01\",\"name\":\"ajla\"}", LocalDate.of(Integer.parseInt("2022"),Integer.parseInt("2"),Integer.parseInt("2")), false,1));
+            repository.save(new Notification(repository3.save(new User(Long.valueOf(2))), repository2.save(new Events(Long.valueOf(1))),"{\"event\":\"event2\",\"date\":\"2020-05-01\",\"name\":\"ajla\"}",LocalDate.of(Integer.parseInt("2022"),Integer.parseInt("2"),Integer.parseInt("2")), false,1));
+            repository.save(new Notification(repository3.save(new User(Long.valueOf(3))),repository2.save(new Events(Long.valueOf(1))),"{\"event\":\"event3\",\"date\":\"2019-05-01\",\"name\":\"ajla\"}", LocalDate.of(Integer.parseInt("2022"),Integer.parseInt("2"),Integer.parseInt("2")), false,1));
 
             log.info("Notifications found with findAll():");
             log.info("-------------------------------");
