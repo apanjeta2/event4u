@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import MaterialContainer from '@material-ui/core/Container';
@@ -13,9 +13,11 @@ import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import StarIcon from '@material-ui/icons/Star';
 import IconButton from '@material-ui/core/IconButton';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
-import { handleGetEventsByCategory, handleEventClicked } from '../actions/events-page-actions';
+import { handleGetEventsByCategory, handleEventClicked, handleInterestedClicked, handleGoingToClicked, handleGetEventsByCategoryLoggedUser, handleGetCategory } from '../actions/events-page-actions';
 
 import ApplicationHeader from '../../shared-components/header';
 
@@ -31,7 +33,12 @@ const useStyles = makeStyles({
     padding: '2px',
   },
   icon_label: {
-    paddingRight: '10px',
+    paddingRight: '3px',
+  },
+  icon_label_bold: {
+    paddingRight: '3px',
+    textDecoration: 'underline',
+    fontWeight: 'bold',
   },
 });
 
@@ -41,11 +48,19 @@ function EventsPage() {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const params = useParams();
+  const categoryId = params.idCategory;
+  const category = useSelector(state => (state.events.category ? state.events.category.name : null));
+  const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
   const events = useSelector(state => state.events.events);
-  const categoryId = useSelector(state => state.events.category.id);
 
   useEffect(() => {
-    dispatch(handleGetEventsByCategory(categoryId));
+    if (!category) dispatch(handleGetCategory(categoryId));
+  }, [dispatch, categoryId]);
+
+  useEffect(() => {
+    if (userLoggedIn) dispatch(handleGetEventsByCategoryLoggedUser(categoryId));
+    else dispatch(handleGetEventsByCategory(categoryId));
   }, [dispatch, categoryId]);
 
   /*useEffect(()=> {
@@ -55,9 +70,17 @@ function EventsPage() {
     });
   })*/
 
-  const eventClicked = event => {
-    dispatch(handleEventClicked(event));
-    history.push('/event-info');
+  const eventClicked = eventInfo => {
+    dispatch(handleEventClicked(eventInfo));
+    history.push('/event-info/' + eventInfo.event.id);
+  };
+
+  const interestedClicked = event => {
+    dispatch(handleInterestedClicked(event));
+  };
+
+  const goingToClicked = event => {
+    dispatch(handleGoingToClicked(event));
   };
 
   const getDate = date => {
@@ -66,37 +89,59 @@ function EventsPage() {
     return days[d.getDay()] + ', ' + d.getDate() + '.' + d.getMonth() + '.' + d.getFullYear() + '.';
   };
 
-  const eventsItems = events.map(event => (
-    <Grid item xs={12} sm={6} lg={3} key={event.id}>
+  function InterestedIcon(event) {
+    if (event.marked && !event.going) {
+      return <StarIcon />;
+    }
+    return <StarBorderIcon />;
+  }
+
+  function GoingIcon(event) {
+    if (event.marked && event.going) {
+      return <CheckCircleIcon />;
+    }
+    return <CheckCircleOutlineIcon />;
+  }
+
+  function ActionsForLoggedUsers(event) {
+    if (userLoggedIn) {
+      return (
+        <Grid item container>
+          <Typography color="textSecondary" className={event.marked && !event.going ? classes.icon_label_bold : classes.icon_label}>
+            <IconButton aria-label="mark as interested" onClick={() => interestedClicked(event)} className={classes.icon}>
+              {InterestedIcon(event)}
+            </IconButton>
+            {t('EVENTS.EVENTS_INTERESTED_BUTTON')}
+          </Typography>
+          <Typography color="textSecondary" className={event.marked && event.going ? classes.icon_label_bold : classes.icon_label}>
+            <IconButton aria-label="mark as going" onClick={() => goingToClicked(event)} className={classes.icon}>
+              {GoingIcon(event)}
+            </IconButton>
+            {t('EVENTS.EVENTS_GOING_BUTTON')}
+          </Typography>
+        </Grid>
+      );
+    }
+  }
+
+  const eventsItems = events.map(eventInfo => (
+    <Grid item xs={12} sm={6} lg={3} key={userLoggedIn ? eventInfo.event.id : eventInfo.id}>
       <Card className={classes.card}>
         <CardContent>
           <Typography component="h5" variant="h5">
-            {event.title}
+            {userLoggedIn ? eventInfo.event.title : eventInfo.title}
           </Typography>
-          <Typography color="textSecondary">{getDate(event.date)}</Typography>
-          <Typography component="p">{event.description}</Typography>
+          <Typography color="textSecondary">{getDate(userLoggedIn ? eventInfo.event.date : eventInfo.date)}</Typography>
+          <Typography component="p">{userLoggedIn ? eventInfo.event.description : eventInfo.description}</Typography>
         </CardContent>
         <CardActions disableSpacing>
           <Grid container>
             <Grid item>
-              <Button size="small" color="primary" onClick={() => eventClicked(event)}>
+              <Button size="small" color="primary" onClick={() => eventClicked(eventInfo)}>
                 {t('EVENTS.EVENTS_GET_INFO_BUTTON')}
               </Button>
             </Grid>
-            <Grid item container>
-              <Typography color="textSecondary" className={classes.icon_label}>
-                <IconButton aria-label="mark as interested" className={classes.icon}>
-                  <StarBorderIcon />
-                </IconButton>
-                {t('EVENTS.EVENTS_INTERESTED_BUTTON')}
-              </Typography>
-              <Typography color="textSecondary" className={classes.icon_label}>
-                <IconButton aria-label="mark as going" className={classes.icon}>
-                  <CheckCircleOutlineIcon />
-                </IconButton>
-                {t('EVENTS.EVENTS_GOING_BUTTON')}
-              </Typography>
-            </Grid>
+            {ActionsForLoggedUsers(eventInfo)}
           </Grid>
         </CardActions>
       </Card>
@@ -107,7 +152,8 @@ function EventsPage() {
     <Fragment>
       <ApplicationHeader />
       <Container component="main">
-        <h1>{t('EVENTS.EVENTS_TITLE')}</h1>
+        <h1>{category}</h1>
+        <h2>{t('EVENTS.EVENTS_TITLE')}</h2>
         <Grid container spacing={3}>
           {eventsItems}
         </Grid>

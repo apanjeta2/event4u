@@ -32,6 +32,8 @@ public class EventService {
     private DiscoveryService discoveryService;
     @Autowired
     private TokenHelperService tokenHelperService;
+    @Autowired
+    private EventUserService eventUserService;
 
     public List<Event> findAll() {
         var it = eventRepository.findAll();
@@ -108,11 +110,29 @@ public class EventService {
         notificationHelperService.updateEventNotifications(event, token);
         return event;
     }
-
     public List<Event> findByCategoryId(Long id) {
         List<Event> events = findAll();
         events.removeIf(e-> (e.getCategory().getId()!=id));
         return events;
+    }
+
+    public List<EventMark> findByCategoryId(Long idCategory, String token) {
+        Long idUser = tokenHelperService.getUserIdFromToken(token);
+        List<Event> events = findAll();
+        events.removeIf(e-> (e.getCategory().getId()!=idCategory));
+        List<EventMark> eventsMarks = new ArrayList<>();
+        EventUser eu = null;
+        for (Event e: events) {
+            eu= eventUserService.getEventUser(idUser, e.getId());
+            if (eu==null) {
+                eventsMarks.add(new EventMark(e,false,false));
+            }
+            else {
+                eventsMarks.add(new EventMark(e,true,eu.getGoing()));
+            }
+
+        }
+        return eventsMarks;
     }
 
     public void changeStatus(Long id, EventsServiceApplication.Status s) {

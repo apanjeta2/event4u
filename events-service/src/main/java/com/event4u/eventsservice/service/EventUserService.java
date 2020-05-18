@@ -2,6 +2,7 @@ package com.event4u.eventsservice.service;
 
 import com.event4u.eventsservice.exceptionHandling.NotFoundException;
 import com.event4u.eventsservice.model.Event;
+import com.event4u.eventsservice.model.EventMark;
 import com.event4u.eventsservice.model.EventUser;
 import com.event4u.eventsservice.model.User;
 import com.event4u.eventsservice.repository.EventRepository;
@@ -25,11 +26,11 @@ public class EventUserService {
     @Autowired
     private  NotificationHelperService notificationHelperService;
 
-    private List<EventUser> getAllUsers(Long id){
+    private List<EventUser> getAllUsers(Long idEvent){
         var it = eventUserRepository.findAll();
         var users = new ArrayList<EventUser>();
         it.forEach(eventUser -> {
-            if (eventUser.getEvent().getId().equals(id)) {
+            if (eventUser.getEvent().getId().equals(idEvent)) {
                 users.add(eventUser);
             }
         });
@@ -76,48 +77,44 @@ public class EventUserService {
         eventUserRepository.save(new EventUser(user, event, isGoing));
     }
 
-    public void markAsGoing(Long idEvent, String token) {
+    public EventMark markAsGoing(Long idEvent, String token) {
         if (!eventService.existsById(idEvent)) {
             throw new NotFoundException("Event with id " + idEvent.toString());
         }
-        EventUser eu = null;
-        Long idUser = tokenHelperService.getUserIdFromToken(token);
-        List<EventUser> allEventUsers = getAllUsers(idEvent);
-        for (EventUser eventUser : allEventUsers) {
-            if (eventUser.getId().equals(idUser)) {
-                eu = eventUser;
-                break;
-            }
-        }
+        Long idUser = Long.valueOf(3);//tokenHelperService.getUserIdFromToken(token);
+        EventUser eu = getEventUser(idUser, idEvent);
         Event event = eventService.findById(idEvent);
         User user = userService.getUserById(idUser);
-        if (eu == null) {
+        if (eu != null) {
+           eu.setGoing(Boolean.TRUE);
+           eventUserRepository.save(eu);
+        }
+        else {
             markNew(user, event, Boolean.TRUE);
         }
-        notificationHelperService.createGoingToNotificaion(idEvent, token);
+        return new EventMark(event, true, true);
+        //notificationHelperService.createGoingToNotificaion(idEvent, token);
     }
 
-    public void markAsInterested(Long idEvent, String token) {
+    public EventMark markAsInterested(Long idEvent, String token) {
         if (!eventService.existsById(idEvent)) {
             throw new NotFoundException("Event with id " + idEvent.toString());
         }
-        EventUser eu = null;
         Long idUser = tokenHelperService.getUserIdFromToken(token);
-        List<EventUser> allEventUsers = getAllUsers(idEvent);
-        for (EventUser eventUser : allEventUsers) {
-            if (eventUser.getId().equals(idUser)) {
-                eventUser.setGoing(Boolean.FALSE);
-                break;
-            }
-        }
+        EventUser eu = getEventUser(idUser, idEvent);
         Event event = eventService.findById(idEvent);
         User user = userService.getUserById(idUser);
-        if (eu == null) {
+        if (eu != null) {
+            eu.setGoing(Boolean.FALSE);
+            eventUserRepository.save(eu);
+        }
+        else {
             markNew(user, event, Boolean.FALSE);
         }
+        return new EventMark(event, true, false);
     }
 
-    public void removeMark(Long idEvent, String token) {
+    public EventMark removeMark(Long idEvent, String token) {
         if (!eventService.existsById(idEvent)) {
             throw new NotFoundException("Event with id " + idEvent.toString());
         }
@@ -130,6 +127,17 @@ public class EventUserService {
                 break;
             }
         }
+        Event event = eventService.findById(idEvent);
+        return new EventMark(event, false, false);
+    }
+
+    public EventUser getEventUser(Long idUser, Long idEvent) {
+        List<EventUser> allEventUsers = getAllUsers(idEvent);
+        allEventUsers.removeIf(eventUser -> eventUser.getUser().getId()!=idUser);
+        if (allEventUsers == null || allEventUsers.size()==0) {
+            return null;
+        }
+        return allEventUsers.get(0);
     }
 
 }

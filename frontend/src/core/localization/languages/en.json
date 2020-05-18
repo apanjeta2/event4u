@@ -50,10 +50,12 @@
   "EVENTS.EVENTS_GOING_BUTTON": "Going",
   "EVENTS.ERROR_GET_EVENTS": "Error while loading events",
   "EVENTS.ERROR_GET_CATEGORIES": "Error while loading categories",
+  "EVENTS.EVENT_TIME_NOT_AVAILABLE": "Time not available",
+  "EVENTS.ERROR_MARK_EVENT": "Error while marking event",
 
-  "NOTIFICATION.MESSAGE":"You have successfully added your event ",
-  "NOTIFICATION.MESSAGE.REMINDER1":"Reminder for event ",
-  "NOTIFICATION.MESSAGE.REMINDER2":" on ",
+  "NOTIFICATION.MESSAGE": "You have successfully added your event ",
+  "NOTIFICATION.MESSAGE.REMINDER1": "Reminder for event ",
+  "NOTIFICATION.MESSAGE.REMINDER2": " on ",
   "NOTIFICATION.NEWEVENT": "New event",
   "NOTIFICATION.NEWEVENT.REMINDER": "Reminder for event"
 }

@@ -25,12 +25,12 @@ const routes = [
     exact: true,
   },
   {
-    path: '/events',
+    path: '/events/:idCategory',
     component: EventsPage,
     exact: true,
   },
   {
-    path: '/event-info',
+    path: '/event-info/:idEvent',
     component: EventsInfoPage,
     exact: true,
   },

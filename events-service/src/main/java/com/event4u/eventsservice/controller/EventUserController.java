@@ -1,5 +1,6 @@
 package com.event4u.eventsservice.controller;
 
+import com.event4u.eventsservice.model.EventMark;
 import com.event4u.eventsservice.model.SuccessMessage;
 import com.event4u.eventsservice.model.User;
 import com.event4u.eventsservice.service.EventUserService;
@@ -36,20 +37,17 @@ public class EventUserController {
     }
 
     @PostMapping(path = "/interested/{idEvent}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    SuccessMessage markEventInterested(@RequestHeader("Authorization") String token, @PathVariable Long idEvent) {
-        eventUserService.markAsInterested(idEvent, token);
-        return new SuccessMessage("Event successfully marked as interested");
+    EventMark markEventInterested(@RequestHeader("Authorization") String token, @PathVariable Long idEvent) {
+        return eventUserService.markAsInterested(idEvent, token);
     }
 
     @PostMapping(path = "/going/{idEvent}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    SuccessMessage markEventGoing(@RequestHeader("Authorization") String token, @PathVariable Long idEvent) {
-        eventUserService.markAsGoing(idEvent, token);
-        return new SuccessMessage("Event successfully marked as going");
+    EventMark markEventGoing(@RequestHeader("Authorization") String token, @PathVariable Long idEvent) {
+        return eventUserService.markAsGoing(idEvent, token);
     }
 
     @DeleteMapping(path = "/removeMark/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    SuccessMessage deleteMark(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        eventUserService.removeMark(id, token);
-        return new SuccessMessage("Mark successfully removed");
+    EventMark deleteMark(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        return eventUserService.removeMark(id, token);
     }
 }

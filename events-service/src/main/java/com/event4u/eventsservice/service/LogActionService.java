@@ -25,7 +25,7 @@ public class LogActionService {
             if ((url != null) && (url.length() > 0)) {
                 url = p  + url.substring(7, url.length() - 5) + "6565";
             }
-            System.out.println(url);
+            //System.out.println(url);
 
             ManagedChannel channel = ManagedChannelBuilder.forTarget(url)
                     .usePlaintext()

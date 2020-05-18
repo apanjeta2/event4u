@@ -40,7 +40,7 @@ function CategoriesPage() {
 
   const categoryClicked = category => {
     dispatch(handleCategoryClicked(category));
-    history.push('/events');
+    history.push(`/events/${category.id}`);
   };
 
   const categoryItems = categories.map(category => (

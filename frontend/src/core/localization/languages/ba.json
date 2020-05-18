@@ -50,10 +50,12 @@
   "EVENTS.EVENTS_GOING_BUTTON": "Idem",
   "EVENTS.ERROR_GET_EVENTS": "Greška pri učitavanju događaja",
   "EVENTS.ERROR_GET_CATEGORIES": "Greška pri učitavanju kategorija",
+  "EVENTS.EVENT_TIME_NOT_AVAILABLE": "Vrijeme nije dostupno",
+  "EVENTS.ERROR_MARK_EVENT": "Greška pri označavanju događaja",
 
-  "NOTIFICATION.MESSAGE":" Uspješno ste dodali event ",
-  "NOTIFICATION.MESSAGE.REMINDER1":" Podsjetnik za event ",
-  "NOTIFICATION.MESSAGE.REMINDER2":" na datum ",
+  "NOTIFICATION.MESSAGE": " Uspješno ste dodali event ",
+  "NOTIFICATION.MESSAGE.REMINDER1": " Podsjetnik za event ",
+  "NOTIFICATION.MESSAGE.REMINDER2": " na datum ",
   "NOTIFICATION.NEWEVENT": "Novi događaj",
   "NOTIFICATION.NEWEVENT.REMINDER": "Podsjetnik za događaj"
 }
