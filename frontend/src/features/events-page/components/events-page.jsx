@@ -56,12 +56,12 @@ function EventsPage() {
 
   useEffect(() => {
     if (!category) dispatch(handleGetCategory(categoryId));
-  }, [dispatch, categoryId]);
+  }, [dispatch, category, categoryId]);
 
   useEffect(() => {
     if (userLoggedIn) dispatch(handleGetEventsByCategoryLoggedUser(categoryId));
     else dispatch(handleGetEventsByCategory(categoryId));
-  }, [dispatch, categoryId]);
+  }, [dispatch, userLoggedIn, categoryId]);
 
   /*useEffect(()=> {
     navigator.geolocation.getCurrentPosition(function(position) {

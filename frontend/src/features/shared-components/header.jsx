@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect, useCallback } from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -124,10 +124,21 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
 
   const notifications = useSelector(state => state.notifications.notifications);
 
+  const handleNumberOfNonReadNotifications = useCallback(() => {
+    let num = 0;
+    notifications.forEach(element => {
+      if (element.isRead === false) {
+        num++;
+      }
+    });
+    setCount(num);
+  }, [notifications]);
+
+
   useEffect(() => {
     dispatch(handleGetNotifications());
     handleNumberOfNonReadNotifications();
-  }, [dispatch]);
+  }, [dispatch, handleNumberOfNonReadNotifications]);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -186,15 +197,6 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
     handleNumberOfNonReadNotifications();
   };
 
-  const handleNumberOfNonReadNotifications = () => {
-    let num = 0;
-    notifications.map(element => {
-      if (element.isRead === false) {
-        num++;
-      }
-    });
-    setCount(num);
-  };
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
