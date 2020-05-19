@@ -5,7 +5,7 @@
 
 ```
 REACT_APP_BACKEND=http://localhost:4200/aggregator
-REACT_APP_RABBIT_URL=localhost
+REACT_APP_RABBIT_URL=amqp://localhost
 ```
 
 - After that you need to run `npm install` or `npm ci`.

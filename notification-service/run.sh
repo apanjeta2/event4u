@@ -4,4 +4,4 @@ while ! nc -z eureka-service 8761 ; do
     sleep 3	
 done	
 
-java -jar /app.jar 
+java -jar /app.jar --spring.config.location=classpath:/docker.properties

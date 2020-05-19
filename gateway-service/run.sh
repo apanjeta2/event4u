@@ -19,7 +19,8 @@ while ! nc -z user-management-service 4000 ; do
     sleep 3
 done
 
-# sleep 15 seconds for connections to happen
-sleep 15
+# sleep 20 seconds for connections to happen
+echo "[gateway-service] Waiting 20 seconds for all eureka connections, before starting."
+sleep 20
 
 npm start
