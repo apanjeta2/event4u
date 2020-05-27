@@ -60,7 +60,7 @@ public class NotificationHelperService {
 
     public void createGoingToNotificaion(Long idEvent, String token) {
         RestTemplate restTemplate = new RestTemplate();
-        String createNotificationUrl = discoveryService.getGatewayService() + "/aggregator/notifications/createGoingTo/" + idEvent;
+        String createNotificationUrl = discoveryService.getNotificationInstance() + "/notifications/createGoingTo/" + idEvent;
         ResponseEntity<String> res = restTemplate.exchange(createNotificationUrl, HttpMethod.POST , new HttpEntity<>(getHeaders(token)), String.class);
     }
 }

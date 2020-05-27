@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 @RequestMapping(path="events",produces = {MediaType.APPLICATION_JSON_VALUE})
 @RestController
@@ -31,6 +32,7 @@ public class EventController {
     //Vraca event po id-u
     @GetMapping(path="/getById/{id}",produces = {MediaType.APPLICATION_JSON_VALUE})
     public Events getEventById(@RequestHeader("Authorization") String token, @PathVariable Long id){
+        Events e = eventService.getEventById(token, key, id);
         return eventService.getEventById(token, key,id);
     }
 
@@ -68,7 +70,7 @@ public class EventController {
     }
     //Dodavanje event-a
     @PostMapping(path="createEvent",produces = {MediaType.APPLICATION_JSON_VALUE})
-    public NotificationBody newEventCreate (@RequestHeader("Authorization") String token, @RequestBody NotificationBody event) throws JsonProcessingException {
+    public NotificationBody newEventCreate (@RequestHeader("Authorization") String token, @RequestBody NotificationBody event) throws JsonProcessingException, ExecutionException, InterruptedException {
         Events e = eventService.createEventNew(event.getEventId(), event.getName(), event.getDate());
         //Kreiraj notifikaciju odmah
         Notification n = notificationService.createNotificationNew(token, event, key, 2);

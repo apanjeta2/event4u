@@ -1,6 +1,7 @@
 package com.event4u.notificationservice.service;
 
 import com.event4u.notificationservice.ServiceInstanceRestController;
+import com.event4u.notificationservice.controller.MyStompSessionHandler;
 import com.event4u.notificationservice.exception.NotificationNotFoundException;
 import com.event4u.notificationservice.model.*;
 import com.event4u.notificationservice.repository.NotificationRepository;
@@ -9,16 +10,29 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
+import org.springframework.web.socket.sockjs.client.SockJsClient;
+import org.springframework.web.socket.sockjs.client.Transport;
+import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import javax.xml.bind.DatatypeConverter;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class NotificationService {
@@ -56,7 +70,33 @@ public class NotificationService {
         return id1;
     }
 
-    public Object findAll(String token, String key) {
+    public void sendToSubscribers(String token) throws ExecutionException, InterruptedException {
+
+        WebSocketClient simpleWebSocketClient = new StandardWebSocketClient();
+        List<Transport> transports = new ArrayList<>(1);
+        transports.add(new WebSocketTransport(simpleWebSocketClient));
+        SockJsClient sockJsClient = new SockJsClient(transports);
+        WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
+        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+        String url = "ws://localhost:8088/ws";
+        StompSessionHandler sessionHandler = new MyStompSessionHandler();
+        StompSession session = stompClient.connect(url, sessionHandler).get();
+        session.subscribe("topic", new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Notification.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers,Object payload) {
+                System.err.println(payload.toString());
+            }
+        });
+        session.send("/app/hello", token);
+    }
+    public Object findAll(String token, String key) throws ExecutionException, InterruptedException {
+
+
         User user = userService.getUserById(token ,key,getUserIdFromToken(token, key));
         return notificationRepository.findByUser(user);
     }
@@ -108,21 +148,21 @@ public class NotificationService {
     }
 
 
-    public Notification createNotification(String token, String key, Long userId, Long eventId, String message, LocalDate date, boolean isRead, int type){
+    public Notification createNotification(String token, String key, Long userId, Long eventId, String message, LocalDate date, boolean isRead, int type) throws ExecutionException, InterruptedException {
 
+        sendToSubscribers(token);
         User user = userService.getUserById(token, key,userId);
         Events event = eventsService.getEventById(token, key, eventId);
-        System.out.println("ee3");
         return notificationRepository.save(new Notification(user,event,message,date,isRead, type));
     }
 
-    public Notification createNotificationNew(String token, NotificationBody not, String key, int type) {
+    public Notification createNotificationNew(String token, NotificationBody not, String key, int type) throws ExecutionException, InterruptedException {
         //parse token
+        sendToSubscribers(token);
         token=token.replace("Bearer ","");
         String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
         byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
         Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token).getBody();
-
 
         //Kreiranje poruke
 
@@ -145,17 +185,20 @@ public class NotificationService {
         else //salji samo subscriberima
         {
 
-            System.out.println("Kreiraju se notifikacije za sve subscribere od usera sa id-om: "+userid);
             Set<Long> all= userService.getSubscribers(token, key, userid);
-
-            System.out.println("Broj subscribera: "+all.size());
 
             String finalToken = token;
             all.forEach(e -> {
-                createNotification(finalToken, key, e, not.getEventId(), message, not.getDate(), false, type);
+                try {
+                    createNotification(finalToken, key, e, not.getEventId(), message, not.getDate(), false, type);
+                } catch (ExecutionException ex) {
+                    ex.printStackTrace();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             });
 
-            return createNotification(token, key, userid, not.getEventId(), message, not.getDate(), false, 1);
+            return createNotification(token, key, userid, not.getEventId(), message, not.getDate(), false, type);
         }
     }
 
@@ -185,9 +228,8 @@ public class NotificationService {
         return n;
     }
 
-    public Object updateNotificationRead(String token, String key, Long id) {
+    public Object updateNotificationRead(String token, String key, Long id) throws ExecutionException, InterruptedException {
 
-        System.out.println("Update notifikacije: "+id);
         Notification n = notificationRepository.findById(id).map(us -> {
             us.setIsRead(true);
             return notificationRepository.save(us);

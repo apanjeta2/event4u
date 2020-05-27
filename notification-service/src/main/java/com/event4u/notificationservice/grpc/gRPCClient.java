@@ -22,12 +22,12 @@ public class gRPCClient {
     @Autowired
     private ServiceInstanceRestController serviceInstanceRestController;
 
-    private actionGrpc.actionBlockingStub blockingStub;
 
 
 
-    public void createLog(String ServiceName, Long userId, Request.ActionType actionType, String resourceName) {
-        //String target = "localhost:6565";
+    public void createLog(String ServiceName, Long userId, Event4U.Request.ActionType actionType, String resourceName) {
+
+
 
         RestTemplate restTemplate = new RestTemplate();
         List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("system-events-service");
@@ -38,33 +38,30 @@ public class gRPCClient {
         String p = "dns://";
         if (System.getProperty("os.name").toLowerCase().contains("windows")) p += "/";
         if ((url != null) && (url.length() > 0)) {
-            url = p  + url.substring(7, url.length() - 4) + "6565";
+            url = p  + url.substring(7, url.length() - 5) + "6565";
         }
-        System.out.println(url);
         ManagedChannel channel = ManagedChannelBuilder.forTarget(url)
 
                 .usePlaintext()
                 .build();
 
-        blockingStub = actionGrpc.newBlockingStub(channel);
 
-        Request req= Request.newBuilder()
-                .setActionType(actionType)
-                .setServiceName(ServiceName)
-                .setUserId(userId)
-                .setResourceName(resourceName)
-                .build();
-
-        APIResponse response;
         try {
-            logger.info(String.valueOf(req.getUserId()));
-            logger.info(String.valueOf(req.getServiceName()));
-            response = blockingStub.logAction(req);
+
+            actionGrpc.actionBlockingStub stub
+                    = actionGrpc.newBlockingStub(channel);
+            Event4U.APIResponse response = stub.logAction(Event4U.Request.newBuilder()
+                    .setServiceName(ServiceName)
+                    .setUserId(userId)
+                    .setActionType(actionType)
+                    .setResourceName(resourceName)
+                    .build());
+            channel.shutdown();
+
         } catch (StatusRuntimeException e) {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
             return;
         }
-        logger.info("Greeting: " + response.getResponseMessage());
     }
 
 

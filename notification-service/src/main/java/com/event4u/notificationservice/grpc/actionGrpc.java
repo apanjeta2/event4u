@@ -27,30 +27,30 @@ public final class actionGrpc {
   public static final String SERVICE_NAME = "action";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<com.event4u.notificationservice.grpc.Request,
-      com.event4u.notificationservice.grpc.APIResponse> getLogActionMethod;
+  private static volatile io.grpc.MethodDescriptor<com.event4u.notificationservice.grpc.Event4U.Request,
+      com.event4u.notificationservice.grpc.Event4U.APIResponse> getLogActionMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "logAction",
-      requestType = com.event4u.notificationservice.grpc.Request.class,
-      responseType = com.event4u.notificationservice.grpc.APIResponse.class,
+      requestType = com.event4u.notificationservice.grpc.Event4U.Request.class,
+      responseType = com.event4u.notificationservice.grpc.Event4U.APIResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.event4u.notificationservice.grpc.Request,
-      com.event4u.notificationservice.grpc.APIResponse> getLogActionMethod() {
-    io.grpc.MethodDescriptor<com.event4u.notificationservice.grpc.Request, com.event4u.notificationservice.grpc.APIResponse> getLogActionMethod;
+  public static io.grpc.MethodDescriptor<com.event4u.notificationservice.grpc.Event4U.Request,
+      com.event4u.notificationservice.grpc.Event4U.APIResponse> getLogActionMethod() {
+    io.grpc.MethodDescriptor<com.event4u.notificationservice.grpc.Event4U.Request, com.event4u.notificationservice.grpc.Event4U.APIResponse> getLogActionMethod;
     if ((getLogActionMethod = actionGrpc.getLogActionMethod) == null) {
       synchronized (actionGrpc.class) {
         if ((getLogActionMethod = actionGrpc.getLogActionMethod) == null) {
           actionGrpc.getLogActionMethod = getLogActionMethod = 
-              io.grpc.MethodDescriptor.<com.event4u.notificationservice.grpc.Request, com.event4u.notificationservice.grpc.APIResponse>newBuilder()
+              io.grpc.MethodDescriptor.<com.event4u.notificationservice.grpc.Event4U.Request, com.event4u.notificationservice.grpc.Event4U.APIResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
                   "action", "logAction"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.event4u.notificationservice.grpc.Request.getDefaultInstance()))
+                  com.event4u.notificationservice.grpc.Event4U.Request.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.event4u.notificationservice.grpc.APIResponse.getDefaultInstance()))
+                  com.event4u.notificationservice.grpc.Event4U.APIResponse.getDefaultInstance()))
                   .setSchemaDescriptor(new actionMethodDescriptorSupplier("logAction"))
                   .build();
           }
@@ -88,8 +88,8 @@ public final class actionGrpc {
 
     /**
      */
-    public void logAction(com.event4u.notificationservice.grpc.Request request,
-        io.grpc.stub.StreamObserver<com.event4u.notificationservice.grpc.APIResponse> responseObserver) {
+    public void logAction(com.event4u.notificationservice.grpc.Event4U.Request request,
+        io.grpc.stub.StreamObserver<com.event4u.notificationservice.grpc.Event4U.APIResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getLogActionMethod(), responseObserver);
     }
 
@@ -99,8 +99,8 @@ public final class actionGrpc {
             getLogActionMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                com.event4u.notificationservice.grpc.Request,
-                com.event4u.notificationservice.grpc.APIResponse>(
+                com.event4u.notificationservice.grpc.Event4U.Request,
+                com.event4u.notificationservice.grpc.Event4U.APIResponse>(
                   this, METHODID_LOG_ACTION)))
           .build();
     }
@@ -126,8 +126,8 @@ public final class actionGrpc {
 
     /**
      */
-    public void logAction(com.event4u.notificationservice.grpc.Request request,
-        io.grpc.stub.StreamObserver<com.event4u.notificationservice.grpc.APIResponse> responseObserver) {
+    public void logAction(com.event4u.notificationservice.grpc.Event4U.Request request,
+        io.grpc.stub.StreamObserver<com.event4u.notificationservice.grpc.Event4U.APIResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getLogActionMethod(), getCallOptions()), request, responseObserver);
     }
@@ -153,7 +153,7 @@ public final class actionGrpc {
 
     /**
      */
-    public com.event4u.notificationservice.grpc.APIResponse logAction(com.event4u.notificationservice.grpc.Request request) {
+    public com.event4u.notificationservice.grpc.Event4U.APIResponse logAction(com.event4u.notificationservice.grpc.Event4U.Request request) {
       return blockingUnaryCall(
           getChannel(), getLogActionMethod(), getCallOptions(), request);
     }
@@ -179,8 +179,8 @@ public final class actionGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.event4u.notificationservice.grpc.APIResponse> logAction(
-        com.event4u.notificationservice.grpc.Request request) {
+    public com.google.common.util.concurrent.ListenableFuture<com.event4u.notificationservice.grpc.Event4U.APIResponse> logAction(
+        com.event4u.notificationservice.grpc.Event4U.Request request) {
       return futureUnaryCall(
           getChannel().newCall(getLogActionMethod(), getCallOptions()), request);
     }
@@ -206,8 +206,8 @@ public final class actionGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_LOG_ACTION:
-          serviceImpl.logAction((com.event4u.notificationservice.grpc.Request) request,
-              (io.grpc.stub.StreamObserver<com.event4u.notificationservice.grpc.APIResponse>) responseObserver);
+          serviceImpl.logAction((com.event4u.notificationservice.grpc.Event4U.Request) request,
+              (io.grpc.stub.StreamObserver<com.event4u.notificationservice.grpc.Event4U.APIResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();

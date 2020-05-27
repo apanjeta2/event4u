@@ -107,14 +107,10 @@ public class UserService {
         if (!isThere(id1)) createUser(token, key,id1);
 
         User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
-        System.out.println("trazi subscribere za usera "+id1);
 
         Set<Long> odg = new HashSet<>();
         try {
             Set<User> lista = user1.getSubscriber();
-
-            System.out.println("Pronadjeno " + lista.size() + " subscribera");
-
             lista.forEach(e -> {
                 odg.add(e.getUserId());
             });
@@ -144,9 +140,6 @@ public class UserService {
     public User updateUser(Long id) {
         User e = userRepository.findById(id).map(us -> {
             us.setUserId(id);
-            //event.setAddress(address);
-            //event.setTitle(title);
-            //event.setDate(date);
             return userRepository.save(us);
         }).orElseThrow();
         return e;
@@ -165,11 +158,6 @@ public class UserService {
         Long id1=u.getId();
 
         Set<Long> users=getSubscribers(token, key, id1);
-        log.info("Subscriber  od "+ id1.toString());
-        users.forEach(e -> {
-
-                    log.info("Subscriber  od "+ id1.toString() + "je" + e.toString());
-            });
         //Nadji adresu user managment servisa
 
         RestTemplate restTemplate = new RestTemplate();
@@ -197,10 +185,8 @@ public class UserService {
         for (int i=0; i<json.size(); i++) {
             int finalI = i;
 
-            log.info("Svi useri su "+ ts.get(finalI).getId());
             users.forEach(e -> {
                 if (e==Long.parseLong(ts.get(finalI).getId())) {
-                    log.info("Svi jednaki useri su "+ ts.get(finalI).getId());
                     sviSubscriberi.add(ts.get(finalI));
                 }
             });

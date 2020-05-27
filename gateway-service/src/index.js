@@ -73,7 +73,7 @@ client.start((error) => {
       },
     }),
     proxy(notificationsServiceUrl, {
-      filter: (req, res) => req.path.includes('/users') || req.path.includes('/notifications') || req.path.includes('/events'),
+      filter: (req, res) => req.path.includes('/users') || req.path.includes('/notifications') || req.path.includes('/events') || req.path.includes('/ws'),
     })
   );
 

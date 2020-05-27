@@ -2,7 +2,6 @@ package com.event4u.notificationservice.controller;
 
 import com.event4u.notificationservice.NotificationServiceApplication;
 import com.event4u.notificationservice.ServiceInstanceRestController;
-import com.event4u.notificationservice.jwt.JwtTokenUtil;
 import com.event4u.notificationservice.model.*;
 import com.event4u.notificationservice.service.EventsService;
 import com.event4u.notificationservice.service.NotificationService;
@@ -19,8 +18,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -31,6 +36,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RequestMapping(path="/notifications",produces = {MediaType.APPLICATION_JSON_VALUE})
 @RestController
@@ -49,14 +55,13 @@ public class NotificationController {
     private EventsService eventService;
     @Autowired
     private ServiceInstanceRestController serviceInstanceRestController;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+
 
     @Value("${jwt.secret}")
     private String key;
 
     @GetMapping("")
-    public Object allNotifications(@RequestHeader("Authorization") String token) {
+    public Object allNotifications(@RequestHeader("Authorization") String token) throws ExecutionException, InterruptedException {
         return notificationService.findAll(token,key);
     }
     //Vraca sve notifikacije za jednog korisnika
@@ -113,7 +118,7 @@ public class NotificationController {
 
     //Kreiranje nove notifikacije
     @PostMapping("")
-    public Object newNotification(@RequestHeader("Authorization") String token, @RequestParam Long userId, @RequestParam Long eventId, @RequestParam String message, @RequestParam String date, @RequestParam boolean isRead) throws ParseException {
+    public Object newNotification(@RequestHeader("Authorization") String token, @RequestParam Long userId, @RequestParam Long eventId, @RequestParam String message, @RequestParam String date, @RequestParam boolean isRead) throws ParseException, ExecutionException, InterruptedException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
         //convert String to LocalDate
@@ -123,7 +128,7 @@ public class NotificationController {
 
     //Kreiranje nove notifikacije sa body
     @PostMapping(path="/postNotification", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Object postNewNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody not) {
+    public Object postNewNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody not) throws ExecutionException, InterruptedException {
        return notificationService.createNotificationNew(token, not, key,2);
     }
 
@@ -156,17 +161,16 @@ public class NotificationController {
     }
 
     @PutMapping(path ="/setAsRead/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Object updateNotificationRead(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+    public Object updateNotificationRead(@RequestHeader("Authorization") String token, @PathVariable Long id) throws ExecutionException, InterruptedException {
 
-        System.out.println("Update notifikacije api : "+id);
         return notificationService.updateNotificationRead(token, key,id);
     }
 
     @PostMapping(path ="/createGoingTo/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public NotificationBody createGoingNotification(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Events e = eventService.getEventById(token, key,id);
+    public NotificationBody createGoingNotification(@RequestHeader("Authorization") String token, @PathVariable Long id) throws ExecutionException, InterruptedException {
+        Events e = eventService.getEventById(token, key, id);
         NotificationBody not= new NotificationBody(id, e.getName(), e.getDate());
-        Notification n = notificationService.createNotificationNew(token, not, key, 1);
+        Notification n = notificationService.createNotificationNew(token, not, key, 2);
         return not;
     }
 

@@ -4,7 +4,6 @@ package com.event4u.notificationservice.service;
         import com.event4u.notificationservice.model.MessageAMQPResponse;
         import com.event4u.notificationservice.model.Notification;
         import com.event4u.notificationservice.model.NotificationBody;
-        import com.event4u.notificationservice.model.UserBody;
         import com.event4u.notificationservice.service.UserService;
         import com.fasterxml.jackson.core.JsonProcessingException;
         import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,10 +40,7 @@ public class Receiver {
     @RabbitListener(queues = "events-notifications")
     public void listen(String in) throws JsonProcessingException {
         try {
-            //System.out.println("Primljeni event na strani notifikacija: " + in);
-            //NotificationBody mes = new ObjectMapper().readValue(in, NotificationBody.class);
             JSONObject jsonObj = new JSONObject(in);
-            System.out.println("Primljeni event na strane notifikacija: " + jsonObj);
             String date=jsonObj.getString("date");
             String name=jsonObj.getString("name");
             eventID= jsonObj.getLong("eventId");
@@ -52,7 +48,7 @@ public class Receiver {
             String token =jsonObj.getString("token");
 
             eventsService.createEventNew(eventID, name, localDate1);
-            Notification n = notificationService.createNotificationNew(token, new NotificationBody(eventID, name, localDate1), key, 2);
+            Notification n = notificationService.createNotificationNew(token, new NotificationBody(eventID, name, localDate1), key, 1);
 
             MessageAMQPResponse mes=new MessageAMQPResponse(eventID, "OK", "EVENTS-SERVICE");
             String jsonString=new ObjectMapper().writeValueAsString(mes);
@@ -62,7 +58,6 @@ public class Receiver {
             MessageAMQPResponse mes=new MessageAMQPResponse(eventID, "ERROR", "EVENTS-SERVICE");
             String jsonString=new ObjectMapper().writeValueAsString(mes);
             sender.sendMessage(jsonString);
-            System.out.println("Message: " + in);
         }
     }
 }

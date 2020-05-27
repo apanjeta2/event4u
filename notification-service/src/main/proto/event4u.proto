@@ -2,26 +2,23 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-option java_multiple_files = true;
 option java_package = "com.event4u.notificationservice.grpc";
-
 
 service action{
   rpc logAction(Request)  returns (APIResponse);
 }
 
 message Request{
-  google.protobuf.Timestamp timestamp = 1;
-  string serviceName = 2 ;
-  int64 userId = 3 ;
+  string serviceName = 1 ;
+  int64 userId = 2 ;
   enum ActionType {
       CREATE = 0;
       DELETE = 1;
       GET = 2;
       UPDATE = 3;
   }
-  ActionType actionType = 4;
-  string resourceName = 5;
+  ActionType actionType = 3;
+  string resourceName = 4;
 }
 
 message APIResponse{

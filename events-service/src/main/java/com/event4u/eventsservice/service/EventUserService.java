@@ -92,6 +92,7 @@ public class EventUserService {
         else {
             markNew(user, event, Boolean.TRUE);
         }
+        notificationHelperService.createGoingToNotificaion(idEvent, token);
         return new EventMark(event, true, true);
         //notificationHelperService.createGoingToNotificaion(idEvent, token);
     }

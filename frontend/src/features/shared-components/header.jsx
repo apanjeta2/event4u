@@ -26,6 +26,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { handleLogout } from '../auth/actions/auth-actions';
 import { handleGetNotifications, handlePutNotificationsById } from '../notifications/actions/notifications-actions';
 import { timeToWords } from '../../core/helpers/time-helper';
+import SockJsClient from 'react-stomp';
+
+import { BACKEND_API } from '../../config/constants';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -106,6 +109,14 @@ const useStyles = makeStyles(theme => ({
       marginRight: '0px',
     },
   },
+  sectionOfTime: {
+    padding: theme.spacing(1, 0, 0, 1),
+    display: 'flex',
+  },
+  menuItem: {
+    padding: theme.spacing(0, 0, 0, 0),
+    display: 'flex',
+  },
 }));
 
 function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
@@ -118,6 +129,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
   const [languagesAnchor, setLanguagesAnchor] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [NotificationAnchorEl, setNotificationAnchorEl] = useState(null);
+  const [loadedNotifications, setLoadedNotifications] = useState(false);
   const [count, setCount] = useState(0);
 
   const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
@@ -134,11 +146,13 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
     setCount(num);
   }, [notifications]);
 
-
   useEffect(() => {
-    dispatch(handleGetNotifications());
+    if (!loadedNotifications) {
+      dispatch(handleGetNotifications());
+      setLoadedNotifications(true);
+    }
     handleNumberOfNonReadNotifications();
-  }, [dispatch, handleNumberOfNonReadNotifications]);
+  }, [dispatch, handleNumberOfNonReadNotifications, loadedNotifications]);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -196,7 +210,6 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
     dispatch(handlePutNotificationsById(notification));
     handleNumberOfNonReadNotifications();
   };
-
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -262,6 +275,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
   const notificationId = 'primary-search-notifications';
   const renderNotification = (
     <Menu
+      className={classes.menuItem}
       getContentAnchorEl={null}
       keepMounted
       anchorEl={NotificationAnchorEl}
@@ -279,6 +293,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
     >
       {notifications.reverse().map(notification => (
         <MenuItem
+          className={classes.menuItem}
           key={notification.notificationId}
           value={notification.notificationId}
           onClick={() => handleNotificationClicked(notification.notificationId)}
@@ -293,8 +308,10 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
                     {t('NOTIFICATION.MESSAGE') + JSON.parse(notification.message).event + t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).date}
                     <br></br>
                     <Typography variant="caption">
-                      <NewReleasesIcon color="primary" fontSize="small" />
-                      {timeToWords(notification.dateOfCreating)}
+                      <div className={classes.sectionOfTime}>
+                        <NewReleasesIcon color="primary" fontSize="small" />
+                        {timeToWords(notification.dateOfCreating)}
+                      </div>
                     </Typography>
                   </React.Fragment>
                 }
@@ -306,11 +323,13 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
                 primary={t('NOTIFICATION.NEWEVENT.REMINDER') + ': ' + JSON.parse(notification.message).event}
                 secondary={
                   <React.Fragment>
-                    {t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).event + t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).date}
+                    {t('NOTIFICATION.MESSAGE.REMINDER1') + JSON.parse(notification.message).event + t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).date}
                     <br></br>
                     <Typography variant="caption">
-                      <EventIcon color="primary" fontSize="small" />
-                      {timeToWords(notification.dateOfCreating)}
+                      <div className={classes.sectionOfTime}>
+                        <EventIcon color="primary" fontSize="small" />
+                        {timeToWords(notification.dateOfCreating)}
+                      </div>
                     </Typography>
                   </React.Fragment>
                 }
@@ -325,6 +344,14 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
   return (
     <div className={classes.root}>
       <AppBar position="static">
+        <SockJsClient
+          url={BACKEND_API + '/ws'}
+          topics={['/topic/notification']}
+          onMessage={msg => {
+            dispatch(handleGetNotifications());
+            handleNumberOfNonReadNotifications();
+          }}
+        />
         <Toolbar className={classes.toolbar}>
           {userLoggedIn ? (
             <div className={classes.sectionLanguagesLogged}>
@@ -366,6 +393,11 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
                 </IconButton>
               </div>
               <div className={classes.sectionMobile}>
+                <IconButton aria-label="show 17 new notifications" aria-controls={notificationId} aria-haspopup="true" onClick={handleNewNotifications} color="inherit">
+                  <Badge badgeContent={count} color="secondary">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
                 <IconButton aria-label="show more" aria-controls={mobileMenuId} aria-haspopup="true" onClick={handleMobileMenuOpen} color="inherit">
                   <MoreIcon />
                 </IconButton>

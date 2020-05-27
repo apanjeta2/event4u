@@ -1,18 +1,13 @@
 package com.event4u.notificationservice.service;
 
-import com.event4u.notificationservice.NotificationServiceApplication;
 import com.event4u.notificationservice.exception.EventNotFoundException;
-import com.event4u.notificationservice.grpc.Request;
 import com.event4u.notificationservice.grpc.Event4U;
 import com.event4u.notificationservice.grpc.gRPCClient;
 import com.event4u.notificationservice.model.Events;
-import com.event4u.notificationservice.model.NotificationBody;
 import com.event4u.notificationservice.model.UserBody;
 import com.event4u.notificationservice.repository.EventsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +54,7 @@ public class EventsService {
         return id1;
     }
     public Events getEventById(String token, String key, Long id) {
-        //logActionService.logAction(Long.valueOf("0"), Event4U.Request.ActionType.GET,"Category");
-        System.out.println("Get event prije upisa u n bazu");
-        ns.createLog("Notification service", getUserIdFromToken(token,key), Request.ActionType.GET, "Event");
+        ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.GET, "Event");
         return eventsRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
     }
 
@@ -69,7 +62,7 @@ public class EventsService {
 
         //sender.sendMessage(new NotificationBody(eventId, "name", LocalDate.now()));
 
-        ns.createLog("Notification service", getUserIdFromToken(token,key), Request.ActionType.CREATE, "Event");
+        ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.CREATE, "Event");
         return eventsRepository.save(new Events(eventId));
     }
 
@@ -92,7 +85,7 @@ public class EventsService {
 
         //GRPC poziv system-events
 
-        ns.createLog("Notification service", getUserIdFromToken(token,key), Request.ActionType.DELETE, "Event");
+        ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.DELETE, "Event");
 
         eventsRepository.deleteById(id);
     }
@@ -103,7 +96,7 @@ public class EventsService {
             event.setDate(date);
             //event.setDate(date);
             //
-            ns.createLog("Notification service", getUserIdFromToken(token,key), Request.ActionType.UPDATE, "Event");
+            ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.UPDATE, "Event");
             return eventsRepository.save(event);
         }).orElseThrow();
         return e;
