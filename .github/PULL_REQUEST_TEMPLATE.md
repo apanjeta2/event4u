@@ -5,6 +5,8 @@
 - [ ] Refactoring
 - [ ] Documentation
 
-**What does this pull request bring (short description)?**
+**I've checked these changes on (working purposes):**
+- [ ] Localhost
+- [ ] Docker
 
 **Other information**:
