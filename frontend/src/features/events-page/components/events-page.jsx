@@ -27,7 +27,11 @@ const Container = styled(MaterialContainer)`
 
 const useStyles = makeStyles({
   card: {
-    background: '#dbe5f0',
+    background: '#f2f5f9',
+    height: '300px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   icon: {
     padding: '2px',
@@ -56,23 +60,16 @@ function EventsPage() {
 
   useEffect(() => {
     if (!category) dispatch(handleGetCategory(categoryId));
-  }, [dispatch, category, categoryId]);
+  }, [dispatch, categoryId]);
 
   useEffect(() => {
     if (userLoggedIn) dispatch(handleGetEventsByCategoryLoggedUser(categoryId));
     else dispatch(handleGetEventsByCategory(categoryId));
-  }, [dispatch, userLoggedIn, categoryId]);
-
-  /*useEffect(()=> {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      console.log("Latitude is :", position.coords.latitude);
-      console.log("Longitude is :", position.coords.longitude);
-    });
-  })*/
+  }, [dispatch, categoryId]);
 
   const eventClicked = eventInfo => {
     dispatch(handleEventClicked(eventInfo));
-    history.push('/event-info/' + eventInfo.event.id);
+    history.push(`/event-info/${userLoggedIn ? eventInfo.event.id : eventInfo.id}`);
   };
 
   const interestedClicked = event => {
@@ -124,6 +121,19 @@ function EventsPage() {
     }
   }
 
+  function Description(eventInfo) {
+    let description = '';
+    if (userLoggedIn) {
+      description = eventInfo.event.description;
+    } else {
+      description = eventInfo.description;
+    }
+    if (description.length > 300) {
+      description = description.substr(0, 300) + '...';
+    }
+    return <Typography component="p">{description}</Typography>;
+  }
+
   const eventsItems = events.map(eventInfo => (
     <Grid item xs={12} sm={6} lg={3} key={userLoggedIn ? eventInfo.event.id : eventInfo.id}>
       <Card className={classes.card}>
@@ -132,7 +142,7 @@ function EventsPage() {
             {userLoggedIn ? eventInfo.event.title : eventInfo.title}
           </Typography>
           <Typography color="textSecondary">{getDate(userLoggedIn ? eventInfo.event.date : eventInfo.date)}</Typography>
-          <Typography component="p">{userLoggedIn ? eventInfo.event.description : eventInfo.description}</Typography>
+          {Description(eventInfo)}
         </CardContent>
         <CardActions disableSpacing>
           <Grid container>

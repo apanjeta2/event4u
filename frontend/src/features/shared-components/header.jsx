@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect, useCallback } from 'react';
+import React, { useState, Fragment, useCallback, useEffect } from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -211,6 +211,12 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
     handleNumberOfNonReadNotifications();
   };
 
+  const handleMyEventsClicked = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+    history.push(isMyAccount ? '/' : '/my-events');
+  };
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -223,6 +229,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMyAccountEventsClicked}>{t(isMyAccount ? 'HEADER.EVENTS' : 'HEADER.MY_ACCOUNT')}</MenuItem>
+      <MenuItem onClick={handleMyEventsClicked}>{t('HEADER.MY_EVENTS')}</MenuItem>
       <MenuItem onClick={handleLogoutClicked}>{t('HEADER.LOGOUT')}</MenuItem>
     </Menu>
   );
@@ -262,6 +269,12 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
           {isMyAccount ? <EventIcon /> : <AccountCircle />}
         </IconButton>
         <p>{t(isMyAccount ? 'HEADER.EVENTS' : 'HEADER.MY_ACCOUNT')}</p>
+      </MenuItem>
+      <MenuItem onClick={handleMyEventsClicked}>
+        <IconButton>
+          <EventIcon></EventIcon>
+        </IconButton>
+        <p>{t('HEADER.MY_EVENTS')}</p>
       </MenuItem>
       <MenuItem onClick={handleLogoutClicked}>
         <IconButton aria-label="account of current user" aria-controls="primary-search-account-menu" aria-haspopup="true" color="inherit">

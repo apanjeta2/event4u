@@ -39,7 +39,7 @@ export const login = async (req, res) => {
 
     res.status(200).json(response);
   } catch (e) {
-    console.log('[user-management-service] signUp - ', e.message);
+    console.log('[user-management-service] logIn - ', e.message);
     res.status(400).json({ error: 'Error while trying to login. ' });
   }
 };

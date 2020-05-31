@@ -7,13 +7,11 @@ import com.event4u.eventsservice.model.*;
 import com.event4u.eventsservice.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StopWatch;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Timer;
 
 
 @Service
@@ -58,13 +56,14 @@ public class EventService {
         return eventRepository.count();
     }
 
-    public void deleteById(Long eventId, String token) {
+    public List<Event> deleteById(Long eventId, String token) {
         Optional<Event> e = eventRepository.findById(eventId);
         if (!e.isPresent()) {
             throw new NotFoundException("Event with id " + eventId.toString());
         }
         eventRepository.deleteById(eventId);
         notificationHelperService.deleteEventNotifications(eventId, token);
+        return findByCreator(token);
     }
 
     public void deleteById(Long eventId) {
@@ -144,5 +143,21 @@ public class EventService {
     public EventsServiceApplication.Status getStatus(Long id) {
         Event e = findById(id);
         return e.getCrateEventStatus();
+    }
+
+    public List<Event> findByCreator(String token) {
+        Long idUser = tokenHelperService.getUserIdFromToken(token);
+        List<Event> events = findAll();
+        events.removeIf(e-> (!e.getCreator().getId().equals(idUser)));
+        return events;
+    }
+
+    public Event addTime(Long id, String token, EventTime time) {
+        Long idUser = tokenHelperService.getUserIdFromToken(token);
+        Event e = findById(id);
+        if (e.getCreator().getId()!=idUser) throw new NotAuthorizedException();
+        e.setBeginTime(time.getBeginTime());
+        e.setEndTime(time.getEndTime());
+        return eventRepository.save(e);
     }
 }

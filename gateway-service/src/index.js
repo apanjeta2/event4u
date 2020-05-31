@@ -64,7 +64,6 @@ client.start((error) => {
     proxy(eventsServiceUrl, {
       filter: (req, res) => {
         if (req.path.includes('/events-micro')) {
-          console.log(req.path);
           if (req.path.includes('/locations') && req.method != 'GET') return false;
           if (req.path.includes('/categories') && req.method != 'GET') return false;
           return true;

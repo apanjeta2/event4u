@@ -115,6 +115,8 @@ public class NotificationServiceApplication {
             repository2.save(new Events(Long.valueOf(1)));
             repository2.save(new Events(Long.valueOf(2)));
             repository2.save(new Events(Long.valueOf(3)));
+            repository2.save(new Events(Long.valueOf(7)));
+            repository2.save(new Events(Long.valueOf(8)));
 
             log.info("Events found with findAll():");
             log.info("-------------------------------");

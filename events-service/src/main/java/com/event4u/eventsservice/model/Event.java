@@ -27,6 +27,7 @@ public class Event {
     @NotNull(message = "Event date cannot be null or empty")
     @Column(nullable=false)
     private LocalDate date;
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
     private Boolean isActive;
     //@NotNull(message = "Event must belong to a category")
@@ -41,8 +42,8 @@ public class Event {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private List<EventUser> eu;
     private EventsServiceApplication.Status crateEventStatus;
-    private Time beginTime;
-    private Time endTime;
+    private Long beginTime;
+    private Long endTime;
 
     protected Event() {}
 
@@ -79,7 +80,7 @@ public class Event {
         this.id = id;
     }
 
-    public Event(Long id, String title, String address, LocalDate date, String description, Category category, User creator, Location location,  Boolean isActive, Time beginTime, Time endTime) {
+    public Event(Long id, String title, String address, LocalDate date, String description, Category category, User creator, Location location,  Boolean isActive, Long beginTime, Long endTime) {
         this.title = title;
         this.address = address;
         this.date = date;
@@ -173,19 +174,19 @@ public class Event {
         this.crateEventStatus = crateEventStatus;
     }
 
-    public Time getBeginTime() {
+    public Long getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(Time beginTime) {
+    public void setBeginTime(Long beginTime) {
         this.beginTime = beginTime;
     }
 
-    public Time getEndTime() {
+    public Long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(Long endTime) {
         this.endTime = endTime;
     }
 }

@@ -13,6 +13,13 @@ const getEventsInitialState = () => {
     markAsInterestedInProgress: false,
     getCategoryInProgres: false,
     getEventInProgres: false,
+    myEvents: [],
+    locations: [],
+    getLocationsInProgres: false,
+    addNewEventInProgres: false,
+    deleteEventInProgres: false,
+    selectedDate: new Date(),
+    expended: false,
   };
 };
 
@@ -54,6 +61,26 @@ export const events = (state = getEventsInitialState(), action) => {
       return { ...state, getEventInProgres: action.status };
     case EVENTS_ACTIONS.HANDLE_GET_EVENT_SUCCESS:
       return { ...state, eventInfo: action.data };
+    case EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR_IN_PROGRESS:
+      return { ...state, getEventsInProgres: action.status };
+    case EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR_SUCCESS:
+      return { ...state, myEvents: action.data };
+    case EVENTS_ACTIONS.HANDLE_GET_LOCATIONS_SUCCESS:
+      return { ...state, locations: action.data };
+    case EVENTS_ACTIONS.HANDLE_GET_LOCATIONS_IN_PROGRESS:
+      return { ...state, getLocationsInProgres: action.status };
+    case EVENTS_ACTIONS.HANDLE_ADD_NEW_EVENT_SUCCESS:
+      return { ...state, eventInfo: action.data };
+    case EVENTS_ACTIONS.HANDLE_ADD_NEW_EVENT_IN_PROGRESS:
+      return { ...state, addNewEventInProgres: action.status };
+    case EVENTS_ACTIONS.HANDLE_SET_DATE:
+      return { ...state, selectedDate: action.data };
+    case EVENTS_ACTIONS.HANDLE_DELETE_EVENT_IN_PROGRESS:
+      return { ...state, deleteEventInProgres: action.status };
+    case EVENTS_ACTIONS.HANDLE_DELETE_EVENT_SUCCESS:
+      return { ...state, events: action.data };
+    case EVENTS_ACTIONS.HANDLE_EXPAND_CLICKED:
+      return { ...state, expanded: action.data };
     default:
       return state;
   }

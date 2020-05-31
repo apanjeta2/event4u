@@ -56,6 +56,35 @@ const requestGetEventById = eventId => {
   });
 };
 
+const requestGetEventsByCreator = () => {
+  return axios({
+    method: 'GET',
+    url: `/events-micro/events/my-events`,
+  });
+};
+
+const requestDeleteEvent = eventId => {
+  return axios({
+    method: 'DELETE',
+    url: `/events-micro/events/${eventId}`,
+  });
+};
+
+const requestGetLocations = () => {
+  return axios({
+    method: 'GET',
+    url: `/events-micro/locations`,
+  });
+};
+
+const requestAddNewEvent = data => {
+  return axios({
+    method: 'POST',
+    url: `events-micro/events`,
+    data: data,
+  });
+};
+
 export default {
   requestGetCategories,
   requestGetEventsByCategory,
@@ -65,4 +94,8 @@ export default {
   requestRemoveMark,
   requestGetCategoryById,
   requestGetEventById,
+  requestGetEventsByCreator,
+  requestDeleteEvent,
+  requestGetLocations,
+  requestAddNewEvent,
 };

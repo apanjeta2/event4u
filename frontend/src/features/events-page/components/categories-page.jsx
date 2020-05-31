@@ -22,7 +22,7 @@ const Container = styled(MaterialContainer)`
 
 const useStyles = makeStyles({
   card: {
-    background: '#dbe5f0',
+    background: '#f2f5f9',
   },
 });
 

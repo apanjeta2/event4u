@@ -5,6 +5,8 @@ import CategoriesPage from '../../features/events-page/components/categories-pag
 import EventsPage from '../../features/events-page/components/events-page';
 import EventsInfoPage from '../../features/events-page/components/event-info-page';
 import MyAccountPage from '../../features/auth/components/my-account';
+import MyEventsPage from '../../features/events-page/components/my-events-page';
+import NewEventPage from '../../features/events-page/components/new-event-page';
 
 const routes = [
   {
@@ -35,8 +37,19 @@ const routes = [
     exact: true,
   },
   {
+    path: '/new-event',
+    component: NewEventPage,
+    exact: true,
+  },
+  {
     path: '/my-account',
     component: MyAccountPage,
+    exact: true,
+    requireAuth: true,
+  },
+  {
+    path: '/my-events',
+    component: MyEventsPage,
     exact: true,
     requireAuth: true,
   },

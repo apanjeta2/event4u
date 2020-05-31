@@ -103,3 +103,66 @@ export const handleGetEventSuccess = data => ({
   type: EVENTS_ACTIONS.HANDLE_GET_EVENT_SUCCESS,
   data,
 });
+
+export const handleGetEventsByCreator = () => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR,
+});
+
+export const handleGetEventsByCreatorInProgress = status => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR_IN_PROGRESS,
+  status,
+});
+
+export const handleGetEventsByCreatorSuccess = data => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR_SUCCESS,
+  data,
+});
+
+export const handleDeleteEvent = data => ({
+  type: EVENTS_ACTIONS.HANDLE_DELETE_EVENT,
+  data,
+});
+
+export const handleDeleteEventInProgress = status => ({
+  type: EVENTS_ACTIONS.HANDLE_DELETE_EVENT_IN_PROGRESS,
+  status,
+});
+
+export const handleDeleteEventSuccess = data => ({
+  type: EVENTS_ACTIONS.HANDLE_DELETE_EVENT_SUCCESS,
+  data,
+});
+
+export const handleGetLocations = () => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_LOCATIONS,
+});
+
+export const handleGetLocationsInProgress = status => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_LOCATIONS_IN_PROGRESS,
+  status,
+});
+
+export const handleGetLocationsSuccess = data => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_LOCATIONS_SUCCESS,
+  data,
+});
+
+export const handleAddNewEvent = data => ({
+  type: EVENTS_ACTIONS.HANDLE_ADD_NEW_EVENT,
+  data,
+});
+
+export const handleAddEventInProgress = status => ({
+  type: EVENTS_ACTIONS.HANDLE_ADD_NEW_EVENT_IN_PROGRESS,
+  status,
+});
+
+export const handleAddEventSuccess = data => ({
+  type: EVENTS_ACTIONS.HANDLE_ADD_NEW_EVENT_SUCCESS,
+  data,
+});
+
+export const setSelectedDate = data => ({
+  type: EVENTS_ACTIONS.HANDLE_SET_DATE,
+  data,
+});

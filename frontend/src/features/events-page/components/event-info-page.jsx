@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
-import { handleInterestedClicked, handleGoingToClicked, handleGetEvent } from '../actions/events-page-actions';
+import { handleInterestedClicked, handleGoingToClicked } from '../actions/events-page-actions';
 
 import ApplicationHeader from '../../shared-components/header';
 
@@ -29,9 +29,12 @@ const Container = styled(MaterialContainer)`
 
 const useStyles = makeStyles(theme => ({
   card: {
-    background: '#dbe5f0',
+    background: '#f2f5f9',
     minHeight: '50vh',
     minWidth: '60vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 14,
@@ -52,23 +55,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function EventsPage() {
+function EventsInfoPage() {
   const classes = useStyles();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
-  //const beginTime = useSelector(state => (userLoggedIn ? state.events.event.event.beginTime : state.events.event.beginTime));
-  //const endTime = useSelector(state => (userLoggedIn ? state.events.event.event.endTime : state.events.event.endTime));
-  const eventInfo = useSelector(state => state.events.eventInfo);
   const params = useParams();
   const eventId = params.idEvent;
 
-  useEffect(() => {
-    dispatch(handleGetEvent(eventId));
-  }, [dispatch, eventId]);
+  const eventInfo = useSelector(state => state.events.eventInfo);
 
-  const getDate = () => {
-    const d = new Date(userLoggedIn ? eventInfo.event.date : eventInfo.date);
+  const getDate = date => {
+    const d = new Date(date);
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return days[d.getDay()] + ', ' + d.getDate() + '.' + d.getMonth() + '.' + d.getFullYear() + '.';
   };
@@ -81,9 +79,7 @@ function EventsPage() {
   };
 
   const getTime = () => {
-    //if (beginTime === null) return t('EVENTS.EVENT_TIME_NOT_AVAILABLE');
-    let time = '';
-    return time;
+    return t('EVENTS.TIME_NOT_AVAILABLE');
   };
 
   const interestedClicked = event => {
@@ -138,7 +134,7 @@ function EventsPage() {
             <CardContent>
               <Typography className={(classes.title, classes.icon_label)} color="textSecondary" gutterBottom>
                 <EventIcon />
-                {getDate()}
+                {getDate(userLoggedIn ? eventInfo.event.date : eventInfo.date)}
               </Typography>
               <Typography className={(classes.title, classes.icon_label)} color="textSecondary" gutterBottom>
                 <AccessTimeIcon />
@@ -161,4 +157,4 @@ function EventsPage() {
   );
 }
 
-export default EventsPage;
+export default EventsInfoPage;
