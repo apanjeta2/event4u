@@ -4,11 +4,8 @@ import com.event4u.eventsservice.Sender;
 import com.event4u.eventsservice.model.Event;
 import com.event4u.eventsservice.model.EventNotification;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,9 +46,9 @@ public class NotificationHelperService {
 
     public void updateEventNotifications(Event e, String token) {
         RestTemplate restTemplate = new RestTemplate();
-        String UpdateEventUrl = discoveryService.getNotificationInstance() + "/aggregator/events/" + e.getId();
+        String UpdateEventUrl = discoveryService.getNotificationInstance() + "/events/" + e.getId();
         HttpEntity<EventNotification> req = new HttpEntity<EventNotification>(new EventNotification(e.getId(), e.getTitle(), e.getDate(), token), getHeaders(token));
-        ResponseEntity<String> res = restTemplate.exchange(UpdateEventUrl, HttpMethod.PUT , req, String.class);
+        ResponseEntity<String> res = restTemplate.exchange(UpdateEventUrl, HttpMethod.PUT , req, String.class); //TODO: fix this
     }
 
     public void createGoingToNotificaion(Long idEvent, String token) {

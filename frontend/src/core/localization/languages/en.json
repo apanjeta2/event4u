@@ -77,7 +77,12 @@
   "EVENTS.EVENT_ADDED": "Event successfuly added",
   "EVENTS.TIME_NOT_AVAILABLE": "Time not available",
   "EVENTS.DATE_NOT_AVAILABLE": "Date not available",
-  "EVENTS.EVENT_DELETED": "Event succesfully deleted",
+  "EVENTS.EVENT_DELETED": "Event successfully deleted",
+  "EVENTS.EVENTS_NOT_FOUND": "There are not any events in this category :(",
+  "EVENTS.UPDATE_EVENT": "Save changes",
+  "EVENTS.UPDATE_EVENT_TITILE": "Update event",
+  "EVENTS.EVENT_UPDATED": "Event successfully updated",
+  "EVENTS.ERROR_UPDATE_EVENT": "Error while updating event",
 
   "NOTIFICATION.MESSAGE": "You have successfully added your event ",
   "NOTIFICATION.MESSAGE.REMINDER1": "Reminder for event ",

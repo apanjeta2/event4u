@@ -128,7 +128,7 @@ function EventsPage() {
     } else {
       description = eventInfo.description;
     }
-    if (description.length > 300) {
+    if (description && description.length > 300) {
       description = description.substr(0, 300) + '...';
     }
     return <Typography component="p">{description}</Typography>;
@@ -164,9 +164,13 @@ function EventsPage() {
       <Container component="main">
         <h1>{category}</h1>
         <h2>{t('EVENTS.EVENTS_TITLE')}</h2>
-        <Grid container spacing={3}>
-          {eventsItems}
-        </Grid>
+        {Array.isArray(events) && events.length ? (
+          <Grid container spacing={3}>
+            {eventsItems}
+          </Grid>
+        ) : (
+          <Typography component="p">{t('EVENTS.EVENTS_NOT_FOUND')}</Typography>
+        )}
       </Container>
     </Fragment>
   );

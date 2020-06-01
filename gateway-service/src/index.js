@@ -33,6 +33,7 @@ const client = new Eureka({
     },
     registerWithEureka: true,
     fetchRegistry: true,
+    preferIpAddress: true,
   },
   eureka: {
     host: EUREKA_HOST_BASE_URL,

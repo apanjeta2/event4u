@@ -97,6 +97,15 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    @ExceptionHandler({TokenException.class})
+    public ResponseEntity<Object> handleBadToken(final TokenException ex, final WebRequest request) {
+        logger.info(ex.getClass().getName());
+        logger.error("error", ex);
+        final ApiError apiError = new ApiError(HttpStatus.METHOD_NOT_ALLOWED, ex.getLocalizedMessage(), "error occurred");
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+
+    }
+
     @ExceptionHandler({InvalidParameterException.class})
     public ResponseEntity<Object> InvalidParameterException(final InvalidParameterException ex, final WebRequest request) {
         logger.info(ex.getClass().getName());

@@ -20,6 +20,7 @@ const getEventsInitialState = () => {
     deleteEventInProgres: false,
     selectedDate: new Date(),
     expended: false,
+    updateEventInProgres: false,
   };
 };
 
@@ -73,6 +74,10 @@ export const events = (state = getEventsInitialState(), action) => {
       return { ...state, eventInfo: action.data };
     case EVENTS_ACTIONS.HANDLE_ADD_NEW_EVENT_IN_PROGRESS:
       return { ...state, addNewEventInProgres: action.status };
+    case EVENTS_ACTIONS.HANDLE_UPDATE_EVENT_SUCCESS:
+      return { ...state, eventInfo: action.data };
+    case EVENTS_ACTIONS.HANDLE_UPDATE_EVENT_IN_PROGRESS:
+      return { ...state, updateEventInProgres: action.status };
     case EVENTS_ACTIONS.HANDLE_SET_DATE:
       return { ...state, selectedDate: action.data };
     case EVENTS_ACTIONS.HANDLE_DELETE_EVENT_IN_PROGRESS:

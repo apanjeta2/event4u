@@ -104,7 +104,7 @@ function MyEventsPage() {
 
   return (
     <Fragment>
-      <ApplicationHeader />
+      <ApplicationHeader isMyEvents />
       <Container component="main">
         <h1>{t('EVENTS.MY-EVENTS')}</h1>
         <Button variant="outlined" size="small" color="primary" onClick={() => newEventClicked()}>

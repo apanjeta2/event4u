@@ -78,6 +78,11 @@
   "EVENTS.TIME_NOT_AVAILABLE": "Vrijeme nije poznato",
   "EVENTS.DATE_NOT_AVAILABLE": "Datum nije poznat",
   "EVENTS.EVENT_DELETED": "Događaj uspješno izbrisan",
+  "EVENTS.EVENTS_NOT_FOUND": "Nema događaja u ovoj kategoriji :(",
+  "EVENTS.UPDATE_EVENT": "Sačuvaj izmjene",
+  "EVENTS.UPDATE_EVENT_TITILE": "Ažuriraj događaj",
+  "EVENTS.EVENT_UPDATED": "Događaj uspješno ažuriran",
+  "EVENTS.ERROR_UPDATE_EVENT": "Došlo je do greške pri ažuriranju događaja",
 
   "NOTIFICATION.MESSAGE": " Uspješno ste dodali event ",
   "NOTIFICATION.MESSAGE.REMINDER1": " Podsjetnik za event ",

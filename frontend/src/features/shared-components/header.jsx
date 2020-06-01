@@ -119,7 +119,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
+function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
   const { t } = useTranslation();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -214,7 +214,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
   const handleMyEventsClicked = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    history.push(isMyAccount ? '/' : '/my-events');
+    history.push(isMyEvents ? '/' : '/my-events');
   };
 
   const menuId = 'primary-search-account-menu';
@@ -229,7 +229,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch }) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMyAccountEventsClicked}>{t(isMyAccount ? 'HEADER.EVENTS' : 'HEADER.MY_ACCOUNT')}</MenuItem>
-      <MenuItem onClick={handleMyEventsClicked}>{t('HEADER.MY_EVENTS')}</MenuItem>
+      <MenuItem onClick={handleMyEventsClicked}>{t(isMyEvents ? 'HEADER.EVENTS' : 'HEADER.MY_EVENTS')}</MenuItem>
       <MenuItem onClick={handleLogoutClicked}>{t('HEADER.LOGOUT')}</MenuItem>
     </Menu>
   );

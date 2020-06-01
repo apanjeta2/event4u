@@ -60,8 +60,6 @@ function EventsInfoPage() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
-  const params = useParams();
-  const eventId = params.idEvent;
 
   const eventInfo = useSelector(state => state.events.eventInfo);
 

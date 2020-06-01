@@ -85,6 +85,14 @@ const requestAddNewEvent = data => {
   });
 };
 
+const requestUpdateEvent = (data, eventId) => {
+  return axios({
+    method: 'PUT',
+    url: `events-micro/events/${eventId}`,
+    data: data,
+  });
+};
+
 export default {
   requestGetCategories,
   requestGetEventsByCategory,
@@ -98,4 +106,5 @@ export default {
   requestDeleteEvent,
   requestGetLocations,
   requestAddNewEvent,
+  requestUpdateEvent,
 };

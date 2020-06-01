@@ -21,6 +21,8 @@ import {
   handleGetLocationsInProgress,
   handleAddEventSuccess,
   handleAddEventInProgress,
+  handleUpdateEventInProgress,
+  handleUpdateEventSuccess,
 } from '../actions/events-page-actions';
 
 import { handleShowMessage } from '../../snackbar/actions/snackbar-actions';
@@ -184,6 +186,28 @@ function* addNewEvent({ data }) {
   }
 }
 
+function* updateEvent({ data, eventId }) {
+  const body = {
+    title: data.title,
+    address: data.address,
+    date: data.date.toJSON(),
+    description: data.description,
+    idCategory: data.category,
+    idLocation: data.location,
+    isActive: true,
+  };
+  try {
+    yield put(handleUpdateEventInProgress(true));
+    const res = yield call(EventsApi.requestUpdateEvent, body, eventId);
+    yield put(handleUpdateEventSuccess(res.data));
+    yield put(handleShowMessage('EVENTS.EVENT_UPDATED', SNACKBAR_SEVERITY_VARIANTS.SUCCESS));
+  } catch (err) {
+    yield put(handleShowMessage('EVENTS.ERROR_UPDATE_EVENT', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+  } finally {
+    yield put(handleUpdateEventInProgress(false));
+  }
+}
+
 export default function* saga() {
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_CATEGORIES, getCategories);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CATEGORY, getEventsByCategory);
@@ -196,4 +220,5 @@ export default function* saga() {
   yield takeLatest(EVENTS_ACTIONS.HANDLE_DELETE_EVENT, deleteEventById);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_LOCATIONS, getLocations);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_ADD_NEW_EVENT, addNewEvent);
+  yield takeLatest(EVENTS_ACTIONS.HANDLE_UPDATE_EVENT, updateEvent);
 }

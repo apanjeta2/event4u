@@ -162,6 +162,22 @@ export const handleAddEventSuccess = data => ({
   data,
 });
 
+export const handleUpdateEvent = (data, eventId) => ({
+  type: EVENTS_ACTIONS.HANDLE_UPDATE_EVENT,
+  data,
+  eventId,
+});
+
+export const handleUpdateEventInProgress = status => ({
+  type: EVENTS_ACTIONS.HANDLE_UPDATE_EVENT_IN_PROGRESS,
+  status,
+});
+
+export const handleUpdateEventSuccess = data => ({
+  type: EVENTS_ACTIONS.HANDLE_UPDATE_EVENT_SUCCESS,
+  data,
+});
+
 export const setSelectedDate = data => ({
   type: EVENTS_ACTIONS.HANDLE_SET_DATE,
   data,

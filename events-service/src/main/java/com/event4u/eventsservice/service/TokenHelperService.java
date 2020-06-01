@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.DatatypeConverter;
+import com.event4u.eventsservice.exceptionHandling.TokenException;
 
 @Service
 public class TokenHelperService {
@@ -16,12 +17,18 @@ public class TokenHelperService {
     private String key;
 
     public Token getTokenFromString(String token) {
-        token=token.replace("Bearer ","");
-        String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
-        byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
-        Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token).getBody();
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.convertValue(claim, Token.class);
+        try {
+            token=token.replace("Bearer ","");
+            String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
+            byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
+            Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token).getBody();
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.convertValue(claim, Token.class);
+        }
+        catch(Exception e) {
+            throw new TokenException();
+        }
+
     }
 
     public Long getUserIdFromToken(String token) {

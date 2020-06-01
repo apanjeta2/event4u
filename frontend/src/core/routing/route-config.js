@@ -7,6 +7,7 @@ import EventsInfoPage from '../../features/events-page/components/event-info-pag
 import MyAccountPage from '../../features/auth/components/my-account';
 import MyEventsPage from '../../features/events-page/components/my-events-page';
 import NewEventPage from '../../features/events-page/components/new-event-page';
+import EditEventPage from '../../features/events-page/components/edit-event-page';
 
 const routes = [
   {
@@ -50,6 +51,12 @@ const routes = [
   {
     path: '/my-events',
     component: MyEventsPage,
+    exact: true,
+    requireAuth: true,
+  },
+  {
+    path: '/edit-event/:idEvent',
+    component: EditEventPage,
     exact: true,
     requireAuth: true,
   },

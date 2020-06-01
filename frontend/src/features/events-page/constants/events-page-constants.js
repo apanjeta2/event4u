@@ -32,5 +32,8 @@ export const EVENTS_ACTIONS = {
   HANDLE_ADD_NEW_EVENT: 'eventsAddNewEvent',
   HANDLE_ADD_NEW_EVENT_IN_PROGRESS: 'eventsAddNewEventInProgress',
   HANDLE_ADD_NEW_EVENT_SUCCESS: 'eventsAddNewEventSuccess',
+  HANDLE_UPDATE_EVENT: 'eventsUpdateEvent',
+  HANDLE_UPDATE_EVENT_IN_PROGRESS: 'eventsUpdateEventInProgress',
+  HANDLE_UPDATE_EVENT_SUCCESS: 'eventsUpdateEventSuccess',
   HANDLE_SET_DATE: 'eventsSetDate',
 };
