@@ -21,7 +21,7 @@ Event4u is a web application that allows users to find the perfect event for the
 ### Running with docker
 
 - To run with docker, you must have docker installed and started
-- If running on `windows` please change all `.sh` files in the repository and change the `EOL` format from `CRLF` to `LF` !
+- If running on `windows` please change all `.sh` files so that the `EOL` format is `LF` and not `CRLF`, otherwise the services won't start !
 - Finally run:
 
 ```shell script
