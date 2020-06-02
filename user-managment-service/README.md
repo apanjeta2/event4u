@@ -15,11 +15,9 @@
 
 - You must setup your MYSQL database and remember the connection parameters
 
-### Running the service
+### Setting up the environment
 
-- You must have node (`>= 10` version) as well as npm installed (`>= 6` version) in case of running `locally`
-- All other services must be started (in case of running `locally`)
-- In order to run `user-management-service` locally you must define these env variables in an .env file (in the root service path):
+- In order to run `user-management-service` you must define these env variables in an `.env` file (in the root service path):
 
 ```
 DB_USERNAME=your_db_username
@@ -39,6 +37,10 @@ FIREBASE_DATABASE_URL=your_firebase_url
 FIREBASE_STORAGE_URL=https://storage.googleapis.com
 ```
 
+### Running the service (`locally`)
+
+- You must have node (`>= 10` version) as well as npm installed (`>= 6` version)
+- All other services must be started
 - In case of running locally run:
 
 ```shell script
