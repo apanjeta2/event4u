@@ -104,6 +104,21 @@ export const handleGetEventSuccess = data => ({
   data,
 });
 
+export const handleGetCreator = data => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_CREATOR,
+  data,
+});
+
+export const handleGetCreatorInProgress = status => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_CREATOR_IN_PROGRESS,
+  status,
+});
+
+export const handleGetCreatorSuccess = data => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_CREATOR_SUCCESS,
+  data,
+});
+
 export const handleGetEventsByCreator = () => ({
   type: EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR,
 });

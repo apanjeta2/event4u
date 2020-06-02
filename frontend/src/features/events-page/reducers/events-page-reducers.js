@@ -13,6 +13,8 @@ const getEventsInitialState = () => {
     markAsInterestedInProgress: false,
     getCategoryInProgres: false,
     getEventInProgres: false,
+    getCreatorInProgres: false,
+    creatorOfEvent: null,
     myEvents: [],
     locations: [],
     getLocationsInProgres: false,
@@ -62,6 +64,10 @@ export const events = (state = getEventsInitialState(), action) => {
       return { ...state, getEventInProgres: action.status };
     case EVENTS_ACTIONS.HANDLE_GET_EVENT_SUCCESS:
       return { ...state, eventInfo: action.data };
+    case EVENTS_ACTIONS.HANDLE_GET_CREATOR_IN_PROGRESS:
+      return { ...state, getCreatorInProgres: action.status };
+    case EVENTS_ACTIONS.HANDLE_GET_CREATOR_SUCCESS:
+      return { ...state, creatorOfEvent: action.data };
     case EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR_IN_PROGRESS:
       return { ...state, getEventsInProgres: action.status };
     case EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR_SUCCESS:

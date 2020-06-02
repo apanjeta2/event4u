@@ -49,12 +49,14 @@ public class Receiver {
 
             eventsService.createEventNew(eventID, name, localDate1);
             Notification n = notificationService.createNotificationNew(token, new NotificationBody(eventID, name, localDate1), key, 1);
-
             MessageAMQPResponse mes=new MessageAMQPResponse(eventID, "OK", "EVENTS-SERVICE");
             String jsonString=new ObjectMapper().writeValueAsString(mes);
+
             sender.sendMessage(jsonString);
         }
         catch (Exception ex) {
+
+            System.out.println(ex);
             MessageAMQPResponse mes=new MessageAMQPResponse(eventID, "ERROR", "EVENTS-SERVICE");
             String jsonString=new ObjectMapper().writeValueAsString(mes);
             sender.sendMessage(jsonString);

@@ -49,6 +49,12 @@ const routes = [
     requireAuth: true,
   },
   {
+    path: '/profile/:username',
+    component: MyAccountPage,
+    exact: true,
+    requireAuth: true,
+  },
+  {
     path: '/my-events',
     component: MyEventsPage,
     exact: true,

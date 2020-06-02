@@ -30,9 +30,17 @@ const requestDeleteProfile = () => {
   });
 };
 
+const requestUserProfileById = categoryId => {
+  return axios({
+    method: 'GET',
+    url: `/getSpecificUserById/${categoryId}`,
+  });
+};
+
 export default {
   requestUserProfile,
   requestUpdateProfile,
   requestImageUpload,
   requestDeleteProfile,
+  requestUserProfileById,
 };

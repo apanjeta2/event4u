@@ -52,6 +52,7 @@
   "EVENTS.ERROR_GET_EVENTS": "Error while loading events",
   "EVENTS.ERROR_GET_CATEGORIES": "Error while loading categories",
   "EVENTS.ERROR_MARK_EVENT": "Error while marking event",
+  "EVENTS.CREATOR": "Organized by ",
   "EVENTS.MY-EVENTS": "My events",
   "EVENTS.CREATE-EVENT": "Create new event",
   "EVENTS.MY-EVENTS-ACTIONS": "Update/delete events",
@@ -88,5 +89,6 @@
   "NOTIFICATION.MESSAGE.REMINDER1": "Reminder for event ",
   "NOTIFICATION.MESSAGE.REMINDER2": " on ",
   "NOTIFICATION.NEWEVENT": "New event",
-  "NOTIFICATION.NEWEVENT.REMINDER": "Reminder for event"
+  "NOTIFICATION.NEWEVENT.REMINDER": "Reminder for event",
+  "NOTIFICATIONS.ERROR_GET_NOTIFICATIONS": "Error while loading notifications"
 }

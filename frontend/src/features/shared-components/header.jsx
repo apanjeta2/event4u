@@ -23,10 +23,11 @@ import propTypes from 'prop-types';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { handleLogout } from '../auth/actions/auth-actions';
-import { handleGetNotifications, handlePutNotificationsById } from '../notifications/actions/notifications-actions';
 import { timeToWords } from '../../core/helpers/time-helper';
 import SockJsClient from 'react-stomp';
+
+import { handleLogout } from '../auth/actions/auth-actions';
+import { handleGetNotifications, handlePutNotificationsById } from '../notifications/actions/notifications-actions';
 
 import { BACKEND_API } from '../../config/constants';
 
@@ -147,12 +148,12 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
   }, [notifications]);
 
   useEffect(() => {
-    if (!loadedNotifications) {
+    if (!loadedNotifications && userLoggedIn) {
       dispatch(handleGetNotifications());
       setLoadedNotifications(true);
     }
     handleNumberOfNonReadNotifications();
-  }, [dispatch, handleNumberOfNonReadNotifications, loadedNotifications]);
+  }, [dispatch, handleNumberOfNonReadNotifications, loadedNotifications, userLoggedIn]);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -207,7 +208,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
   };
 
   const handleNotificationClicked = notification => {
-    dispatch(handlePutNotificationsById(notification));
+    dispatch(handlePutNotificationsById(notification.notificationId));
     handleNumberOfNonReadNotifications();
   };
 
@@ -304,12 +305,13 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
       open={isNotificationsOpen}
       onClose={handleNewNotificationsClose}
     >
-      {notifications.reverse().map(notification => (
+      {notifications.map(notification => (
         <MenuItem
+          component="div"
           className={classes.menuItem}
           key={notification.notificationId}
           value={notification.notificationId}
-          onClick={() => handleNotificationClicked(notification.notificationId)}
+          onClick={() => handleNotificationClicked(notification)}
           style={notification.isRead ? { backgroundColor: 'white' } : { backgroundColor: '#eceef4' }}
         >
           {notification.type === 1 ? (
@@ -321,10 +323,10 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
                     {t('NOTIFICATION.MESSAGE') + JSON.parse(notification.message).event + t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).date}
                     <br></br>
                     <Typography variant="caption">
-                      <div className={classes.sectionOfTime}>
+                      <Typography component={'span'} className={classes.sectionOfTime}>
                         <NewReleasesIcon color="primary" fontSize="small" />
                         {timeToWords(notification.dateOfCreating)}
-                      </div>
+                      </Typography>
                     </Typography>
                   </React.Fragment>
                 }
@@ -339,10 +341,10 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
                     {t('NOTIFICATION.MESSAGE.REMINDER1') + JSON.parse(notification.message).event + t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).date}
                     <br></br>
                     <Typography variant="caption">
-                      <div className={classes.sectionOfTime}>
+                      <Typography component={'span'} className={classes.sectionOfTime}>
                         <EventIcon color="primary" fontSize="small" />
                         {timeToWords(notification.dateOfCreating)}
-                      </div>
+                      </Typography>
                     </Typography>
                   </React.Fragment>
                 }
@@ -358,7 +360,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
     <div className={classes.root}>
       <AppBar position="static">
         <SockJsClient
-          url={BACKEND_API + '/ws'}
+          url={BACKEND_API + '/ws/'}
           topics={['/topic/notification']}
           onMessage={msg => {
             dispatch(handleGetNotifications());

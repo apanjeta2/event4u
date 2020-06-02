@@ -54,7 +54,7 @@ public class EventsService {
         return id1;
     }
     public Events getEventById(String token, String key, Long id) {
-        ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.GET, "Event");
+        //ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.GET, "Event");
         return eventsRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
     }
 
@@ -62,7 +62,7 @@ public class EventsService {
 
         //sender.sendMessage(new NotificationBody(eventId, "name", LocalDate.now()));
 
-        ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.CREATE, "Event");
+        //ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.CREATE, "Event");
         return eventsRepository.save(new Events(eventId));
     }
 
@@ -96,7 +96,7 @@ public class EventsService {
             event.setDate(date);
             //event.setDate(date);
             //
-            ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.UPDATE, "Event");
+            //ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.UPDATE, "Event");
             return eventsRepository.save(event);
         }).orElseThrow();
         return e;

@@ -52,6 +52,7 @@
   "EVENTS.ERROR_GET_EVENTS": "Greška pri učitavanju događaja",
   "EVENTS.ERROR_GET_CATEGORIES": "Greška pri učitavanju kategorija",
   "EVENTS.ERROR_MARK_EVENT": "Greška pri označavanju događaja",
+  "EVENTS.CREATOR": "Organizator ",
   "EVENTS.MY-EVENTS": "Moji događaji",
   "EVENTS.CREATE-EVENT": "Kreiraj novi događaj",
   "EVENTS.MY-EVENTS-ACTIONS": "Izmjena/brisanje događaja",
@@ -88,5 +89,6 @@
   "NOTIFICATION.MESSAGE.REMINDER1": " Podsjetnik za event ",
   "NOTIFICATION.MESSAGE.REMINDER2": " na datum ",
   "NOTIFICATION.NEWEVENT": "Novi događaj",
-  "NOTIFICATION.NEWEVENT.REMINDER": "Podsjetnik za događaj"
+  "NOTIFICATION.NEWEVENT.REMINDER": "Podsjetnik za događaj",
+  "NOTIFICATIONS.ERROR_GET_NOTIFICATIONS": "Greška pri učitavanju notifikacija"
 }

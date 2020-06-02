@@ -29,7 +29,6 @@ public class NotificationStompController {
     @MessageMapping("/hello")
     @SendTo("/topic/notification")
     public ArrayList<Notification> send(String token) throws Exception {
-        Thread.sleep(1000); // simulated delay
         User user = userService.getUserById(token ,key,notificationService.getUserIdFromToken(token, key));
         return (ArrayList<Notification>) notificationRepository.findByUser(user);
     }

@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import MaterialContainer from '@material-ui/core/Container';
@@ -18,10 +18,16 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Link from '@material-ui/core/Link';
 
-import { handleInterestedClicked, handleGoingToClicked } from '../actions/events-page-actions';
+import { handleInterestedClicked, handleGoingToClicked, handleGetEvent } from '../actions/events-page-actions';
 
 import ApplicationHeader from '../../shared-components/header';
+
+import { handleGetUser } from '../../auth/actions/auth-actions';
+
+import { handleGetCreator } from '../actions/events-page-actions';
 
 const Container = styled(MaterialContainer)`
   background-color: #fff;
@@ -53,6 +59,13 @@ const useStyles = makeStyles(theme => ({
   grid: {
     minHeight: '90vh',
   },
+  creator: {
+    paddingRight: '10px',
+    align: 'center',
+    position: 'absolute',
+    display: 'block',
+    paddingTop: '70px',
+  },
 }));
 
 function EventsInfoPage() {
@@ -60,8 +73,20 @@ function EventsInfoPage() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
-
   const eventInfo = useSelector(state => state.events.eventInfo);
+  const creatorId = useSelector(state => state.events.eventInfo.event.creator.id);
+  const params = useParams();
+  const eventId = params.idEvent;
+
+  const token = useSelector(state => state.auth.token);
+  const userProfile = useSelector(state => state.auth.profile);
+  const history = useHistory();
+
+  useEffect(() => {
+    dispatch(handleGetEvent(eventId));
+    dispatch(handleGetUser(token));
+    dispatch(handleGetCreator(creatorId));
+  }, [dispatch, eventId, token, creatorId]);
 
   const getDate = date => {
     const d = new Date(date);
@@ -86,6 +111,10 @@ function EventsInfoPage() {
 
   const goingToClicked = event => {
     dispatch(handleGoingToClicked(event));
+  };
+
+  const openProfile = username => {
+    history.push(`/my-account`);
   };
 
   function InterestedIcon(event) {
@@ -117,6 +146,15 @@ function EventsInfoPage() {
               {GoingIcon(event)}
             </IconButton>
             {t('EVENTS.EVENTS_GOING_BUTTON')}
+          </Typography>
+          <Typography color="textSecondary" className={classes.creator}>
+            <IconButton aria-label="creator" className={classes.icon}>
+              <AccountCircleIcon></AccountCircleIcon>
+            </IconButton>
+            {t('EVENTS.CREATOR')}
+            <Link href="#" onClick={() => openProfile(userProfile.username)}>
+              {userProfile.username}
+            </Link>
           </Typography>
         </CardActions>
       );

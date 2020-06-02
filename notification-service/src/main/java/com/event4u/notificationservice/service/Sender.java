@@ -18,6 +18,10 @@ public class Sender {
         rabbitTemplate.convertAndSend("notifications-events", res);
     }
 
+    public void sendMessageFrontend(String res) throws JsonProcessingException {
+        rabbitTemplate.convertAndSend("notifications-frontend", res);
+    }
+
 
 }
 

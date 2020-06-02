@@ -7,6 +7,7 @@ import com.event4u.notificationservice.service.EventsService;
 import com.event4u.notificationservice.service.NotificationService;
 import com.event4u.notificationservice.service.UserService;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import net.minidev.json.JSONObject;
@@ -128,7 +129,7 @@ public class NotificationController {
 
     //Kreiranje nove notifikacije sa body
     @PostMapping(path="/postNotification", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Object postNewNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody not) throws ExecutionException, InterruptedException {
+    public Object postNewNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody not) throws ExecutionException, InterruptedException, JsonProcessingException {
        return notificationService.createNotificationNew(token, not, key,2);
     }
 
@@ -167,7 +168,7 @@ public class NotificationController {
     }
 
     @PostMapping(path ="/createGoingTo/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public NotificationBody createGoingNotification(@RequestHeader("Authorization") String token, @PathVariable Long id) throws ExecutionException, InterruptedException {
+    public NotificationBody createGoingNotification(@RequestHeader("Authorization") String token, @PathVariable Long id) throws ExecutionException, InterruptedException, JsonProcessingException {
         Events e = eventService.getEventById(token, key, id);
         NotificationBody not= new NotificationBody(id, e.getName(), e.getDate());
         Notification n = notificationService.createNotificationNew(token, not, key, 2);

@@ -4,11 +4,6 @@ while ! nc -z eureka-service 8761 ; do
     sleep 3
 done
 
-while ! nc -z notification-service 8088 ; do
-    echo "[gateway-service] Waiting 4 notification-service"
-    sleep 3
-done
-
 while ! nc -z events-service 8081 ; do
     echo "[gateway-service] Waiting 4 events-service"
     sleep 3
@@ -19,6 +14,10 @@ while ! nc -z user-management-service 4000 ; do
     sleep 3
 done
 
+while ! nc -z notification-service 8088 ; do
+    echo "[gateway-service] Waiting 4 notification-service"
+    sleep 3
+done
 # sleep 20 seconds for connections to happen
 echo "[gateway-service] Waiting 20 seconds for all eureka connections, before starting."
 sleep 20

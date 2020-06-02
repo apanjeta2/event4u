@@ -5,10 +5,14 @@ import com.event4u.notificationservice.controller.MyStompSessionHandler;
 import com.event4u.notificationservice.exception.NotificationNotFoundException;
 import com.event4u.notificationservice.model.*;
 import com.event4u.notificationservice.repository.NotificationRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -16,6 +20,8 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -44,6 +50,10 @@ public class NotificationService {
     private EventsService eventsService;
     @Autowired
     private ServiceInstanceRestController serviceInstanceRestController;
+
+    @Autowired
+    private Sender sender;
+
 
     public void validateToken(String token, String key) {
 
@@ -78,9 +88,15 @@ public class NotificationService {
         SockJsClient sockJsClient = new SockJsClient(transports);
         WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-        String url = "ws://localhost:8088/ws";
+
+        List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("notification-service");
+
+        String url1 = listOfUrls.get(0);
+        String url = url1+"/ws";
+
         StompSessionHandler sessionHandler = new MyStompSessionHandler();
         StompSession session = stompClient.connect(url, sessionHandler).get();
+
         session.subscribe("topic", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -151,13 +167,15 @@ public class NotificationService {
     public Notification createNotification(String token, String key, Long userId, Long eventId, String message, LocalDate date, boolean isRead, int type) throws ExecutionException, InterruptedException {
 
         sendToSubscribers(token);
+
         User user = userService.getUserById(token, key,userId);
         Events event = eventsService.getEventById(token, key, eventId);
         return notificationRepository.save(new Notification(user,event,message,date,isRead, type));
     }
 
-    public Notification createNotificationNew(String token, NotificationBody not, String key, int type) throws ExecutionException, InterruptedException {
+    public Notification createNotificationNew(String token, NotificationBody not, String key, int type) throws ExecutionException, InterruptedException, JsonProcessingException {
         //parse token
+
         sendToSubscribers(token);
         token=token.replace("Bearer ","");
         String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());

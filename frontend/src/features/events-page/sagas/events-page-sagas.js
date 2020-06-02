@@ -13,6 +13,8 @@ import {
   handleGetCategorySuccess,
   handleGetEventInProgress,
   handleGetEventSuccess,
+  handleGetCreatorInProgress,
+  handleGetCreatorSuccess,
   handleGetEventsByCreatorInProgress,
   handleGetEventsByCreatorSuccess,
   handleDeleteEventInProgress,
@@ -28,6 +30,8 @@ import {
 import { handleShowMessage } from '../../snackbar/actions/snackbar-actions';
 
 import EventsApi from '../../../api/events-api';
+
+import UserApi from '../../../api/user-api';
 
 import { SNACKBAR_SEVERITY_VARIANTS } from '../../snackbar/constants/snackbar-constants';
 import { EVENTS_ACTIONS } from '../constants/events-page-constants';
@@ -126,6 +130,18 @@ function* getEventById({ data }) {
   }
 }
 
+function* getCreator({ data }) {
+  try {
+    yield put(handleGetCreatorInProgress(true));
+    const res = yield call(UserApi.requestUserProfileById, data);
+    yield put(handleGetCreatorSuccess(res.data));
+  } catch (err) {
+    yield put(handleShowMessage('EVENTS.ERROR_GET_EVENTS', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+  } finally {
+    yield put(handleGetCreatorInProgress(false));
+  }
+}
+
 function* getEventsByCreator() {
   try {
     yield put(handleGetEventsByCreatorInProgress(true));
@@ -174,6 +190,7 @@ function* addNewEvent({ data }) {
     idLocation: data.location,
     isActive: true,
   };
+
   try {
     yield put(handleAddEventInProgress(true));
     const res = yield call(EventsApi.requestAddNewEvent, body);
@@ -216,6 +233,7 @@ export default function* saga() {
   yield takeLatest(EVENTS_ACTIONS.HANDLE_EVENT_MARKED_AS_GOING_TO, markEventAsGoing);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_CATEGORY, getCategoryById);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_EVENT, getEventById);
+  yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_CREATOR, getCreator);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR, getEventsByCreator);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_DELETE_EVENT, deleteEventById);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_LOCATIONS, getLocations);

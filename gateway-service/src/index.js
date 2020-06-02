@@ -10,6 +10,8 @@ import serviceHelper from './lib/helpers/services-helper';
 
 import { PORT, FRONTEND_URL, FULL_BASE_URL, EUREKA_HOST_BASE_URL, BACKEND_HOST_BASE_URL, SERVICES } from './config/constants';
 
+import userRoutes from './lib/middlewares/get-user';
+
 dotenv.config();
 
 const app = express();
@@ -39,6 +41,7 @@ const client = new Eureka({
     host: EUREKA_HOST_BASE_URL,
     port: 8761,
     servicePath: '/eureka/apps/',
+    preferIpAddress: true,
   },
 });
 
@@ -49,6 +52,7 @@ client.start((error) => {
     cors({
       origin: FRONTEND_URL,
       optionsSuccessStatus: 200,
+      credentials: true,
     })
   );
 
@@ -80,10 +84,8 @@ client.start((error) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
-
-  // new endpoints
+  app.use('/aggregator', userRoutes);
 });
-
 app.listen(PORT, () => console.log(`[gateway-service] Listening on port ${PORT}!`));
 
 export default client;

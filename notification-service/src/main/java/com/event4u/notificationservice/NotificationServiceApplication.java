@@ -38,7 +38,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class NotificationServiceApplication {
 
-    static final String queueName = "notifications-events";
 
     private static final Logger log = 
             LoggerFactory.getLogger(NotificationServiceApplication.class);
@@ -51,11 +50,15 @@ public class NotificationServiceApplication {
 
     @Bean
     Queue queue() {
-        return new Queue(queueName, false);
+        return new Queue("notifications-events", false);
     }
     @Bean
     Queue queue2() {
         return new Queue("events-notifications", false);
+    }
+    @Bean
+    Queue queue3() {
+        return new Queue("notifications-frontend", false);
     }
 
     @Bean
