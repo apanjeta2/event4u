@@ -16,7 +16,7 @@ Event4u is a web application that allows users to find the perfect event for the
 
 - You can run the services either `locally` or with `docker`
 - Based on your running choice, you need to change the `.env` files accordingly to the services
-- All services have a `README.md` in their root path with an explanation regarding for `.env` file 
+- All services have a `README.md` in their root path with an explanation on how to set up the `.env` file 
 
 ### Running with docker
 
