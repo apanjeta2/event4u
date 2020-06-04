@@ -129,7 +129,7 @@ public class NotificationController {
 
     //Kreiranje nove notifikacije sa body
     @PostMapping(path="/postNotification", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Object postNewNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody not) throws ExecutionException, InterruptedException, JsonProcessingException {
+    public Object postNewNotification(@RequestHeader("Authorization") String token, @RequestBody NotificationBody not) throws ExecutionException, InterruptedException, JsonProcessingException, org.apache.tomcat.util.json.ParseException {
        return notificationService.createNotificationNew(token, not, key,2);
     }
 
@@ -168,7 +168,7 @@ public class NotificationController {
     }
 
     @PostMapping(path ="/createGoingTo/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public NotificationBody createGoingNotification(@RequestHeader("Authorization") String token, @PathVariable Long id) throws ExecutionException, InterruptedException, JsonProcessingException {
+    public NotificationBody createGoingNotification(@RequestHeader("Authorization") String token, @PathVariable Long id) throws ExecutionException, InterruptedException, JsonProcessingException, org.apache.tomcat.util.json.ParseException {
         Events e = eventService.getEventById(token, key, id);
         NotificationBody not= new NotificationBody(id, e.getName(), e.getDate());
         Notification n = notificationService.createNotificationNew(token, not, key, 2);

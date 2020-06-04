@@ -23,9 +23,8 @@ public class LogActionService {
             String p = "dns://";
             if (System.getProperty("os.name").toLowerCase().contains("windows")) p += "/";
             if ((url != null) && (url.length() > 0)) {
-                url = p  + url.substring(7, url.length() - 5) + "6565";
+                url = p  + url.substring(7, url.length() - 5) + ":6565";
             }
-            //System.out.println(url);
 
             ManagedChannel channel = ManagedChannelBuilder.forTarget(url)
                     .usePlaintext()
@@ -39,7 +38,6 @@ public class LogActionService {
                     .setActionType(actionType)
                     .setResourceName(resName)
                     .build());
-            //System.out.println(response.getResponseMessage());
             channel.shutdown();
         }
         catch (StatusRuntimeException e) {

@@ -85,8 +85,8 @@ public class UserService {
     public void addSubscriber(String token, String key, Long id1, Long id2) {
 
 
-        if (!isThere(id1)) createUser(token, key,id1);
-        if (!isThere(id2)) createUser(token, key,id2);
+        //if (!isThere(id1)) createUser(token, key,id1);
+        //if (!isThere(id2)) createUser(token, key,id2);
 
         User koSeSubscriba = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
         User naKogaSeSubscriba = userRepository.findById(id2).orElseThrow(() -> new UserNotFoundException(id2));
@@ -104,13 +104,14 @@ public class UserService {
 
     public Set<Long> getSubscribers(String token, String key, Long id1) {
 
-        if (!isThere(id1)) createUser(token, key,id1);
+        //if (!isThere(id1)) createUser(token, key,id1);
 
         User user1 = userRepository.findById(id1).orElseThrow(() -> new UserNotFoundException(id1));
 
         Set<Long> odg = new HashSet<>();
         try {
             Set<User> lista = user1.getSubscriber();
+
             lista.forEach(e -> {
                 odg.add(e.getUserId());
             });

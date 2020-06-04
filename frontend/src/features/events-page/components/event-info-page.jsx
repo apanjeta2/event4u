@@ -21,7 +21,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Link from '@material-ui/core/Link';
 
-import { handleInterestedClicked, handleGoingToClicked, handleGetEvent } from '../actions/events-page-actions';
+import { handleInterestedClicked, handleGoingToClicked, handleGetEvent, handleGetEventLoggedUser } from '../actions/events-page-actions';
 
 import ApplicationHeader from '../../shared-components/header';
 
@@ -74,19 +74,25 @@ function EventsInfoPage() {
   const dispatch = useDispatch();
   const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
   const eventInfo = useSelector(state => state.events.eventInfo);
-  const creatorId = useSelector(state => state.events.eventInfo.event.creator.id);
+  const creatorId = useSelector(state => (eventInfo != null ? (userLoggedIn ? eventInfo.event.creator.id : eventInfo.creator.id) : null));
   const params = useParams();
   const eventId = params.idEvent;
 
   const token = useSelector(state => state.auth.token);
-  const userProfile = useSelector(state => state.auth.profile);
+  const creatorOfEvent = useSelector(state => state.events.creatorOfEvent);
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(handleGetEvent(eventId));
-    dispatch(handleGetUser(token));
-    dispatch(handleGetCreator(creatorId));
-  }, [dispatch, eventId, token, creatorId]);
+    if (userLoggedIn) dispatch(handleGetEventLoggedUser(eventId));
+    else dispatch(handleGetEvent(eventId));
+  }, [dispatch, eventId, userLoggedIn]);
+
+  useEffect(() => {
+    if (userLoggedIn) {
+      dispatch(handleGetUser(token));
+      dispatch(handleGetCreator(creatorId));
+    }
+  }, [dispatch, token, creatorId, userLoggedIn]);
 
   const getDate = date => {
     const d = new Date(date);
@@ -95,6 +101,7 @@ function EventsInfoPage() {
   };
 
   const getLocation = () => {
+    if (!eventInfo) return;
     if (userLoggedIn === true) {
       return eventInfo.event.location.city + ', ' + eventInfo.event.address;
     }
@@ -113,8 +120,8 @@ function EventsInfoPage() {
     dispatch(handleGoingToClicked(event));
   };
 
-  const openProfile = username => {
-    history.push(`/my-account`);
+  const openProfile = id => {
+    history.push(`/profile/` + id);
   };
 
   function InterestedIcon(event) {
@@ -129,6 +136,22 @@ function EventsInfoPage() {
       return <CheckCircleIcon />;
     }
     return <CheckCircleOutlineIcon />;
+  }
+
+  function Creator(eventInfo) {
+    if (userLoggedIn) {
+      return (
+        <Typography color="textSecondary" className={classes.creator}>
+          <IconButton aria-label="creator" className={classes.icon}>
+            <AccountCircleIcon></AccountCircleIcon>
+          </IconButton>
+          {t('EVENTS.CREATOR')}
+          <Link href="#" onClick={() => openProfile(creatorId)}>
+            {creatorOfEvent ? creatorOfEvent.username : creatorId}
+          </Link>
+        </Typography>
+      );
+    }
   }
 
   function ActionsForLoggedUsers(event) {
@@ -147,15 +170,6 @@ function EventsInfoPage() {
             </IconButton>
             {t('EVENTS.EVENTS_GOING_BUTTON')}
           </Typography>
-          <Typography color="textSecondary" className={classes.creator}>
-            <IconButton aria-label="creator" className={classes.icon}>
-              <AccountCircleIcon></AccountCircleIcon>
-            </IconButton>
-            {t('EVENTS.CREATOR')}
-            <Link href="#" onClick={() => openProfile(userProfile.username)}>
-              {userProfile.username}
-            </Link>
-          </Typography>
         </CardActions>
       );
     }
@@ -165,12 +179,12 @@ function EventsInfoPage() {
     <Fragment>
       <ApplicationHeader />
       <Container component="main">
-        <Grid container spacing={0} direction="column" alignItems="center" justify="center" key={userLoggedIn ? eventInfo.event.id : eventInfo.id} className={classes.grid}>
+        <Grid container spacing={0} direction="column" alignItems="center" justify="center" key={eventInfo ? (userLoggedIn ? eventInfo.event.id : eventInfo.id) : null} className={classes.grid}>
           <Card className={classes.card}>
             <CardContent>
               <Typography className={(classes.title, classes.icon_label)} color="textSecondary" gutterBottom>
                 <EventIcon />
-                {getDate(userLoggedIn ? eventInfo.event.date : eventInfo.date)}
+                {getDate(eventInfo ? (userLoggedIn ? eventInfo.event.date : eventInfo.date) : null)}
               </Typography>
               <Typography className={(classes.title, classes.icon_label)} color="textSecondary" gutterBottom>
                 <AccessTimeIcon />
@@ -180,12 +194,13 @@ function EventsInfoPage() {
                 <LocationOnIcon />
                 {getLocation()}
               </Typography>
+              {eventInfo ? Creator(eventInfo) : ''}
               <Typography variant="h5" component="h2">
-                {userLoggedIn ? eventInfo.event.title : eventInfo.title}
+                {eventInfo ? (userLoggedIn ? eventInfo.event.title : eventInfo.title) : null}
               </Typography>
-              <Typography component="p">{userLoggedIn ? eventInfo.event.description : eventInfo.description}</Typography>
+              <Typography component="p">{eventInfo ? (userLoggedIn ? eventInfo.event.description : eventInfo.description) : null}</Typography>
             </CardContent>
-            {ActionsForLoggedUsers(eventInfo)}
+            {eventInfo ? ActionsForLoggedUsers(eventInfo) : ''}
           </Card>
         </Grid>
       </Container>

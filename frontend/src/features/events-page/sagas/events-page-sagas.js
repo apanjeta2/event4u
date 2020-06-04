@@ -25,6 +25,10 @@ import {
   handleAddEventInProgress,
   handleUpdateEventInProgress,
   handleUpdateEventSuccess,
+  handleSubscribeToInProgress,
+  handleSubscribeToSuccess,
+  handleGetSubscribersInProgress,
+  handleGetSubscribersSuccess,
 } from '../actions/events-page-actions';
 
 import { handleShowMessage } from '../../snackbar/actions/snackbar-actions';
@@ -32,6 +36,8 @@ import { handleShowMessage } from '../../snackbar/actions/snackbar-actions';
 import EventsApi from '../../../api/events-api';
 
 import UserApi from '../../../api/user-api';
+
+import NotificationApi from '../../../api/notifications-api';
 
 import { SNACKBAR_SEVERITY_VARIANTS } from '../../snackbar/constants/snackbar-constants';
 import { EVENTS_ACTIONS } from '../constants/events-page-constants';
@@ -122,6 +128,18 @@ function* getEventById({ data }) {
   try {
     yield put(handleGetEventInProgress(true));
     const res = yield call(EventsApi.requestGetEventById, data);
+    yield put(handleGetEventSuccess(res.data));
+  } catch (err) {
+    yield put(handleShowMessage('EVENTS.ERROR_GET_EVENTS', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+  } finally {
+    yield put(handleGetEventInProgress(false));
+  }
+}
+
+function* getEventByIdLoggedUser({ data }) {
+  try {
+    yield put(handleGetEventInProgress(true));
+    const res = yield call(EventsApi.requestGetEventByIdLoggedUser, data);
     yield put(handleGetEventSuccess(res.data));
   } catch (err) {
     yield put(handleShowMessage('EVENTS.ERROR_GET_EVENTS', SNACKBAR_SEVERITY_VARIANTS.ERROR));
@@ -225,6 +243,31 @@ function* updateEvent({ data, eventId }) {
   }
 }
 
+function* subscribeTo({ data }) {
+  try {
+    yield put(handleSubscribeToInProgress(true));
+    const res = yield call(NotificationApi.requestSubscribeTo, data);
+    yield put(handleSubscribeToSuccess(res.data));
+    yield put(handleShowMessage('NOTIFICATIONS.SUBSCRIBED', SNACKBAR_SEVERITY_VARIANTS.SUCCESS));
+  } catch (err) {
+    yield put(handleShowMessage('NOTIFICATIONS.ERROR_SUBSCRIBED', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+  } finally {
+    yield put(handleSubscribeToInProgress(false));
+  }
+}
+
+function* getSubscribers({ data }) {
+  try {
+    yield put(handleGetSubscribersInProgress(true));
+    const res = yield call(NotificationApi.requestGetSubscribers, data);
+    yield put(handleGetSubscribersSuccess(res.data));
+  } catch (err) {
+    yield put(handleShowMessage('EVENTS.ERROR_GET_SUBSCRIBERS', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+  } finally {
+    yield put(handleGetSubscribersInProgress(false));
+  }
+}
+
 export default function* saga() {
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_CATEGORIES, getCategories);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CATEGORY, getEventsByCategory);
@@ -233,10 +276,13 @@ export default function* saga() {
   yield takeLatest(EVENTS_ACTIONS.HANDLE_EVENT_MARKED_AS_GOING_TO, markEventAsGoing);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_CATEGORY, getCategoryById);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_EVENT, getEventById);
+  yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_EVENT_LOGGED_IN_USER, getEventByIdLoggedUser);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_CREATOR, getCreator);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CREATOR, getEventsByCreator);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_DELETE_EVENT, deleteEventById);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_LOCATIONS, getLocations);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_ADD_NEW_EVENT, addNewEvent);
   yield takeLatest(EVENTS_ACTIONS.HANDLE_UPDATE_EVENT, updateEvent);
+  yield takeLatest(EVENTS_ACTIONS.HANDLE_SUBSCRIBE_TO, subscribeTo);
+  yield takeLatest(EVENTS_ACTIONS.HANDLE_GET_SUBSCRIBERS, getSubscribers);
 }

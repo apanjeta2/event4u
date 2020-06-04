@@ -8,6 +8,7 @@ import MyAccountPage from '../../features/auth/components/my-account';
 import MyEventsPage from '../../features/events-page/components/my-events-page';
 import NewEventPage from '../../features/events-page/components/new-event-page';
 import EditEventPage from '../../features/events-page/components/edit-event-page';
+import UserPage from '../../features/events-page/components/user-page';
 
 const routes = [
   {
@@ -49,8 +50,8 @@ const routes = [
     requireAuth: true,
   },
   {
-    path: '/profile/:username',
-    component: MyAccountPage,
+    path: '/profile/:idUser',
+    component: UserPage,
     exact: true,
     requireAuth: true,
   },

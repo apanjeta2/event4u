@@ -77,7 +77,7 @@ public class EventsService {
 
         //GRPC poziv system-events
         //Long id1=getUserIdFromToken(token, key);
-        //ns.createLog("Notification service", id1, Request.ActionType.CREATE, "Event");
+       // ns.createLog("Notification service", id1, Request.ActionType.CREATE, "Event");
 
         return eventsRepository.save(e);
     }
@@ -85,7 +85,7 @@ public class EventsService {
 
         //GRPC poziv system-events
 
-        ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.DELETE, "Event");
+        //ns.createLog("Notification service", getUserIdFromToken(token,key), Event4U.Request.ActionType.DELETE, "Event");
 
         eventsRepository.deleteById(id);
     }

@@ -7,6 +7,7 @@ const axios = require('axios');
 
 export const getSpecificUserById = async (req, res) => {
   axios.defaults.headers.common['Authorization'] = req.headers.authorization;
+  let finalRes = '';
   try {
     const userId = req.params.userId;
     axios

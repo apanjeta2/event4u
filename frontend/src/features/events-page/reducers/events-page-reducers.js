@@ -23,6 +23,8 @@ const getEventsInitialState = () => {
     selectedDate: new Date(),
     expended: false,
     updateEventInProgres: false,
+    getSubscribers: false,
+    mySubscribers: [],
   };
 };
 
@@ -38,8 +40,6 @@ export const events = (state = getEventsInitialState(), action) => {
       return { ...state, events: action.data };
     case EVENTS_ACTIONS.HANDLE_GET_EVENTS_BY_CATEGORY_IN_PROGRESS:
       return { ...state, getCategoriesInProgres: action.status };
-    case EVENTS_ACTIONS.HANDLE_EVENT_CHOSEN:
-      return { ...state, eventInfo: action.data };
     case EVENTS_ACTIONS.HANDLE_EVENT_MARKED_AS_INTERESTED_IN_PROGRESS:
       return { ...state, markAsInterestedInProgress: action.status };
     case EVENTS_ACTIONS.HANDLE_EVENT_MARKED_AS_INTERESTED_SUCCESS:
@@ -92,6 +92,12 @@ export const events = (state = getEventsInitialState(), action) => {
       return { ...state, events: action.data };
     case EVENTS_ACTIONS.HANDLE_EXPAND_CLICKED:
       return { ...state, expanded: action.data };
+    case EVENTS_ACTIONS.HANDLE_GET_SUBSCRIBERS_IN_PROGRESS:
+      return { ...state, getSubscribers: action.status };
+    case EVENTS_ACTIONS.HANDLE_GET_SUBSCRIBERS_SUCCESS:
+      return { ...state, mySubscribers: action.data };
+    case EVENTS_ACTIONS.HANDLE_SUBSCRIBE_TO_IN_PROGRESS:
+      return { ...state, getSubscribers: action.status };
     default:
       return state;
   }

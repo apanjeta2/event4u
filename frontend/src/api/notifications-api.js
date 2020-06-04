@@ -21,8 +21,24 @@ const requestUpdateNotificationRead = notificationId => {
   });
 };
 
+const requestSubscribeTo = userId => {
+  return axios({
+    method: 'POST',
+    url: `/users/subscribeTo/${userId}`,
+  });
+};
+
+const requestGetSubscribers = userId => {
+  return axios({
+    method: 'GET',
+    url: `/users/subscribers/${userId}`,
+  });
+};
+
 export default {
   requestGetNotifications,
   requestGetNotificationById,
   requestUpdateNotificationRead,
+  requestSubscribeTo,
+  requestGetSubscribers,
 };

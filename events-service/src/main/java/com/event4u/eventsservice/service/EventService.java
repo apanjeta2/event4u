@@ -52,6 +52,20 @@ public class EventService {
         return e.get();
     }
 
+    public EventMark findById(Long id, String token) {
+        Event e = findById(id);
+        Long idUser = tokenHelperService.getUserIdFromToken(token);
+        EventUser eu = null;
+
+        eu= eventUserService.getEventUser(idUser, e.getId());
+        if (eu==null) {
+            return new EventMark(e,false,false);
+        }
+        else {
+            return new EventMark(e,true,eu.getGoing());
+        }
+    }
+
     public Long count() {
         return eventRepository.count();
     }
@@ -160,4 +174,6 @@ public class EventService {
         e.setEndTime(time.getEndTime());
         return eventRepository.save(e);
     }
+
+
 }

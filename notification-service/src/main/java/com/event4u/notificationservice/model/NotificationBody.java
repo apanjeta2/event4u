@@ -1,26 +1,24 @@
 package com.event4u.notificationservice.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
-import java.io.Serializable;
 import java.time.LocalDate;
 
-public class NotificationBody implements Serializable {
+public class NotificationBody {
 
     private Long eventId;
     private String  name;
     private LocalDate date;
     private String token;
 
+    protected NotificationBody() {
 
-    @JsonCreator
+    }
+
     public NotificationBody(Long eventId, String name, LocalDate date) {
         this.name = name;
         this.eventId=eventId;
         this.date=date;
     }
 
-    @JsonCreator
     public NotificationBody(Long eventId, String name, LocalDate date, String token) {
         this.name = name;
         this.eventId=eventId;

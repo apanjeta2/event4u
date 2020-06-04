@@ -81,7 +81,7 @@ public class EventUserService {
         if (!eventService.existsById(idEvent)) {
             throw new NotFoundException("Event with id " + idEvent.toString());
         }
-        Long idUser = Long.valueOf(3);//tokenHelperService.getUserIdFromToken(token);
+        Long idUser = tokenHelperService.getUserIdFromToken(token);
         EventUser eu = getEventUser(idUser, idEvent);
         Event event = eventService.findById(idEvent);
         User user = userService.getUserById(idUser);
@@ -94,7 +94,6 @@ public class EventUserService {
         }
         notificationHelperService.createGoingToNotificaion(idEvent, token);
         return new EventMark(event, true, true);
-        //notificationHelperService.createGoingToNotificaion(idEvent, token);
     }
 
     public EventMark markAsInterested(Long idEvent, String token) {

@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -60,11 +61,12 @@ public class UserController {
 
     @Value("${jwt.secret}")
     private String key;
-    @PostMapping("subscribeTo")
-    public ResponseEntity<JSONObject> subscribeTo(@RequestHeader("Authorization") String token, @RequestBody String idS){
+    @PostMapping("subscribeTo/{idS}")
+    public ResponseEntity<JSONObject> subscribeTo(@RequestHeader("Authorization") String token, @PathVariable String idS){
 
         //Iz headrea dobija token i odatle generisemo id
-        //user koji se subscribe-a dobijen iz tokena????
+        //user koji se subscribe-
+        System.out.println("Body je :" + idS);
         token=token.replace("Bearer ","");
         String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
         byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
@@ -90,6 +92,12 @@ public class UserController {
     @GetMapping("getFullSubscribers")
     public Object getFullSubscribers(@RequestHeader("Authorization") String token) throws JsonProcessingException, ParseException {
         return userService.getAllSubscribers(token, key);
+
+    }
+
+    @GetMapping("subscribers/{id}")
+    public Object getSubscribers(@RequestHeader("Authorization") String token, @PathVariable Long id) throws JsonProcessingException, ParseException {
+        return userService.getSubscribers(token, key, id);
 
     }
 

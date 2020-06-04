@@ -118,8 +118,8 @@ public class NotificationServiceApplication {
             repository2.save(new Events(Long.valueOf(1)));
             repository2.save(new Events(Long.valueOf(2)));
             repository2.save(new Events(Long.valueOf(3)));
-            repository2.save(new Events(Long.valueOf(7)));
-            repository2.save(new Events(Long.valueOf(8)));
+            repository2.save(new Events(Long.valueOf(7), "Studentski pohodi - Bobovac", LocalDate.of(2020, 9, 23)));
+            repository2.save(new Events(Long.valueOf(8), "Studentski pohodi - Trebevic", LocalDate.of(2020, 9, 23)));
 
             log.info("Events found with findAll():");
             log.info("-------------------------------");
@@ -141,14 +141,6 @@ public class NotificationServiceApplication {
             User u2 = new User(Long.valueOf(2));
 
             User u3 = new User(Long.valueOf(3));
-
-            u1.getEvents().add(e1);
-            u1.getEvents().add(e2);
-            e1.getUsers().add(u1);
-            e2.getUsers().add(u1);
-
-            u1.getSubscriber().add(u2);
-            u2.getSubsribedTo().add(u1);
 
             repository3.save(u1);
             repository3.save(u2);

@@ -31,6 +31,11 @@ public class Events {
     public Events(Long id) {
         this.eventId=id;
     }
+    public Events(Long id, String name, LocalDate date) {
+        this.eventId=id;
+        this.name=name;
+        this.date=date;
+    }
 
     @Override
     public String toString() {

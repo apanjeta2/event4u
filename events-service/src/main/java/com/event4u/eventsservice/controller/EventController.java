@@ -58,6 +58,12 @@ public class EventController {
         return eventService.findById(id);
     }
 
+    @GetMapping(path ="/user/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public EventMark getEventForUser(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        logActionService.logAction(Long.valueOf("0"), Event4U.Request.ActionType.GET,"Event");
+        return eventService.findById(id,token);
+    }
+
     @PostMapping(path = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Event newEvent(@RequestHeader("Authorization") String token, @RequestBody NewEvent event) {
         logActionService.logAction(tokenHelperService.getUserIdFromToken(token), Event4U.Request.ActionType.CREATE,"Event");

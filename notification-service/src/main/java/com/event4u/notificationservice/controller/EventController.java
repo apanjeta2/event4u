@@ -8,6 +8,7 @@ import com.event4u.notificationservice.service.NotificationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.netflix.discovery.DiscoveryClient;
 import net.minidev.json.JSONObject;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -70,7 +71,7 @@ public class EventController {
     }
     //Dodavanje event-a
     @PostMapping(path="createEvent",produces = {MediaType.APPLICATION_JSON_VALUE})
-    public NotificationBody newEventCreate (@RequestHeader("Authorization") String token, @RequestBody NotificationBody event) throws JsonProcessingException, ExecutionException, InterruptedException {
+    public NotificationBody newEventCreate (@RequestHeader("Authorization") String token, @RequestBody NotificationBody event) throws JsonProcessingException, ExecutionException, InterruptedException, ParseException {
         Events e = eventService.createEventNew(event.getEventId(), event.getName(), event.getDate());
         //Kreiraj notifikaciju odmah
         Notification n = notificationService.createNotificationNew(token, event, key, 2);

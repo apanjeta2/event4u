@@ -84,11 +84,16 @@
   "EVENTS.UPDATE_EVENT_TITILE": "Update event",
   "EVENTS.EVENT_UPDATED": "Event successfully updated",
   "EVENTS.ERROR_UPDATE_EVENT": "Error while updating event",
+  "EVENTS.ERROR_GET_SUBSCRIBERS": "Error while getting subscribers",
 
   "NOTIFICATION.MESSAGE": "You have successfully added your event ",
   "NOTIFICATION.MESSAGE.REMINDER1": "Reminder for event ",
   "NOTIFICATION.MESSAGE.REMINDER2": " on ",
   "NOTIFICATION.NEWEVENT": "New event",
   "NOTIFICATION.NEWEVENT.REMINDER": "Reminder for event",
-  "NOTIFICATIONS.ERROR_GET_NOTIFICATIONS": "Error while loading notifications"
+  "NOTIFICATIONS.ERROR_GET_NOTIFICATIONS": "Error while loading notifications",
+  "NOTIFICATIONS.SUBSCRIBED": "You have successfully subscribed",
+  "NOTIFICATIONS.ERROR_SUBSCRIBED": "Error while subscribing",
+  "NOTIFICATION.MESSAGE2": " Just added new event ",
+  "NOTIFICATION.NEWEVENT2": "New event that might interest you"
 }

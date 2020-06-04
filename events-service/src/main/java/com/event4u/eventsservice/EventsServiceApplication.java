@@ -99,10 +99,10 @@ public class EventsServiceApplication {
 				log.info(l.toString());
 			}
 			log.info("");
-			Event e1 = eRepository.save(new Event("LV4 NWT",
+			Event e1 = eRepository.save(new Event("Studentski pohodi - Bobovac",
 					"Zmaja od Bosne bb",
-					LocalDate.of(2020, 3, 23),
-					"Laboratorijske vježbe iz predmeta NWT",
+					LocalDate.of(2020, 9, 23),
+					"Planinarenje",
 					Boolean.TRUE,
 					c1,
 					u1,
@@ -110,10 +110,10 @@ public class EventsServiceApplication {
 			));
 			eventService.changeStatus(e1.getId(),Status.CREATE_FINISHED);
 			Event e2 = eRepository.save(
-					new Event("LV4 NWT",
+					new Event("Studentski pohodi - Trebevic",
 							"Zmaja od Bosne bb",
-							LocalDate.of(2020, 3, 30),
-							"Laboratorijske vježbe iz predmeta NWT",
+							LocalDate.of(2020, 9, 30),
+							"Planinarenje",
 							Boolean.TRUE,
 							c1,
 							u1,

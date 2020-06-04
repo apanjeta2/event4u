@@ -56,6 +56,13 @@ const requestGetEventById = eventId => {
   });
 };
 
+const requestGetEventByIdLoggedUser = eventId => {
+  return axios({
+    method: 'GET',
+    url: `/events-micro/events/user/${eventId}`,
+  });
+};
+
 const requestGetEventsByCreator = () => {
   return axios({
     method: 'GET',
@@ -102,6 +109,7 @@ export default {
   requestRemoveMark,
   requestGetCategoryById,
   requestGetEventById,
+  requestGetEventByIdLoggedUser,
   requestGetEventsByCreator,
   requestDeleteEvent,
   requestGetLocations,

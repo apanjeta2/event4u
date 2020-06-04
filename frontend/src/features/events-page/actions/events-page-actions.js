@@ -39,11 +39,6 @@ export const handleCategoryClicked = data => ({
   data,
 });
 
-export const handleEventClicked = data => ({
-  type: EVENTS_ACTIONS.HANDLE_EVENT_CHOSEN,
-  data,
-});
-
 export const handleInterestedClicked = data => ({
   type: EVENTS_ACTIONS.HANDLE_EVENT_MARKED_AS_INTERESTED,
   data,
@@ -91,6 +86,11 @@ export const handleGetCategorySuccess = data => ({
 
 export const handleGetEvent = data => ({
   type: EVENTS_ACTIONS.HANDLE_GET_EVENT,
+  data,
+});
+
+export const handleGetEventLoggedUser = data => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_EVENT_LOGGED_IN_USER,
   data,
 });
 
@@ -195,5 +195,35 @@ export const handleUpdateEventSuccess = data => ({
 
 export const setSelectedDate = data => ({
   type: EVENTS_ACTIONS.HANDLE_SET_DATE,
+  data,
+});
+
+export const handleGetSubscribers = data => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_SUBSCRIBERS,
+  data,
+});
+
+export const handleGetSubscribersInProgress = status => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_SUBSCRIBERS_IN_PROGRESS,
+  status,
+});
+
+export const handleGetSubscribersSuccess = data => ({
+  type: EVENTS_ACTIONS.HANDLE_GET_SUBSCRIBERS_SUCCESS,
+  data,
+});
+
+export const handleSubscribeTo = data => ({
+  type: EVENTS_ACTIONS.HANDLE_SUBSCRIBE_TO,
+  data,
+});
+
+export const handleSubscribeToInProgress = status => ({
+  type: EVENTS_ACTIONS.HANDLE_SUBSCRIBE_TO_IN_PROGRESS,
+  status,
+});
+
+export const handleSubscribeToSuccess = data => ({
+  type: EVENTS_ACTIONS.HANDLE_SUBSCRIBE_TO_SUCCESS,
   data,
 });

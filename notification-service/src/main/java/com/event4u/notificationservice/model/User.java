@@ -31,7 +31,6 @@ public class User {
     @NotNull(message = "Id cannot be null")
     private Long userId;
 
-    @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<User> subscriber = new HashSet<>();
 

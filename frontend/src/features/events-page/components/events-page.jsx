@@ -17,7 +17,7 @@ import StarIcon from '@material-ui/icons/Star';
 import IconButton from '@material-ui/core/IconButton';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
-import { handleGetEventsByCategory, handleEventClicked, handleInterestedClicked, handleGoingToClicked, handleGetEventsByCategoryLoggedUser, handleGetCategory } from '../actions/events-page-actions';
+import { handleGetEventsByCategory, handleInterestedClicked, handleGoingToClicked, handleGetEventsByCategoryLoggedUser, handleGetCategory } from '../actions/events-page-actions';
 
 import ApplicationHeader from '../../shared-components/header';
 
@@ -60,15 +60,14 @@ function EventsPage() {
 
   useEffect(() => {
     if (!category) dispatch(handleGetCategory(categoryId));
-  }, [dispatch, categoryId]);
+  }, [dispatch, categoryId, category]);
 
   useEffect(() => {
     if (userLoggedIn) dispatch(handleGetEventsByCategoryLoggedUser(categoryId));
     else dispatch(handleGetEventsByCategory(categoryId));
-  }, [dispatch, categoryId]);
+  }, [dispatch, categoryId, userLoggedIn]);
 
   const eventClicked = eventInfo => {
-    dispatch(handleEventClicked(eventInfo));
     history.push(`/event-info/${userLoggedIn ? eventInfo.event.id : eventInfo.id}`);
   };
 
@@ -166,7 +165,7 @@ function EventsPage() {
         <h2>{t('EVENTS.EVENTS_TITLE')}</h2>
         {Array.isArray(events) && events.length ? (
           <Grid container spacing={3}>
-            {eventsItems}
+            {events ? eventsItems : ''}
           </Grid>
         ) : (
           <Typography component="p">{t('EVENTS.EVENTS_NOT_FOUND')}</Typography>

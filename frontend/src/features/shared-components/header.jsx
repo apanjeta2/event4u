@@ -23,13 +23,20 @@ import propTypes from 'prop-types';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import PeopleIcon from '@material-ui/icons/People';
+
 import { timeToWords } from '../../core/helpers/time-helper';
+
 import SockJsClient from 'react-stomp';
 
 import { handleLogout } from '../auth/actions/auth-actions';
 import { handleGetNotifications, handlePutNotificationsById } from '../notifications/actions/notifications-actions';
 
+import { handleGetEventsByCreator } from '../events-page/actions/events-page-actions';
+
 import { BACKEND_API } from '../../config/constants';
+
+import UserApi from '../../api/user-api';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -151,6 +158,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
     if (!loadedNotifications && userLoggedIn) {
       dispatch(handleGetNotifications());
       setLoadedNotifications(true);
+      dispatch(handleGetEventsByCreator());
     }
     handleNumberOfNonReadNotifications();
   }, [dispatch, handleNumberOfNonReadNotifications, loadedNotifications, userLoggedIn]);
@@ -216,6 +224,15 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
     setAnchorEl(null);
     handleMobileMenuClose();
     history.push(isMyEvents ? '/' : '/my-events');
+  };
+
+  const handleGetName = userId => {
+    UserApi.requestUserProfileById(userId).then(
+      response => {},
+      error => {
+        console.log(error);
+      }
+    );
   };
 
   const menuId = 'primary-search-account-menu';
@@ -332,7 +349,7 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
                 }
               />
             </ListItem>
-          ) : (
+          ) : notification.type === 2 ? (
             <ListItem>
               <ListItemText
                 primary={t('NOTIFICATION.NEWEVENT.REMINDER') + ': ' + JSON.parse(notification.message).event}
@@ -343,6 +360,24 @@ function ApplicationHeader({ isMyAccount, isAuthPage, onSearch, isMyEvents }) {
                     <Typography variant="caption">
                       <Typography component={'span'} className={classes.sectionOfTime}>
                         <EventIcon color="primary" fontSize="small" />
+                        {timeToWords(notification.dateOfCreating)}
+                      </Typography>
+                    </Typography>
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+          ) : (
+            <ListItem>
+              <ListItemText
+                primary={t('NOTIFICATION.NEWEVENT2') + ': ' + JSON.parse(notification.message).event}
+                secondary={
+                  <React.Fragment>
+                    {t('NOTIFICATION.MESSAGE2') + JSON.parse(notification.message).event + t('NOTIFICATION.MESSAGE.REMINDER2') + JSON.parse(notification.message).date}
+                    <br></br>
+                    <Typography variant="caption">
+                      <Typography component={'span'} className={classes.sectionOfTime}>
+                        <PeopleIcon color="primary" fontSize="small" />
                         {timeToWords(notification.dateOfCreating)}
                       </Typography>
                     </Typography>

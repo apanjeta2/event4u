@@ -9,6 +9,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -32,6 +34,7 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import javax.xml.bind.DatatypeConverter;
 import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -112,12 +115,15 @@ public class NotificationService {
     }
     public Object findAll(String token, String key) throws ExecutionException, InterruptedException {
 
-
+        Long id = getUserIdFromToken(token, key);
+        if (!userService.isThere(id)) userService.createUser(token, key,id);
         User user = userService.getUserById(token ,key,getUserIdFromToken(token, key));
         return notificationRepository.findByUser(user);
     }
 
     public List<Notification> findByUserId(String token, String key, Long id) {
+
+        //if (!userService.isThere(id)) userService.createUser(token, key,id);
 
         User user = userService.getUserById(token ,key,id);
         return notificationRepository.findByUser(user);
@@ -173,7 +179,7 @@ public class NotificationService {
         return notificationRepository.save(new Notification(user,event,message,date,isRead, type));
     }
 
-    public Notification createNotificationNew(String token, NotificationBody not, String key, int type) throws ExecutionException, InterruptedException, JsonProcessingException {
+    public Notification createNotificationNew(String token, NotificationBody not, String key, int type) throws ExecutionException, InterruptedException, JsonProcessingException, ParseException {
         //parse token
 
         sendToSubscribers(token);
@@ -182,10 +188,6 @@ public class NotificationService {
         byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
         Claims claim = Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token).getBody();
 
-        //Kreiranje poruke
-
-        String message = "{\"event\": \""+not.getName() +"\" , \"date\": \""+not.getDate()+"\""+" , \"name\": \"\"}";
-
         ObjectMapper mapper = new ObjectMapper();
 
         //Iz tokena dobijemo info o useru
@@ -193,22 +195,36 @@ public class NotificationService {
         //return claim;
 
         Long userid=u.getId();
-        //Doadace se user ako ne postoji jer se kupi sa user managment servisa
-        userService.createUser(token, key, userid);
+        //Kreiranje poruke
 
-        //Tip 1 notif. je za kreiranje notifikacija za jednog uera, npr kad se neko subscribe na njegov event dobije notifikaciju
-        if (type==1)
-        return createNotification(token, key, userid, not.getEventId(), message, not.getDate(), false, type);
-        //Tip 2 notif. je za kreiranje notifikacija za sve subscribere usera koji je kreirao event
-        else //salji samo subscriberima
-        {
+        String message = "{\"event\": \""+not.getName() +"\" , \"date\": \""+not.getDate()+"\""+" , \"name\": \""+userid+"\"}";
 
-            Set<Long> all= userService.getSubscribers(token, key, userid);
 
+        if (type==1) {
+
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            List<String> listOfUrls = serviceInstanceRestController.serviceInstancesByApplicationName("notification-service");
+
+            String url = listOfUrls.get(0);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+            headers.add("Content-Type", "application/json");
+            headers.add("Authorization", token);
+            ResponseEntity<String> response = restTemplate.exchange(url+"users/subscribers/"+userid, HttpMethod.GET, new HttpEntity<Object>(headers), String.class);
+
+            String odg = response.getBody();
+            JSONParser parser = new JSONParser(odg);
+            ArrayList<BigInteger> json =(ArrayList<BigInteger>)  parser.parse();
+
+            System.out.println("Subscriberi su "+odg);
             String finalToken = token;
-            all.forEach(e -> {
+            json.forEach(e -> {
                 try {
-                    createNotification(finalToken, key, e, not.getEventId(), message, not.getDate(), false, type);
+                    //Tip 3 je za subscribere
+                    createNotification(finalToken, key, e.longValue(), not.getEventId(), message, not.getDate(), false, 3);
+
                 } catch (ExecutionException ex) {
                     ex.printStackTrace();
                 } catch (InterruptedException ex) {
@@ -216,6 +232,12 @@ public class NotificationService {
                 }
             });
 
+            //Tip 1 notif. je za kreiranje notifikacija za usera koji je kreirao event, o uspjesnom kreiranju
+            return createNotification(token, key, userid, not.getEventId(), message, not.getDate(), false, type);
+        }
+        else //salji samo subscriberima
+        {
+            //Tip 2 notif. je za kreiranje notifikacija za going to evente
             return createNotification(token, key, userid, not.getEventId(), message, not.getDate(), false, type);
         }
     }
