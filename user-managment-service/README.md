@@ -22,16 +22,16 @@
 ```
 DB_USERNAME=your_db_username
 DB_PASSWORD=your_password
-DB_HOST=your_db_host // in case of docker: db
+DB_HOST=your_db_host # in case of docker: db
 DB_PORT=your_port
 DATABASE=your_database_name
 JWT_SECRET=your_secret
 JWT_EXPIRE_TIME_TOKEN=1h
-INITIAL_DB_SETUP=true // SET 'true' for first time running, afterwards you can remove it
+INITIAL_DB_SETUP=true # in case of locally, you can do it once, in case of docker: true always
 PORT=your_port
-FULL_BASE_URL=your_base_url // in case of docker: http://user-management-service:4000
-EUREKA_HOST_BASE_URL=localhost // in case of docker: eureka-service
-BACKEND_HOST_BASE_URL=localhost // in case of docker: user-management-service
+FULL_BASE_URL=your_base_url # in case of docker: http://user-management-service:4000
+EUREKA_HOST_BASE_URL=localhost # in case of docker: eureka-service
+BACKEND_HOST_BASE_URL=localhost # in case of docker: user-management-service
 STORAGE_BUCKET=your_storage_bucket
 FIREBASE_DATABASE_URL=your_firebase_url
 FIREBASE_STORAGE_URL=https://storage.googleapis.com
