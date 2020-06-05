@@ -1,5 +1,7 @@
 ## event4u
 
+<img align="left" width="100" height="100" src="./frontend/src/config/images/sign-up-white.png">
+
 Event4u is a web application that allows users to find the perfect event for themselves. The app allows users to search for events in a variety of categories that might be of interest to them and that are near their location. Users can sign up and create a profile to get other options such as creating events, marking events with going to or interested parties, subscribing to other users and getting notifications, etc.
 
 ### Services
@@ -11,6 +13,7 @@ Event4u is a web application that allows users to find the perfect event for the
 - [system-events-service](https://github.com/MasovicHaris/event4u/tree/master/system-events)
 - [gateway-service](https://github.com/MasovicHaris/event4u/tree/master/gateway-service)
 - [frontend](https://github.com/MasovicHaris/event4u/tree/master/frontend)
+
 
 ### Pre-running requests
 
