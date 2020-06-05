@@ -134,7 +134,7 @@ function EventsPage() {
   }
 
   const eventsItems = events.map(eventInfo => (
-    <Grid item xs={12} sm={6} lg={3} key={userLoggedIn ? eventInfo.event.id : eventInfo.id}>
+    <Grid item xs={12} sm={6} lg={3} key={eventInfo ? (userLoggedIn ? (eventInfo.event ? eventInfo.event.id : '') : eventInfo.id) : ''}>
       <Card className={classes.card}>
         <CardContent>
           <Typography component="h5" variant="h5">

@@ -35,10 +35,10 @@ public class gRPCClient {
         String url = listOfUrls.get(0);
         String fooResourceUrl = url;
 
-        String p = "dns://";
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) p += "/";
+        String p = "dns:///";
+        //if (System.getProperty("os.name").toLowerCase().contains("windows")) p += "/";
         if ((url != null) && (url.length() > 0)) {
-            url = p  + url.substring(7, url.length() - 5) + ":6565";
+            url = p  + url.substring(7, url.indexOf(":",7)) + ":6565";
         }
         ManagedChannel channel = ManagedChannelBuilder.forTarget(url)
 
